@@ -3,6 +3,4 @@
 Project Members:
     - AAFredsted
     - Christian :)
-
-
-    yoyooy
+    - Michel
