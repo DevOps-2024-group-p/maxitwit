@@ -1,0 +1,18 @@
+doctype html
+html
+  head
+    title #{title}  | NeoTwit
+    link(rel='stylesheet', href='/stylesheets/style.css')
+  body
+   div(class='page')
+      h1 MiniTwit
+      div(class='navigation')
+        a(href=('/public')) public timeline
+        |  | 
+        a(href=('/register')) sign up
+        |  | 
+        a(href=('/login')) sign in
+      div(class='body')
+        block content
+      div(class='footer') MiniTwit &mdash; A Flask Application
+
