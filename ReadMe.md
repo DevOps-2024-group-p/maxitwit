@@ -1,15 +1,15 @@
 commands:
 
-// install dependencies
+install dependencies: 
 npm install
 
-// start the server
+start the server: 
 DEBUG=neotwit:* npm start
 
-// stop the server
+stop the server: 
 DEBUG=neotwit:* npm stop
 
-// alternative way to start the server + watch for changes without having to restart the server, you still have to refresh the browser
+alternative way to start the server + watch for changes without having to restart the server, you still have to refresh the browser: 
 npx nodemon
 
 
