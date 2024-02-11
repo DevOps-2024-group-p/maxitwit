@@ -22,7 +22,7 @@ var app = express();
 
 // Set up the view engine (jade/pug)
 app.set('views', path.join(__dirname, 'views')); // Specifies the directory where the Jade template files are located
-app.set('view engine', 'jade'); // Sets Jade (now Pug) as the template engine for rendering views
+app.set('view engine', 'pug'); // Sets Jade (now Pug) as the template engine for rendering views
 
 // Middleware setup
 app.use(logger('dev')); // Use Morgan to log requests to the console in 'dev' format, which includes method, url, status, response time
