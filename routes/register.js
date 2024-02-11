@@ -18,4 +18,24 @@ router.post('/', function(req, res, next) {
   res.redirect('/login');
 });
 
+router.post('/', async (req, res) => {
+  const { username, password, email } = req.body;
+  // Validate input (omitted for brevity)
+
+  // Hash password
+  const hashedPassword = await bcrypt.hash(password, 10);
+
+  // Insert user into DB
+  const sql = `INSERT INTO users (username, email, pw_hash) VALUES (?, ?, ?)`;
+  db.run(sql, [username, email, hashedPassword], function(err) {
+      if (err) {
+          // Handle errors (e.g., username taken)
+          return res.status(400).send('Error message');
+      }
+      // User registered
+      return res.redirect('/login');
+  });
+});
+
+
 module.exports = router;

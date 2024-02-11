@@ -6,7 +6,7 @@ services:
     build: ./
     container_name: maxitwit
     volumes:
-      - .:/usr/src/app
-    working_dir: /usr/src/app
+      - .:/src
+    working_dir: /src
     ports:
       - "127.0.0.1:3000:3000"
