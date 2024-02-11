@@ -5,20 +5,20 @@
  */
 
 // Import necessary modules
-var createError = require('http-errors'); // Module to create HTTP errors for Express, simplifies error handling
-var express = require('express'); // The main Express framework
-var path = require('path'); // Core Node.js module to handle and transform file paths
-var cookieParser = require('cookie-parser'); // Middleware to parse and set cookies in request objects
-var logger = require('morgan'); // HTTP request logger middleware for node.js
+const createError = require('http-errors'); // Module to create HTTP errors for Express, simplifies error handling
+const express = require('express'); // The main Express framework
+const path = require('path'); // Core Node.js module to handle and transform file paths
+const cookieParser = require('cookie-parser'); // Middleware to parse and set cookies in request objects
+const logger = require('morgan'); // HTTP request logger middleware for node.js
 
 // Import routers for different paths
-var indexRouter = require('./routes/index'); // Router for the homepage and other routes related to the root path
-var loginRouter = require('./routes/login'); // Router for login related paths
-var registerRouter = require('./routes/register'); // Router for register related paths
-var publicRouter = require('./routes/public'); // Router for public timeline related paths
+const indexRouter = require('./routes/index'); // Router for the homepage and other routes related to the root path
+const loginRouter = require('./routes/login'); // Router for login related paths
+const registerRouter = require('./routes/register'); // Router for register related paths
+const publicRouter = require('./routes/public'); // Router for public timeline related paths
 
 // Initialize the Express application
-var app = express();
+const app = express();
 
 // Set up the view engine (jade/pug)
 app.set('views', path.join(__dirname, 'views')); // Specifies the directory where the Jade template files are located

@@ -1,13 +1,10 @@
 FROM node:latest
 
-WORKDIR /usr/src/app
+WORKDIR /src
 
 COPY package.json ./
 
 RUN npm install
-RUN npm install sqlite3 --save
-RUN npm install express --save
-RUN npm install -g nodemon
 
 COPY . .
 
