@@ -1,10 +1,57 @@
 var express = require('express');
 var router = express.Router();
+const bcrypt = require('bcrypt');
+const sqlite3 = require('sqlite3').verbose();
+
+// Database connection
+let db = new sqlite3.Database('./db/minitwit.db', sqlite3.OPEN_READWRITE, (err) => {
+  if (err) {
+    console.error(err.message);
+  } else {
+    console.log('Connected to the minitwit.db');
+  }
+});
 
 /* GET login page. */
-router.get('/', function(req, res, next) {
-  // use res.render to render the login view
+router.get('/', function (req, res) {
   res.render('login', { title: 'Login' });
+});
+
+router.post('/', (req, res) => {
+  const { username, password } = req.body;
+
+  // Input validation
+  if (!username || !password) {
+    return res.status(400).send('Username and password are required');
+  }
+
+  // Check user in DB
+  const sql = 'SELECT * FROM user WHERE username = ?';
+  db.get(sql, [username], (err, user) => {
+    if (err) {
+      console.error(err.message);
+      return res.status(500).send('Server error');
+    }
+    if (!user) {
+      // User not found
+      return res.status(400).send('Invalid username or password');
+    } else {
+      // Compare submitted password with hashed password in DB
+      bcrypt.compare(password, user.pw_hash, (err, result) => {
+        if (err) {
+          console.error(err.message);
+          return res.status(500).send('Server error');
+        }
+        if (result) {
+          // Passwords match
+          return res.redirect('/public');
+        } else {
+          // Passwords dont match
+          return res.status(400).send('Invalid username or password');
+        }
+      });
+    }
+  });
 });
 
 module.exports = router;

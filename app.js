@@ -10,14 +10,21 @@ const express = require('express'); // The main Express framework
 const path = require('path'); // Core Node.js module to handle and transform file paths
 const cookieParser = require('cookie-parser'); // Middleware to parse and set cookies in request objects
 const logger = require('morgan'); // HTTP request logger middleware for node.js
+
+// DB Modules
 const sqlite3 = require('sqlite3').verbose();
 const db = new sqlite3.Database('./db/minitwit.db'); // todo This needs to be set up in an init function with error handling instead
+const fs = require('fs');
+const sqlFilePath = path.join(__dirname, 'db', 'schema.sql');
+const sql = fs.readFileSync(sqlFilePath, 'utf8');
+
 
 // Import routers for different paths
 const indexRouter = require('./routes/index'); // Router for the homepage and other routes related to the root path
 const loginRouter = require('./routes/login'); // Router for login related paths
 const registerRouter = require('./routes/register'); // Router for register related paths
 const publicRouter = require('./routes/public'); // Router for public timeline related paths
+
 
 // Initialize the Express application
 const app = express();

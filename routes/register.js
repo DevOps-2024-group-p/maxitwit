@@ -1,41 +1,44 @@
 var express = require('express');
 var router = express.Router();
+const bcrypt = require('bcrypt');
+const sqlite3 = require('sqlite3').verbose();
 
-// Mock database object
-var users = {}; // In a real app, replace this with database operations
+// Database connection
+let db = new sqlite3.Database('./db/minitwit.db', sqlite3.OPEN_READWRITE, (err) => {
+  if (err) {
+    console.error(err.message);
+  } else {
+    console.log('Connected to the minitwit.db');
+  }
+});
 
 /* GET register page. */
-router.get('/', function(req, res, next) {
+router.get('/', function (req, res, next) {
   res.render('register', { title: 'Register' });
 });
 
-/* POST register page. */
-router.post('/', function(req, res, next) {
-  var { username, email, password } = req.body;
-  // In a real app, you should validate and hash the password before saving
-  users[username] = { email, password };
-  // Redirect to login or confirmation page
-  res.redirect('/login');
-});
-
 router.post('/', async (req, res) => {
-  const { username, password, email } = req.body;
-  // Validate input (omitted for brevity)
+  const { username, email, password } = req.body;
 
-  // Hash password
-  const hashedPassword = await bcrypt.hash(password, 10);
+  // Input validation
+  try {
+    // Hash password
+    const hashedPassword = await bcrypt.hash(password, 10);
 
-  // Insert user into DB
-  const sql = `INSERT INTO users (username, email, pw_hash) VALUES (?, ?, ?)`;
-  db.run(sql, [username, email, hashedPassword], function(err) {
+    // Insert user into DB
+    const sql = `INSERT INTO user (username, email, pw_hash) VALUES (?, ?, ?)`;
+    db.run(sql, [username, email, hashedPassword], function (err) {
       if (err) {
-          // Handle errors (e.g., username taken)
-          return res.status(400).send('Error message');
+        console.error(err.message);
+        return res.status(400).send('Error, try again');
       }
-      // User registered
+      // Redirect to login
       return res.redirect('/login');
-  });
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Error, try again');
+  }
 });
-
 
 module.exports = router;
