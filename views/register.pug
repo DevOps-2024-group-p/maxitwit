@@ -2,4 +2,14 @@ extends layout
 
 block content
   h2= title
-
+  form(method="post" action="/register")
+    .form-group
+      label(for="username") Username
+      input#username.form-control(name="username" required="required")
+    .form-group
+      label(for="email") Email
+      input#email.form-control(type="email" name="email" required="required")
+    .form-group
+      label(for="password") Password
+      input#password.form-control(type="password" name="password" required="required")
+    button.btn.btn-primary(type="submit") Register
