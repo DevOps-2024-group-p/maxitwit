@@ -8,5 +8,7 @@ services:
     volumes:
       - .:/src
     working_dir: /src
+    environment:
+      - NODE_PATH=/src/node_modules
     ports:
       - "127.0.0.1:3000:3000"

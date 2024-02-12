@@ -8,8 +8,7 @@ npm install
 - **Start the Server:** 
 DEBUG=neotwit:* npm start
 
-- **Stop the Server:** 
-DEBUG=neotwit:* npm stop
+qDEBUG=neotwit:* npm stop
 
 - **Alternative Way to Start the Server + Watch for Changes:** 
 npx nodemon
