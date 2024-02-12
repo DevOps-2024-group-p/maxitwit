@@ -22,10 +22,11 @@ let db = new sqlite3.Database('./db/minitwit.db', sqlite3.OPEN_READWRITE, (err) 
 
 /* GET public timeline page. */
 router.get('/', function (req, res, next) {
-  const sql = `SELECT message.*, user.* 
+  const sql = `SELECT message.text, message.pub_date, message.flagged, user.username, user.email 
   FROM message
   JOIN user ON message.author_id = user.user_id
-  WHERE message.flagged != 1;`
+  WHERE message.flagged != 1
+  LIMIT 50;`
   db.all(sql, [], (err, messages) => {
     if (err) {
       console.error(err.message);
@@ -39,9 +40,9 @@ router.get('/', function (req, res, next) {
       const hours = ("0" + date.getUTCHours()).slice(-2);
       const minutes = ("0" + date.getUTCMinutes()).slice(-2);
       message.pub_date = year + "-" + month + "-" + day + " @ " + hours + ":" + minutes;
-    });
-    messages.forEach(message => {
       message.gravatar = gravatar_url(message.email, 48);
+      delete message.email;
+      delete message.flagged;
     });
     console.log(messages);
     res.render('public', { title: 'Public Timeline', messages: messages });
