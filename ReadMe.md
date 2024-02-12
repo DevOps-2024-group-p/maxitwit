@@ -23,3 +23,7 @@ docker build -t maxitwit/app .
 - **Run Container:**
 
 docker run -it -dp 3000:3000 maxitwit/app
+
+- **Alternatively use docker compose:**
+
+docker compose up
