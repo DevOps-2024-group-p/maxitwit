@@ -24,6 +24,7 @@ const indexRouter = require('./routes/index'); // Router for the homepage and ot
 const loginRouter = require('./routes/login'); // Router for login related paths
 const registerRouter = require('./routes/register'); // Router for register related paths
 const publicRouter = require('./routes/public'); // Router for public timeline related paths
+const timelineRouter = require('./routes/timeline');
 
 
 // Initialize the Express application
@@ -45,14 +46,16 @@ app.use('/', indexRouter); // Use the index router for requests to the root URL 
 app.use('/login', loginRouter); // Use the login router for requests to '/login'
 app.use('/register', registerRouter); // Use the register router for requests to '/register'
 app.use('/public', publicRouter); // Use the public timeline router for requests to '/public'
+app.use('/timeline', timelineRouter);
+
 
 // Catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   next(createError(404)); // If no middleware has responded by now, it means a 404 error should be generated and forwarded to the error handler
 });
 
 // Error handler middleware
-app.use(function(err, req, res, next) {
+app.use(function (err, req, res, next) {
   // Set locals, providing error details only in development environment
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};

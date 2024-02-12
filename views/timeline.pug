@@ -1,0 +1,44 @@
+extends layout
+
+block title
+  if request.endpoint == 'public_timeline'
+    | Public Timeline
+  else if request.endpoint == 'user_timeline'
+    | #{profile_user.username}'s Timeline
+  else
+    | My Timeline
+
+block body
+  h2= self.title()
+  if g.user
+    if request.endpoint == 'user_timeline'
+      div.followstatus
+        if g.user.user_id == profile_user.user_id
+          | This is you!
+        else if followed
+          | You are currently following this user.
+          a.unfollow(href=`${url_for('unfollow_user', {username: profile_user.username})}`) Unfollow user
+          | .
+        else
+          | You are not yet following this user.
+          a.follow(href=`${url_for('follow_user', {username: profile_user.username})}`) Follow user
+          | .
+    else if request.endpoint == 'timeline'
+      div.twitbox
+        h3 What's on your mind #{g.user.username}?
+        form(action=`${url_for('add_message')}`, method='post')
+          p
+            input(type='text', name='text', size='60')
+            input(type='submit', value='Share')
+  ul.messages
+    each message in messages
+      li
+        img(src=`${gravatar(message.email, {size: 48})}`)
+        p
+          strong
+            a(href=`${url_for('user_timeline', {username: message.username})}`)= message.username
+          | #{message.text}
+          small &mdash; #{datetimeformat(message.pub_date)}
+    else
+      li
+        em There's no message so far.
