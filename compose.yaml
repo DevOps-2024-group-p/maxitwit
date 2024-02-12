@@ -6,7 +6,7 @@ services:
     build: ./
     container_name: maxitwit
     volumes:
-      - .:/src
+      - ./db:/src/db
     working_dir: /src
     environment:
       - NODE_PATH=/src/node_modules
