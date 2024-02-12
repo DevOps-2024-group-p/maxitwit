@@ -1,22 +1,22 @@
 extends layout
 
 block content
-  h1= title
-  p Welcome to #{title}
-
+  h2= title
   block body
-
-    div.page
-      ul.messages
+    ul.messages 
       each message in messages
         div.twitbox
-          //- img(src=`${gravatar(message.email, {size: 48})}`)
-          p
-            small 
-              strong
-                #{message.username}
-              | #{message.text}
-              | #{message.pub_date}
+          li.message-item
+            img(src=message.gravatar)
+            div
+              span
+                strong
+                  a(href="/"+message.username) #{message.username}
+              | 
+              span #{message.text}
+              |
+              span 
+                small &mdash; #{message.pub_date}
       else
-        div.twitbox
-          em There's no message so far.
+        ul.messages
+            em There's no message so far.

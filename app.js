@@ -24,7 +24,6 @@ const indexRouter = require('./routes/index'); // Router for the homepage and ot
 const loginRouter = require('./routes/login'); // Router for login related paths
 const registerRouter = require('./routes/register'); // Router for register related paths
 const publicRouter = require('./routes/public'); // Router for public timeline related paths
-const timelineRouter = require('./routes/timeline');
 
 
 // Initialize the Express application
@@ -46,7 +45,6 @@ app.use('/', indexRouter); // Use the index router for requests to the root URL 
 app.use('/login', loginRouter); // Use the login router for requests to '/login'
 app.use('/register', registerRouter); // Use the register router for requests to '/register'
 app.use('/public', publicRouter); // Use the public timeline router for requests to '/public'
-app.use('/timeline', timelineRouter);
 
 
 // Catch 404 and forward to error handler
