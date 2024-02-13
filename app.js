@@ -10,6 +10,7 @@ const express = require('express'); // The main Express framework
 const path = require('path'); // Core Node.js module to handle and transform file paths
 const cookieParser = require('cookie-parser'); // Middleware to parse and set cookies in request objects
 const logger = require('morgan'); // HTTP request logger middleware for node.js
+const session = require('express-session');
 
 // DB Modules
 const sqlite3 = require('sqlite3').verbose();
@@ -46,6 +47,13 @@ app.use('/login', loginRouter); // Use the login router for requests to '/login'
 app.use('/register', registerRouter); // Use the register router for requests to '/register'
 app.use('/public', publicRouter); // Use the public timeline router for requests to '/public'
 
+// Session auth
+app.use(session({
+  secret: 'keyboard cat',
+  resave: false,
+  saveUninitialized: false,
+  cookie: { secure: true }
+}));  
 
 // Catch 404 and forward to error handler
 app.use(function (req, res, next) {

@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 const bcrypt = require('bcrypt');
 const sqlite3 = require('sqlite3').verbose();
+const { check, validationResult } = require('express-validator');
 
 // Database connection
 let db = new sqlite3.Database('./db/minitwit.db', sqlite3.OPEN_READWRITE, (err) => {
@@ -20,8 +21,17 @@ router.get('/', function (req, res, next) {
 router.post('/', async (req, res) => {
   const { username, email, password } = req.body;
 
+  
   // Input validation
   try {
+    
+    // todo catch error in view template
+    const existingUser = db.get('SELECT * FROM user WHERE username = ?', [username]);
+    const existingEmail = db.get('SELECT * FROM user WHERE email = ?', [email]);
+    if (existingUser || existingEmail) {
+      return res.status(400).send('User already exists');
+    }
+    
     // Hash password
     const hashedPassword = await bcrypt.hash(password, 10);
 
