@@ -45,7 +45,7 @@ router.get('/', function (req, res, next) {
       delete message.flagged;
     });
     console.log(messages);
-    res.render('public', { title: 'Public Timeline', messages: messages });
+    res.render('timeline', { title: 'Public Timeline', messages: messages });
   });
 });
 

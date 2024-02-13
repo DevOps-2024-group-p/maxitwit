@@ -9,9 +9,9 @@ const requireAuth = (req, res, next) => {
   }
 }
 
-/* GET home page. */
+/* GET user timeline page. */
 router.get('/', requireAuth, function(req, res, next) {
-  res.render('index', { title: 'Index' });
+  res.render('timeline', { title: 'My Timeline' });
 });
 
 module.exports = router;
