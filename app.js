@@ -21,10 +21,9 @@ const sql = fs.readFileSync(sqlFilePath, 'utf8');
 
 
 // Import routers for different paths
-const indexRouter = require('./routes/index'); // Router for the homepage and other routes related to the root path
 const loginRouter = require('./routes/login'); // Router for login related paths
 const registerRouter = require('./routes/register'); // Router for register related paths
-const publicRouter = require('./routes/public'); // Router for public timeline related paths
+const timelineRouter = require('./routes/timeline'); // Router for public timeline related paths
 
 
 // Initialize the Express application
@@ -41,19 +40,17 @@ app.use(express.urlencoded({ extended: false })); // Parses incoming requests wi
 app.use(cookieParser()); // Parse Cookie header and populate req.cookies with an object keyed by cookie names
 app.use(express.static(path.join(__dirname, 'public'))); // Serve static files (images, CSS, JavaScript) from the 'public' directory
 
+app.use(session({
+  secret: 'devving-and-opssing',
+  resave: false,
+  saveUninitialized: true
+}));
+
 // Route handlers
-app.use('/', indexRouter); // Use the index router for requests to the root URL ('/')
 app.use('/login', loginRouter); // Use the login router for requests to '/login'
 app.use('/register', registerRouter); // Use the register router for requests to '/register'
-app.use('/public', publicRouter); // Use the public timeline router for requests to '/public'
+app.use('/', timelineRouter); // Use the public timeline router for requests to '/'
 
-// Session auth
-app.use(session({
-  secret: 'keyboard cat',
-  resave: false,
-  saveUninitialized: false,
-  cookie: { secure: true }
-}));  
 
 // Catch 404 and forward to error handler
 app.use(function (req, res, next) {

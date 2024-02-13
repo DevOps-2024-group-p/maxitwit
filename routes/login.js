@@ -2,6 +2,13 @@ var express = require('express');
 var router = express.Router();
 const bcrypt = require('bcrypt');
 const sqlite3 = require('sqlite3').verbose();
+var session = require('express-session');
+
+router.use(session({
+  secret: 'devving-and-opssing',
+  resave: false,
+  saveUninitialized: true
+}));
 
 // Database connection
 let db = new sqlite3.Database('./db/minitwit.db', sqlite3.OPEN_READWRITE, (err) => {
@@ -44,7 +51,11 @@ router.post('/', (req, res) => {
         }
         if (result) {
           // Passwords match
-          return res.redirect('/public');
+          req.session.username = {
+            username:username
+          };
+          console.log(req.session.username)
+          return res.redirect('/');
         } else {
           // Passwords dont match
           return res.status(400).send('Invalid username or password');
