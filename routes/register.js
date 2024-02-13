@@ -26,9 +26,25 @@ router.post('/', async (req, res) => {
   try {
     
     // todo catch error in view template
-    const existingUser = db.get('SELECT * FROM user WHERE username = ?', [username]);
-    const existingEmail = db.get('SELECT * FROM user WHERE email = ?', [email]);
-    if (existingUser || existingEmail) {
+    var emailExists, userExists;
+
+    db.get('SELECT * FROM user WHERE email = ?', [email], (err, row) => {
+      if (err) {
+        res.status(400).send(err.message);
+        return;
+      }
+      emailExists = row;
+    });
+    
+    db.get('SELECT * FROM user WHERE username = ?', [username], (err, row) => {
+      if (err) {
+        res.status(400).send(err.message);
+        return;
+      }
+      userExists = row;
+    });
+
+    if (emailExists || userExists) {
       return res.status(400).send('User already exists');
     }
     
