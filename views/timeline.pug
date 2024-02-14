@@ -1,22 +1,38 @@
-extends layout
+extends layout.pug
 
 block content
   h2= title
-  block body
-    ul.messages 
+  if g.user
+    if endpoint === 'user'
+      .followstatus
+        if g.user.user_id === profile_user.user_id
+          | This is you!
+        else if followed
+          | You are currently following this user.
+          a.unfollow(href=`${profile_user}/unfollow`)
+            | Unfollow user
+        else
+          | You are not yet following this user.
+          a.follow(href=`${profile_user}/follow`)
+            | Follow user
+    else if endpoint === 'timeline'
+      .twitbox
+        h3 What's on your mind #{g.user.username}?
+        form(action='/add_message', method='post')
+          p
+            input(type='text', name='text', size='60')
+            input(type='submit', value='Share')
+  ul.messages
+    if messages && messages.length > 0
       each message in messages
-        div.twitbox
-          li.message-item
-            img(src=message.gravatar)
-            div
-              span
-                strong
-                  a(href="/"+message.username) #{message.username}
-              | 
-              span #{message.text}
-              |
-              span 
-                small &mdash; #{message.pub_date}
-      else
-        ul.messages
-            em There's no message so far.
+        li
+          img(src=message.gravatar)
+          p
+            strong
+              a(href=`${message.username}`)
+                | #{message.username}
+            | #{message.text}
+            small &mdash; #{message.pub_date}
+    else
+      li
+        em There's no message so far.
