@@ -53,6 +53,7 @@ router.post('/', (req, res) => {
         if (result) {
           // Passwords match
           req.session.username = {
+            id: user.user_id,
             username: username
           };
           console.log(req.session.username)

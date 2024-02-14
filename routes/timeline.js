@@ -34,50 +34,54 @@ let db = new sqlite3.Database('./db/minitwit.db', sqlite3.OPEN_READWRITE, (err) 
 	}
 });
 
+router.post('/add_message', requireAuth, async function (req, res, next) {
+	try {
+
+		const userId = req.session.username.id;
+		const messageContent = req.body.text;
+		const currentDate = new Date().getTime();
+		const flagged = 0;
+
+		console.log(currentDate);
+		const sql = `insert into message (author_id, text, pub_date, flagged) values (?, ?, ?, ?)`;
+		db.run(sql, [userId, messageContent, currentDate, flagged], (err) => {
+			if (err) {
+				console.error(err.message);
+			}
+		});
+
+		res.redirect('/');
+
+	} catch (error) {
+		console.log(error);
+		res.status(500).send('Server error');
+	}
+})
+
 router.get('/logout', function (req, res) {
 	req.session.destroy();
 	const g = { user: null };
-	res.render('timeline', { g: g });
+	res.redirect('/public');
 });
 
 /* GET current user timeline page. */
 router.get('/', requireAuth, async function (req, res, next) {
 	try {
 		const { username } = req.session.username;
+		const id = req.session.username.id;
 		const g = { user: req.session.username };
 		const profile_user = 'example_profile_user';
 		const followed = true;
-		let userId;
 
-		const row = await new Promise((resolve, reject) => {
-			db.get(`SELECT user_id FROM user 
-              	JOIN message m 
-				ON m.author_id = user.user_id 
-                WHERE user.username = ?`, [username], (err, row) => {
-				if (err) reject(err);
-				else resolve(row);
-			});
-		});
-
-		if (row) {
-			userId = row.user_id;
-		}
-
-		const findMessages = `SELECT 
-			message.text, 
-			message.pub_date, 
-			message.flagged, 
-			user.username, 
-			user.email 
-  			FROM message
-			JOIN user ON user.user_id = message.author_id
-			JOIN follower on follower.who_id = user.user_id
-			WHERE message.flagged != 1 AND user.user_id = ? 
-			OR message.author_id = follower.whom_id
- 			LIMIT 50;`
+		const sql = `SELECT message.text, message.pub_date, message.flagged, user.username, user.email 
+  	FROM message
+  	JOIN user ON message.author_id = user.user_id
+  	WHERE message.flagged != 1 and message.author_id = ?
+	order by message.pub_date desc
+  	LIMIT 50;`
 
 		const messages = await new Promise((resolve, reject) => {
-			db.all(findMessages, [userId], (err, messages) => {
+			db.all(sql, [id], (err, messages) => {
 				if (err) reject(err);
 				else resolve(messages);
 			});
@@ -95,6 +99,7 @@ router.get('/', requireAuth, async function (req, res, next) {
 			delete message.email;
 		});
 
+		console.log(messages);
 		res.render('timeline', {
 			endpoint: 'timeline',
 			title: `${g.user.username}'s timeline`,
@@ -104,9 +109,8 @@ router.get('/', requireAuth, async function (req, res, next) {
 			followed: followed,
 		});
 
-		res.render('timeline', { title: `Welcome, ${username}`, messages: messages });
 	} catch (error) {
-		console.error(err.message);
+		console.error(error.message);
 		res.status(500).send('Server error');
 	}
 });
@@ -122,6 +126,7 @@ router.get('/public', async function (req, res, next) {
   	FROM message
   	JOIN user ON message.author_id = user.user_id
   	WHERE message.flagged != 1
+	order by message.pub_date desc
   	LIMIT 50;`
 
 	const messages = await new Promise((resolve, reject) => {
@@ -221,7 +226,7 @@ router.get('/:username', async function (req, res, next) {
 		});
 
 	} catch (error) {
-		console.error(err.message);
+		console.error(error.message);
 		res.status(500).send('Server error');
 	}
 });
