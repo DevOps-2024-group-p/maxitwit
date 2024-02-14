@@ -34,11 +34,17 @@ let db = new sqlite3.Database('./db/minitwit.db', sqlite3.OPEN_READWRITE, (err) 
 	}
 });
 
+router.get('/logout', function (req, res) {
+	req.session.destroy();
+	const g = { user: null };
+	res.render('timeline', { g: g });
+});
+
 /* GET current user timeline page. */
 router.get('/', requireAuth, async function (req, res, next) {
 	try {
 		const { username } = req.session.username;
-		const g = { user: { username: username } };
+		const g = { user: req.session.username };
 		const profile_user = 'example_profile_user';
 		const followed = true;
 		let userId;
@@ -107,8 +113,8 @@ router.get('/', requireAuth, async function (req, res, next) {
 
 /* GET public timeline page. */
 router.get('/public', async function (req, res, next) {
+	const g = { user: req.session.username };
 	const endpoint = 'user'
-	const g = { user: { username: 'example_user' } }; // Example data, replace with actual user data
 	const profile_user = 'example_profile_user'; // Example value, replace with actual profile user data
 	const followed = true; // Example value, replace with actual logic to determine if user is followed
 
@@ -152,7 +158,7 @@ router.get('/public', async function (req, res, next) {
 /* GET timeline of another user. */
 router.get('/:username', async function (req, res, next) {
 	try {
-		const g = { user: { username: 'example_user' } };
+		const g = { user: req.session.username };
 		const profile_user = 'example_profile_user';
 		const followed = true;
 

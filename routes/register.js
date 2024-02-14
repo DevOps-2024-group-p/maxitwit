@@ -15,16 +15,16 @@ let db = new sqlite3.Database('./db/minitwit.db', sqlite3.OPEN_READWRITE, (err) 
 
 /* GET register page. */
 router.get('/', function (req, res, next) {
-  res.render('register', { title: 'Register' });
+  const g = { user: req.session.username };
+  res.render('register', { title: 'Register', g: g });
 });
 
 router.post('/', async (req, res) => {
   const { username, email, password } = req.body;
 
-  
   // Input validation
   try {
-    
+
     // todo catch error in view template
     var emailExists, userExists;
 
@@ -35,7 +35,7 @@ router.post('/', async (req, res) => {
       }
       emailExists = row;
     });
-    
+
     db.get('SELECT * FROM user WHERE username = ?', [username], (err, row) => {
       if (err) {
         res.status(400).send(err.message);
@@ -47,7 +47,7 @@ router.post('/', async (req, res) => {
     if (emailExists || userExists) {
       return res.status(400).send('User already exists');
     }
-    
+
     // Hash password
     const hashedPassword = await bcrypt.hash(password, 10);
 

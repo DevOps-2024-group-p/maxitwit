@@ -8,9 +8,9 @@ html
       h1 Maxitwit
       div(class='navigation')
         if g.user
-          a(href=('/')) my timeline   | 
+          a(href=('/')) my timeline  | 
           a(href=('/public')) public timeline   |
-          a(href=('/logout')) sign out [#{g.user.username}]
+          a(href=('/logout')) sign out #{g.user.username}
         else
           a(href=('/public')) public timeline   |
           a(href=('/register')) sign up   |

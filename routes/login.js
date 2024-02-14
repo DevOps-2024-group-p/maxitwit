@@ -21,7 +21,8 @@ let db = new sqlite3.Database('./db/minitwit.db', sqlite3.OPEN_READWRITE, (err) 
 
 /* GET login page. */
 router.get('/', function (req, res) {
-  res.render('login', { title: 'Login' });
+  const g = { user: req.session.username };
+  res.render('login', { title: 'Login', g: g });
 });
 
 router.post('/', (req, res) => {
@@ -52,7 +53,7 @@ router.post('/', (req, res) => {
         if (result) {
           // Passwords match
           req.session.username = {
-            username:username
+            username: username
           };
           console.log(req.session.username)
           return res.redirect('/');
