@@ -10,6 +10,7 @@ const express = require('express'); // The main Express framework
 const path = require('path'); // Core Node.js module to handle and transform file paths
 const cookieParser = require('cookie-parser'); // Middleware to parse and set cookies in request objects
 const logger = require('morgan'); // HTTP request logger middleware for node.js
+const session = require('express-session');
 
 // DB Modules
 const sqlite3 = require('sqlite3').verbose();
@@ -20,10 +21,9 @@ const sql = fs.readFileSync(sqlFilePath, 'utf8');
 
 
 // Import routers for different paths
-const indexRouter = require('./routes/index'); // Router for the homepage and other routes related to the root path
 const loginRouter = require('./routes/login'); // Router for login related paths
 const registerRouter = require('./routes/register'); // Router for register related paths
-const publicRouter = require('./routes/public'); // Router for public timeline related paths
+const timelineRouter = require('./routes/timeline'); // Router for public timeline related paths
 
 
 // Initialize the Express application
@@ -40,19 +40,25 @@ app.use(express.urlencoded({ extended: false })); // Parses incoming requests wi
 app.use(cookieParser()); // Parse Cookie header and populate req.cookies with an object keyed by cookie names
 app.use(express.static(path.join(__dirname, 'public'))); // Serve static files (images, CSS, JavaScript) from the 'public' directory
 
+app.use(session({
+  secret: 'devving-and-opssing',
+  resave: false,
+  saveUninitialized: true
+}));
+
 // Route handlers
-app.use('/', indexRouter); // Use the index router for requests to the root URL ('/')
 app.use('/login', loginRouter); // Use the login router for requests to '/login'
 app.use('/register', registerRouter); // Use the register router for requests to '/register'
-app.use('/public', publicRouter); // Use the public timeline router for requests to '/public'
+app.use('/', timelineRouter); // Use the public timeline router for requests to '/'
+
 
 // Catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   next(createError(404)); // If no middleware has responded by now, it means a 404 error should be generated and forwarded to the error handler
 });
 
 // Error handler middleware
-app.use(function(err, req, res, next) {
+app.use(function (err, req, res, next) {
   // Set locals, providing error details only in development environment
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};

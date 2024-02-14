@@ -7,11 +7,14 @@ html
    div(class='page')
       h1 Maxitwit
       div(class='navigation')
-        a(href=('/public')) public timeline
-        |  | 
-        a(href=('/register')) sign up
-        |  | 
-        a(href=('/login')) sign in
+        if g.user
+          a(href=('/')) my timeline  | 
+          a(href=('/public')) public timeline   |
+          a(href=('/logout')) sign out #{g.user.username}
+        else
+          a(href=('/public')) public timeline   |
+          a(href=('/register')) sign up   |
+          a(href=('/login')) sign in    |
       div(class='body')
         block content
       div(class='footer') Maxitwit &mdash; An Express application

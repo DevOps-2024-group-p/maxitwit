@@ -124,6 +124,17 @@ div.page ul.messages li small {
   color: #888;
 }
 
+ul.messages small {
+  font-size: 0.9em;
+  color: #888;
+}
+
+.message-item {
+  display: flex;
+  align-items: start;
+}
+
+
 div.page div.twitbox {
   margin: 10px 0;
   padding: 5px;
