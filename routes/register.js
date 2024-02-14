@@ -22,8 +22,10 @@ router.get('/', function (req, res, next) {
 router.post('/', async (req, res) => {
   const { username, email, password } = req.body;
 
+  
   // Input validation
   try {
+
 
     // todo catch error in view template
     var emailExists, userExists;
