@@ -5,7 +5,7 @@ block content
   if g.user
     if endpoint === 'user'
       .followstatus
-        if g.user.user_id === profile_user.user_id
+        if g.user === profile_user
           | This is you!
         else if followed
           | You are currently following this user.

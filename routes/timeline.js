@@ -39,6 +39,8 @@ function formatMessages(messages) {
 	return messages;
 }
 
+
+
 router.post('/add_message', requireAuth, async function (req, res, next) {
 	try {
 		const userId = req.session.username.id;
@@ -64,7 +66,8 @@ router.get('/', requireAuth, async function (req, res, next) {
 		const g = { user: req.session.username };
 		const profile_user = 'example_profile_user';
 		const followed = true;
-		let messages = await userService.getMessagesByUserId(userId);
+		// const followed_users = await userService.getFollowed(userId);
+		let messages = await userService.getMessagesFromUserAndFollowedUsers(userId);
 		res.render('timeline', {
 			endpoint: 'timeline',
 			title: `${g.user.username}'s timeline`,
@@ -100,6 +103,8 @@ router.get('/public', async function (req, res, next) {
 	}
 });
 
+
+
 router.get('/:username', async function (req, res, next) {
 	try {
 		const g = { user: req.session.username };
@@ -118,6 +123,48 @@ router.get('/:username', async function (req, res, next) {
 			profile_user: profile_user,
 			followed: followed,
 		});
+	} catch (error) {
+		console.error(error.message);
+		res.status(500).send('Server error');
+	}
+});
+
+router.post('/:username/follow', requireAuth, async function (req, res, next) {
+
+	try {
+		const who_id = req.session.username.id;
+		const g = { user: who_id };
+
+
+		const whom_username = eq.params.username;
+		const whom_id = await userService.getUserIdByUsername(username);
+
+		await userService.followUser(who_id, whom_id);
+		// TODO: implement flashes
+		// res.redirect(`/${whom_username}`);
+		res.render('timeline', {
+			endpoint: 'user',
+			title: `${username}'s Timeline`,
+			messages: formatMessages(messages),
+			g: g,
+			profile_user: whom_id,
+			followed: followed,
+		});
+	} catch (error) {
+		console.error(error.message);
+		res.status(500).send('Server error');
+	}
+});
+
+router.post('/:username/unfollow', requireAuth, async function (req, res, next) {
+	try {
+		const endpoint = 'user';
+		const who_id = req.session.username.id;
+
+		const whom_username = req.params.username;
+		const whom_id = await userService.getUserIdByUsername(whom_username);
+
+		await userService.unfollowUser(who_id, whom_id);
 	} catch (error) {
 		console.error(error.message);
 		res.status(500).send('Server error');

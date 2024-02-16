@@ -95,6 +95,7 @@ class UserService {
             });
         });
     }
+
     async getFollowed(userId) {
         const sql = `select distinct f.whom_id
                      from follower f
@@ -102,14 +103,40 @@ class UserService {
                 `
         return new Promise((resolve, reject) => {
             this.db.all(sql, [userId], (err, followed) => {
-                if(err) {
+                if (err) {
                     reject(err);
-                }else {
+                } else {
                     resolve(followed);
                 }
             })
         })
-        
+
+    }
+
+    async followUser(userId, followedId) {
+        const sql = `INSERT INTO follower (who_id, whom_id) VALUES (?, ?)`;
+        return new Promise((resolve, reject) => {
+            this.db.run(sql, [userId, followedId], (err) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve();
+                }
+            });
+        });
+    }
+
+    async unfollowUser(userId, followedId) {
+        const sql = `DELETE FROM follower WHERE who_id = ? AND whom_id = ?`;
+        return new Promise((resolve, reject) => {
+            this.db.run(sql, [userId, followedId], (err) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve();
+                }
+            });
+        });
     }
 
 }
