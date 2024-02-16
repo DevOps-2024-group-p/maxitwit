@@ -44,13 +44,17 @@ class UserService {
     }
 
     async getMessagesFromUserAndFollowedUsers(userId) {
-        const sql = `SELECT message.text, message.pub_date, message.flagged, user.username, user.email 
-                    FROM message
-                    JOIN user ON message.author_id = user.user_id
-                    JOIN follower ON user.user_id = follower.who_id
-                    WHERE message.flagged != 1 AND (follower.whom_id = message.author_id OR message.author_id = ?)
-                    ORDER BY message.pub_date DESC
-                    LIMIT 50`;
+        const sql = `
+            SELECT message.*, user.* 
+            FROM message, user
+            WHERE message.flagged = 0
+            AND (
+                user.user_id = ?
+                OR user.user_id IN (
+                    SELECT whom_id FROM follower
+                    WHERE who_id = ?)
+                )
+            ORDER BY message.pub_date desc limit 30`;
         return new Promise((resolve, reject) => {
             this.db.all(sql, [userId], (err, messages) => {
                 if (err) {
@@ -82,15 +86,31 @@ class UserService {
 
     async getUserIdByUsername(username) {
         const sql = `SELECT user_id FROM user 
-                    JOIN message m 
-                    ON m.author_id = user.user_id 
                     WHERE user.username = ?`;
         return new Promise((resolve, reject) => {
             this.db.get(sql, [username], (err, row) => {
                 if (err) {
                     reject(err);
                 } else {
-                    resolve(row ? row.user_id : null);
+                    resolve(row.user_id);
+                }
+            });
+        });
+    }
+
+    async isFollowing(userId, followedId) {
+        const sql = `SELECT * FROM follower 
+                    WHERE who_id = ? AND whom_id = ?`;
+        return new Promise((resolve, reject) => {
+            this.db.get(sql, [userId, followedId], (err, row) => {
+                if (err) {
+                    reject(err);
+                }
+                if (!row) {
+                    resolve(false);
+                }
+                else {
+                    resolve(true);
                 }
             });
         });
@@ -120,7 +140,7 @@ class UserService {
                 if (err) {
                     reject(err);
                 } else {
-                    resolve();
+                    resolve(true);
                 }
             });
         });
@@ -133,7 +153,7 @@ class UserService {
                 if (err) {
                     reject(err);
                 } else {
-                    resolve();
+                    resolve(false);
                 }
             });
         });

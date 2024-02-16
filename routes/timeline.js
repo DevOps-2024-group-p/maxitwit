@@ -40,7 +40,6 @@ function formatMessages(messages) {
 }
 
 
-
 router.post('/add_message', requireAuth, async function (req, res, next) {
 	try {
 		const userId = req.session.username.id;
@@ -84,19 +83,18 @@ router.get('/', requireAuth, async function (req, res, next) {
 
 router.get('/public', async function (req, res, next) {
 	try {
-		const g = { user: req.session.username };
-		const endpoint = 'user'
-		const profile_user = 'example_profile_user';
-		const followed = true;
+
+		const g = {
+			user: req.session.username
+		};
 		let messages = await userService.getPublicTimelineMessages();
 		res.render('timeline', {
-			endpoint: endpoint,
+			endpoint: 'timeline',
 			title: `Public Timeline`,
 			messages: formatMessages(messages),
 			g: g,
-			profile_user: profile_user,
-			followed: followed,
 		});
+
 	} catch (error) {
 		console.error(error.message);
 		res.status(500).send('Server error');
@@ -105,19 +103,33 @@ router.get('/public', async function (req, res, next) {
 
 
 
-router.get('/:username', async function (req, res, next) {
+router.get('/:username', requireAuth, async function (req, res, next) {
 	try {
-		const g = { user: req.session.username };
-		const profile_user = 'example_profile_user';
-		const followed = true;
-		const username = req.params.username;
+		const who_id = req.session.username.id;
+		const g = {
+			user: {
+				id: req.session.username.id,
+				username: req.session.username.username
 
-		const userId = await userService.getUserIdByUsername(username);
-		let messages = await userService.getMessagesByUserId(userId);
+			}
+		};
+
+		const whom_username = req.params.username;
+		const whom_id = await userService.getUserIdByUsername(whom_username);
+		const profile_user = {
+			user: {
+				id: whom_id,
+				username: whom_username
+			}
+		};
+
+		const followed = await userService.isFollowing(who_id, whom_id);
+
+		let messages = await userService.getMessagesByUserId(whom_id);
 
 		res.render('timeline', {
 			endpoint: 'user',
-			title: `${username}'s Timeline`,
+			title: `${whom_username}'s Timeline`,
 			messages: formatMessages(messages),
 			g: g,
 			profile_user: profile_user,
@@ -129,25 +141,38 @@ router.get('/:username', async function (req, res, next) {
 	}
 });
 
-router.post('/:username/follow', requireAuth, async function (req, res, next) {
+router.get('/:username/follow', requireAuth, async function (req, res, next) {
 
 	try {
 		const who_id = req.session.username.id;
-		const g = { user: who_id };
+		const g = {
+			user: {
+				id: req.session.username.id,
+				username: req.session.username.username
 
+			}
+		};
 
-		const whom_username = eq.params.username;
-		const whom_id = await userService.getUserIdByUsername(username);
+		const whom_username = req.params.username;
+		const whom_id = await userService.getUserIdByUsername(whom_username);
+		const profile_user = {
+			user: {
+				id: whom_id,
+				username: whom_username
+			}
+		};
 
-		await userService.followUser(who_id, whom_id);
+		let messages = await userService.getMessagesByUserId(whom_id);
+
+		const followed = await userService.followUser(who_id, whom_id);
 		// TODO: implement flashes
 		// res.redirect(`/${whom_username}`);
 		res.render('timeline', {
 			endpoint: 'user',
-			title: `${username}'s Timeline`,
+			title: `${whom_username}'s Timeline`,
 			messages: formatMessages(messages),
 			g: g,
-			profile_user: whom_id,
+			profile_user: profile_user,
 			followed: followed,
 		});
 	} catch (error) {
@@ -156,15 +181,39 @@ router.post('/:username/follow', requireAuth, async function (req, res, next) {
 	}
 });
 
-router.post('/:username/unfollow', requireAuth, async function (req, res, next) {
+router.get('/:username/unfollow', requireAuth, async function (req, res, next) {
 	try {
-		const endpoint = 'user';
 		const who_id = req.session.username.id;
+		const g = {
+			user: {
+				id: req.session.username.id,
+				username: req.session.username.username
+
+			}
+		};
 
 		const whom_username = req.params.username;
 		const whom_id = await userService.getUserIdByUsername(whom_username);
+		const profile_user = {
+			user: {
+				id: whom_id,
+				username: whom_username
+			}
+		};
 
-		await userService.unfollowUser(who_id, whom_id);
+		let messages = await userService.getMessagesByUserId(whom_id);
+
+		const followed = await userService.unfollowUser(who_id, whom_id);
+		// TODO: implement flashes
+		// res.redirect(`/${whom_username}`);
+		res.render('timeline', {
+			endpoint: 'user',
+			title: `${whom_username}'s Timeline`,
+			messages: formatMessages(messages),
+			g: g,
+			profile_user: profile_user,
+			followed: followed,
+		});
 	} catch (error) {
 		console.error(error.message);
 		res.status(500).send('Server error');
