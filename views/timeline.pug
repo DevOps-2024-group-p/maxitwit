@@ -5,15 +5,15 @@ block content
   if g.user
     if endpoint === 'user'
       .followstatus
-        if g.user.user_id === profile_user.user_id
+        if g.user.id === profile_user.user.id
           | This is you!
         else if followed
           | You are currently following this user.
-          a.unfollow(href=`${profile_user}/unfollow`)
+          a.unfollow(href=`${profile_user.user.username}/unfollow`)
             | Unfollow user
         else
           | You are not yet following this user.
-          a.follow(href=`${profile_user}/follow`)
+          a.follow(href=`${profile_user.user.username}/follow`)
             | Follow user
     else if endpoint === 'timeline'
       .twitbox

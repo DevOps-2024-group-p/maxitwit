@@ -7,7 +7,7 @@ html
    div(class='page')
       h1 Maxitwit
       div(class='navigation')
-        if g.user
+        if g && g.user
           a(href=('/')) my timeline  | 
           a(href=('/public')) public timeline   |
           a(href=('/logout')) sign out #{g.user.username}
