@@ -44,19 +44,20 @@ class UserService {
     }
 
     async getMessagesFromUserAndFollowedUsers(userId) {
-        const sql = `
-            SELECT message.*, user.* 
-            FROM message, user
-            WHERE message.flagged = 0
-            AND (
-                user.user_id = ?
-                OR user.user_id IN (
-                    SELECT whom_id FROM follower
-                    WHERE who_id = ?)
-                )
-            ORDER BY message.pub_date desc limit 30`;
+        const sql = `SELECT message.text, message.pub_date, message.flagged, user.username, user.email 
+                    FROM message
+                    JOIN user on message.author_id = user.user_id
+                    WHERE message.flagged = 0 
+                    AND message.author_id = user.user_id 
+                    AND (
+                        user.user_id = ?
+                        OR user.user_id IN (
+                            SELECT whom_id FROM follower
+                            WHERE who_id = ?))
+                    ORDER BY message.pub_date DESC
+                    LIMIT 50`;
         return new Promise((resolve, reject) => {
-            this.db.all(sql, [userId], (err, messages) => {
+            this.db.all(sql, [userId, userId], (err, messages) => {
                 if (err) {
                     reject(err);
                 } else {

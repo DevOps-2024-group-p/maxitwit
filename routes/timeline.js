@@ -63,17 +63,12 @@ router.get('/', requireAuth, async function (req, res, next) {
 	try {
 		const userId = req.session.username.id;
 		const g = { user: req.session.username };
-		const profile_user = 'example_profile_user';
-		const followed = true;
-		// const followed_users = await userService.getFollowed(userId);
 		let messages = await userService.getMessagesFromUserAndFollowedUsers(userId);
 		res.render('timeline', {
 			endpoint: 'timeline',
 			title: `${g.user.username}'s timeline`,
 			messages: formatMessages(messages),
 			g: g,
-			profile_user: profile_user,
-			followed: followed,
 		});
 	} catch (error) {
 		console.error(error.message);
