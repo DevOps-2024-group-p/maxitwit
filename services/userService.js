@@ -95,6 +95,22 @@ class UserService {
             });
         });
     }
-}
+    async getFollowed(userId) {
+        const sql = `select distinct f.whom_id
+                     from follower f
+                    where follower.who_id = ?
+                `
+        return new Promise((resolve, reject) => {
+            this.db.all(sql, [userId], (err, followed) => {
+                if(err) {
+                    reject(err);
+                }else {
+                    resolve(followed);
+                }
+            })
+        })
+        
+    }
 
+}
 module.exports = UserService;
