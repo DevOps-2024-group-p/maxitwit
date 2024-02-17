@@ -11,6 +11,12 @@ router.use(session({
 	saveUninitialized: true
 }));
 
+router.use(function (req, res, next) {
+	res.locals.success_messages = req.flash('success');
+	res.locals.error_messages = req.flash('error');
+	next();
+})
+
 const requireAuth = (req, res, next) => {
 	if (req.session.username) {
 		next();
@@ -46,6 +52,7 @@ router.post('/add_message', requireAuth, async function (req, res, next) {
 		const messageContent = req.body.text;
 		const currentDate = Math.floor(new Date().getTime() / 1000);
 		await userService.addMessage(userId, messageContent, currentDate);
+		req.flash('success', 'Nice tweet!');
 		res.redirect('/')
 	} catch (error) {
 		console.log(error);
@@ -159,6 +166,7 @@ router.get('/:username/follow', requireAuth, async function (req, res, next) {
 		let messages = await userService.getMessagesByUserId(whom_id);
 
 		const followed = await userService.followUser(who_id, whom_id);
+		req.flash('success', `You are now following ${whom_username}`)
 		// TODO: implement flashes
 		// res.redirect(`/${whom_username}`);
 		res.render('timeline', {
@@ -198,6 +206,7 @@ router.get('/:username/unfollow', requireAuth, async function (req, res, next) {
 		let messages = await userService.getMessagesByUserId(whom_id);
 
 		const followed = await userService.unfollowUser(who_id, whom_id);
+		req.flash('success', `You have unfollowed ${whom_username}`)
 		// TODO: implement flashes
 		// res.redirect(`/${whom_username}`);
 		res.render('timeline', {

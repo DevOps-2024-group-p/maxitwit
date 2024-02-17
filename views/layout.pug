@@ -15,6 +15,14 @@ html
           a(href=('/public')) public timeline   |
           a(href=('/register')) sign up   |
           a(href=('/login')) sign in    |
+      if success_messages
+        ul.flashes
+          each message in success_messages
+            li= message
+      if error_messages
+        ul.flashes
+          each message in error_messages
+            li= message
       div(class='body')
         block content
       div(class='footer') Maxitwit &mdash; An Express application
