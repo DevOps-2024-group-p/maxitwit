@@ -11,6 +11,7 @@ const path = require('path'); // Core Node.js module to handle and transform fil
 const cookieParser = require('cookie-parser'); // Middleware to parse and set cookies in request objects
 const logger = require('morgan'); // HTTP request logger middleware for node.js
 const session = require('express-session');
+var flash = require('connect-flash');
 
 // DB Modules
 const sqlite3 = require('sqlite3').verbose();
@@ -39,6 +40,7 @@ app.use(express.json()); // Parses incoming requests with JSON payloads, making 
 app.use(express.urlencoded({ extended: false })); // Parses incoming requests with URL-encoded payloads, useful for form submissions
 app.use(cookieParser()); // Parse Cookie header and populate req.cookies with an object keyed by cookie names
 app.use(express.static(path.join(__dirname, 'public'))); // Serve static files (images, CSS, JavaScript) from the 'public' directory
+app.use(flash());
 
 app.use(session({
   secret: 'devving-and-opssing',
@@ -51,12 +53,6 @@ app.use('/login', loginRouter); // Use the login router for requests to '/login'
 app.use('/register', registerRouter); // Use the register router for requests to '/register'
 app.use('/', timelineRouter); // Use the public timeline router for requests to '/'
 
-
-// Catch 404 and forward to error handler
-app.use(function (req, res, next) {
-  next(createError(404)); // If no middleware has responded by now, it means a 404 error should be generated and forwarded to the error handler
-});
-
 // Error handler middleware
 app.use(function (err, req, res, next) {
   // Set locals, providing error details only in development environment
@@ -68,5 +64,10 @@ app.use(function (err, req, res, next) {
   res.render('error'); // Uses the view engine to render the error page
 });
 
+app.use(function (req, res, next) {
+  res.success_messages = req.flash('success');
+  res.error_messages = req.flash('error');
+  next();
+})
 // Export the app for use by other modules (like the server starter script)
 module.exports = app;
