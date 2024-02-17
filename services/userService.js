@@ -48,7 +48,6 @@ class UserService {
                     FROM message
                     JOIN user on message.author_id = user.user_id
                     WHERE message.flagged = 0 
-                    AND message.author_id = user.user_id 
                     AND (
                         user.user_id = ?
                         OR user.user_id IN (
@@ -85,6 +84,33 @@ class UserService {
         });
     }
 
+    async getUserIdByUsernameIfExists(username) {
+        const sql = `SELECT user_id FROM user 
+                    WHERE user.username = ?`;
+        return new Promise((resolve, reject) => {
+            this.db.get(sql, [username], (err, row) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(row);
+                }
+            });
+        });
+    }
+
+    async getUserByUsername(username) {
+        const sql = 'SELECT * FROM user WHERE username = ?';
+        return new Promise((reject, resolve) => {
+            this.db.get(sql, [username], (err, row) => {
+                if (err) {
+                    console.error(err.message);
+                    reject(err);
+                }
+                resolve(row);
+            })
+        })
+    }
+
     async getUserIdByUsername(username) {
         const sql = `SELECT user_id FROM user 
                     WHERE user.username = ?`;
@@ -94,6 +120,34 @@ class UserService {
                     reject(err);
                 } else {
                     resolve(row.user_id);
+                }
+            });
+        });
+    }
+
+    async getUserIdByEmail(email) {
+        const sql = `SELECT user_id FROM user 
+                    WHERE user.email = ?`;
+        return new Promise((resolve, reject) => {
+            this.db.get(sql, [email], (err, row) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(row.user_id);
+                }
+            });
+        });
+    }
+
+    async getUserIdByEmailIfExists(email) {
+        const sql = `SELECT user_id FROM user 
+                    WHERE user.email = ?`;
+        return new Promise((resolve, reject) => {
+            this.db.get(sql, [email], (err, row) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(row);
                 }
             });
         });
@@ -120,8 +174,7 @@ class UserService {
     async getFollowed(userId) {
         const sql = `select distinct f.whom_id
                      from follower f
-                    where follower.who_id = ?
-                `
+                    where follower.who_id = ?`
         return new Promise((resolve, reject) => {
             this.db.all(sql, [userId], (err, followed) => {
                 if (err) {
@@ -158,6 +211,19 @@ class UserService {
                 }
             });
         });
+    }
+
+    async registerUser(username, email, hash) {
+        const sql = `INSERT INTO user (username, email, pw_hash) VALUES (?, ?, ?)`;
+        return new Promise((resolve, reject) => {
+            this.db.run(sql, [username, email, hash], (err) => {
+                if (err) {
+                    console.error(err.message);
+                    reject(err);
+                }
+                resolve();
+            });
+        })
     }
 
 }

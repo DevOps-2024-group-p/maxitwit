@@ -55,7 +55,6 @@ router.post('/add_message', requireAuth, async function (req, res, next) {
 
 router.get('/logout', function (req, res) {
 	req.session.destroy();
-	const g = { user: null };
 	res.redirect('/public');
 });
 
