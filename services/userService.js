@@ -1,21 +1,12 @@
-const sqlite3 = require('sqlite3').verbose();
+const db = require('../db/database');
 
 class UserService {
-    constructor() {
-        this.db = new sqlite3.Database('./db/minitwit.db', sqlite3.OPEN_READWRITE, (err) => {
-            if (err) {
-                console.error(err.message);
-            } else {
-                console.log('Added db connection from user service');
-            }
-        });
-    }
 
     async addMessage(userId, messageContent, currentDate) {
         const flagged = 0;
         const sql = `INSERT INTO message (author_id, text, pub_date, flagged) VALUES (?, ?, ?, ?)`;
         return new Promise((resolve, reject) => {
-            this.db.run(sql, [userId, messageContent, currentDate, flagged], (err) => {
+            db.getDb().run(sql, [userId, messageContent, currentDate, flagged], (err) => {
                 if (err) {
                     reject(err);
                 } else {
@@ -33,7 +24,7 @@ class UserService {
                     ORDER BY message.pub_date DESC
                     LIMIT 50`;
         return new Promise((resolve, reject) => {
-            this.db.all(sql, [id], (err, messages) => {
+            db.getDb().all(sql, [id], (err, messages) => {
                 if (err) {
                     reject(err);
                 } else {
@@ -56,7 +47,7 @@ class UserService {
                     ORDER BY message.pub_date DESC
                     LIMIT 50`;
         return new Promise((resolve, reject) => {
-            this.db.all(sql, [userId, userId], (err, messages) => {
+            db.getDb().all(sql, [userId, userId], (err, messages) => {
                 if (err) {
                     reject(err);
                 } else {
@@ -74,7 +65,7 @@ class UserService {
                     ORDER BY message.pub_date DESC
                     LIMIT 50`;
         return new Promise((resolve, reject) => {
-            this.db.all(sql, [], (err, messages) => {
+            db.getDb().all(sql, [], (err, messages) => {
                 if (err) {
                     reject(err);
                 } else {
@@ -88,7 +79,7 @@ class UserService {
         const sql = `SELECT user_id FROM user 
                     WHERE user.username = ?`;
         return new Promise((resolve, reject) => {
-            this.db.get(sql, [username], (err, row) => {
+            db.getDb().get(sql, [username], (err, row) => {
                 if (err) {
                     reject(err);
                 } else {
@@ -101,7 +92,7 @@ class UserService {
     async getUserByUsername(username) {
         const sql = 'SELECT * FROM user WHERE username = ?';
         return new Promise((reject, resolve) => {
-            this.db.get(sql, [username], (err, row) => {
+            db.getDb().get(sql, [username], (err, row) => {
                 if (err) {
                     console.error(err.message);
                     reject(err);
@@ -115,11 +106,11 @@ class UserService {
         const sql = `SELECT user_id FROM user 
                     WHERE user.username = ?`;
         return new Promise((resolve, reject) => {
-            this.db.get(sql, [username], (err, row) => {
+            db.getDb().get(sql, [username], (err, id) => {
                 if (err) {
                     reject(err);
                 } else {
-                    resolve(row.user_id);
+                    resolve(id);
                 }
             });
         });
@@ -129,11 +120,11 @@ class UserService {
         const sql = `SELECT user_id FROM user 
                     WHERE user.email = ?`;
         return new Promise((resolve, reject) => {
-            this.db.get(sql, [email], (err, row) => {
+            db.getDb().get(sql, [email], (err, id) => {
                 if (err) {
                     reject(err);
                 } else {
-                    resolve(row.user_id);
+                    resolve(id);
                 }
             });
         });
@@ -143,7 +134,7 @@ class UserService {
         const sql = `SELECT user_id FROM user 
                     WHERE user.email = ?`;
         return new Promise((resolve, reject) => {
-            this.db.get(sql, [email], (err, row) => {
+            db.getDb().get(sql, [email], (err, row) => {
                 if (err) {
                     reject(err);
                 } else {
@@ -153,11 +144,11 @@ class UserService {
         });
     }
 
-    async isFollowing(userId, followedId) {
+    async isFollowing(who_id, whom_id) {
         const sql = `SELECT * FROM follower 
                     WHERE who_id = ? AND whom_id = ?`;
         return new Promise((resolve, reject) => {
-            this.db.get(sql, [userId, followedId], (err, row) => {
+            db.getDb().get(sql, [who_id, whom_id], (err, row) => {
                 if (err) {
                     reject(err);
                 }
@@ -176,7 +167,7 @@ class UserService {
                      from follower f
                     where follower.who_id = ?`
         return new Promise((resolve, reject) => {
-            this.db.all(sql, [userId], (err, followed) => {
+            db.getDb().all(sql, [userId], (err, followed) => {
                 if (err) {
                     reject(err);
                 } else {
@@ -190,7 +181,7 @@ class UserService {
     async followUser(userId, followedId) {
         const sql = `INSERT INTO follower (who_id, whom_id) VALUES (?, ?)`;
         return new Promise((resolve, reject) => {
-            this.db.run(sql, [userId, followedId], (err) => {
+            db.getDb().run(sql, [userId, followedId], (err) => {
                 if (err) {
                     reject(err);
                 } else {
@@ -203,7 +194,7 @@ class UserService {
     async unfollowUser(userId, followedId) {
         const sql = `DELETE FROM follower WHERE who_id = ? AND whom_id = ?`;
         return new Promise((resolve, reject) => {
-            this.db.run(sql, [userId, followedId], (err) => {
+            db.getDb().run(sql, [userId, followedId], (err) => {
                 if (err) {
                     reject(err);
                 } else {
@@ -216,7 +207,7 @@ class UserService {
     async registerUser(username, email, hash) {
         const sql = `INSERT INTO user (username, email, pw_hash) VALUES (?, ?, ?)`;
         return new Promise((resolve, reject) => {
-            this.db.run(sql, [username, email, hash], (err) => {
+            db.getDb().run(sql, [username, email, hash], (err) => {
                 if (err) {
                     console.error(err.message);
                     reject(err);

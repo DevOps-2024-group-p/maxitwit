@@ -3,6 +3,7 @@ var router = express.Router();
 const bcrypt = require('bcrypt');
 const sqlite3 = require('sqlite3').verbose();
 var session = require('express-session');
+const db = require('../db/database');
 
 router.use(session({
 	secret: 'devving-and-opssing',
@@ -16,18 +17,22 @@ router.use(function (req, res, next) {
 	next();
 })
 
-// Database connection
-let db = new sqlite3.Database('./db/minitwit.db', sqlite3.OPEN_READWRITE, (err) => {
-	if (err) {
-		console.error(err.message);
-	} else {
-		console.log('Connected to the minitwit.db');
-	}
-});
+// If user is logged in, return id and username from session, otherwise empty user
+// Use the returned value to populate views
+function getUserCredentialsFromSession(req) {
+	if (req.session.username) {
+		return {
+			user: {
+				id: req.session.username.id,
+				username: req.session.username.username
+			}
+		}
+	} return { user: {} }
+}
 
 /* GET login page. */
 router.get('/', function (req, res) {
-	const g = { user: req.session.username };
+	const g = getUserCredentialsFromSession(req);
 	res.render('login', { title: 'Login', g: g });
 });
 
@@ -42,13 +47,13 @@ router.post('/', (req, res, next) => {
 
 	// Check user in DB
 	const sql = 'SELECT * FROM user WHERE username = ?';
-	db.get(sql, [username], (err, user) => {
+	db.getDb().get(sql, [username], (err, user) => {
 		if (err) {
 			console.error(err.message);
 			return res.status(500).send('Server error');
 		}
 		if (!user) {
-			req.flash('error', 'Invalid username or password');
+			req.flash('error', 'Invalid username');
 			res.redirect('/login');
 		} else {
 			bcrypt.compare(password, user.pw_hash, (err, result) => {
@@ -65,8 +70,8 @@ router.post('/', (req, res, next) => {
 					req.flash('success', 'You were logged in');
 					return res.redirect('/');
 				} else {
-					// Passwords dont match
-					return res.status(400).send('Invalid username or password');
+					req.flash('error', 'Invalid password');
+					return res.redirect('/login');
 				}
 			});
 		}

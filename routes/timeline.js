@@ -11,6 +11,17 @@ router.use(session({
 	saveUninitialized: true
 }));
 
+function getUserCredentialsFromSession(req) {
+	if (req.session.username) {
+		return {
+			user: {
+				id: req.session.username.id,
+				username: req.session.username.username
+			}
+		}
+	} return { user: {} }
+}
+
 router.use(function (req, res, next) {
 	res.locals.success_messages = req.flash('success');
 	res.locals.error_messages = req.flash('error');
@@ -52,7 +63,8 @@ router.post('/add_message', requireAuth, async function (req, res, next) {
 		const messageContent = req.body.text;
 		const currentDate = Math.floor(new Date().getTime() / 1000);
 		await userService.addMessage(userId, messageContent, currentDate);
-		req.flash('success', 'Nice tweet!');
+		req.flash('success', 'Your message was recorded');
+
 		res.redirect('/')
 	} catch (error) {
 		console.log(error);
@@ -60,16 +72,15 @@ router.post('/add_message', requireAuth, async function (req, res, next) {
 	}
 })
 
-router.get('/logout', function (req, res) {
+router.get('/logout', requireAuth, function (req, res) {
 	req.session.destroy();
 	res.redirect('/public');
 });
 
 router.get('/', requireAuth, async function (req, res, next) {
 	try {
-		const userId = req.session.username.id;
-		const g = { user: req.session.username };
-		let messages = await userService.getMessagesFromUserAndFollowedUsers(userId);
+		const g = getUserCredentialsFromSession(req);
+		let messages = await userService.getMessagesFromUserAndFollowedUsers(g.user.id);
 		res.render('timeline', {
 			endpoint: 'timeline',
 			title: `${g.user.username}'s timeline`,
@@ -84,13 +95,9 @@ router.get('/', requireAuth, async function (req, res, next) {
 
 router.get('/public', async function (req, res, next) {
 	try {
-
-		const g = {
-			user: req.session.username
-		};
+		const g = getUserCredentialsFromSession(req);
 		let messages = await userService.getPublicTimelineMessages();
 		res.render('timeline', {
-			endpoint: 'timeline',
 			title: `Public Timeline`,
 			messages: formatMessages(messages),
 			g: g,
@@ -104,29 +111,26 @@ router.get('/public', async function (req, res, next) {
 
 
 
-router.get('/:username', requireAuth, async function (req, res, next) {
+router.get('/:username', async function (req, res, next) {
 	try {
-		const who_id = req.session.username.id;
-		const g = {
-			user: {
-				id: req.session.username.id,
-				username: req.session.username.username
 
-			}
-		};
+		const g = getUserCredentialsFromSession(req);
 
 		const whom_username = req.params.username;
 		const whom_id = await userService.getUserIdByUsername(whom_username);
 		const profile_user = {
 			user: {
-				id: whom_id,
+				id: whom_id.user_id,
 				username: whom_username
 			}
 		};
 
-		const followed = await userService.isFollowing(who_id, whom_id);
+		let followed = false;
+		if (g) {
+			followed = await userService.isFollowing(g.user.id, whom_id.user_id);
+		}
 
-		let messages = await userService.getMessagesByUserId(whom_id);
+		let messages = await userService.getMessagesByUserId(whom_id.user_id);
 
 		res.render('timeline', {
 			endpoint: 'user',
@@ -145,38 +149,16 @@ router.get('/:username', requireAuth, async function (req, res, next) {
 router.get('/:username/follow', requireAuth, async function (req, res, next) {
 
 	try {
-		const who_id = req.session.username.id;
-		const g = {
-			user: {
-				id: req.session.username.id,
-				username: req.session.username.username
-
-			}
-		};
+		const g = getUserCredentialsFromSession(req);
 
 		const whom_username = req.params.username;
 		const whom_id = await userService.getUserIdByUsername(whom_username);
-		const profile_user = {
-			user: {
-				id: whom_id,
-				username: whom_username
-			}
-		};
 
-		let messages = await userService.getMessagesByUserId(whom_id);
+		await userService.followUser(g.user.id, whom_id.user_id)
 
-		const followed = await userService.followUser(who_id, whom_id);
 		req.flash('success', `You are now following ${whom_username}`)
-		// TODO: implement flashes
-		// res.redirect(`/${whom_username}`);
-		res.render('timeline', {
-			endpoint: 'user',
-			title: `${whom_username}'s Timeline`,
-			messages: formatMessages(messages),
-			g: g,
-			profile_user: profile_user,
-			followed: followed,
-		});
+		res.redirect(`/${whom_username}`);
+
 	} catch (error) {
 		console.error(error.message);
 		res.status(500).send('Server error');
@@ -185,38 +167,16 @@ router.get('/:username/follow', requireAuth, async function (req, res, next) {
 
 router.get('/:username/unfollow', requireAuth, async function (req, res, next) {
 	try {
-		const who_id = req.session.username.id;
-		const g = {
-			user: {
-				id: req.session.username.id,
-				username: req.session.username.username
-
-			}
-		};
+		const g = getUserCredentialsFromSession(req);
 
 		const whom_username = req.params.username;
 		const whom_id = await userService.getUserIdByUsername(whom_username);
-		const profile_user = {
-			user: {
-				id: whom_id,
-				username: whom_username
-			}
-		};
 
-		let messages = await userService.getMessagesByUserId(whom_id);
+		await userService.unfollowUser(g.user.id, whom_id.user_id);
 
-		const followed = await userService.unfollowUser(who_id, whom_id);
 		req.flash('success', `You have unfollowed ${whom_username}`)
-		// TODO: implement flashes
-		// res.redirect(`/${whom_username}`);
-		res.render('timeline', {
-			endpoint: 'user',
-			title: `${whom_username}'s Timeline`,
-			messages: formatMessages(messages),
-			g: g,
-			profile_user: profile_user,
-			followed: followed,
-		});
+		res.redirect(`/${whom_username}`);
+
 	} catch (error) {
 		console.error(error.message);
 		res.status(500).send('Server error');
