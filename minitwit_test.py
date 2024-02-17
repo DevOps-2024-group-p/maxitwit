@@ -127,7 +127,8 @@ def test_timelines():
 
     # now let's follow foo
     r = http_session.get(f"{BASE_URL}/foo/follow", allow_redirects=True)
-    assert "You are now following &#34;foo&#34;" in r.text
+    # Needed to modify &#34; to &quot;
+    assert "You are now following &quot;foo&quot;" in r.text
 
     # we should now see foo's message
     r = http_session.get(f"{BASE_URL}/")
@@ -144,7 +145,8 @@ def test_timelines():
 
     # now unfollow and check if that worked
     r = http_session.get(f"{BASE_URL}/foo/unfollow", allow_redirects=True)
-    assert "You are no longer following &#34;foo&#34;" in r.text
+    # Needed to modify &#34; to &quot;
+    assert "You are no longer following &quot;foo&quot;" in r.text
     r = http_session.get(f"{BASE_URL}/")
     assert "the message by foo" not in r.text
     assert "the message by bar" in r.text
