@@ -6,3 +6,4 @@ out/
 venv/
 node_modules/
 .idea
+.DS_STORE
