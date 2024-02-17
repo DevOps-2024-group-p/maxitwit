@@ -44,7 +44,7 @@ router.post('/add_message', requireAuth, async function (req, res, next) {
 	try {
 		const userId = req.session.username.id;
 		const messageContent = req.body.text;
-		const currentDate = new Date().getTime();
+		const currentDate = Math.floor(new Date().getTime() / 1000);
 		await userService.addMessage(userId, messageContent, currentDate);
 		res.redirect('/')
 	} catch (error) {
