@@ -11,7 +11,9 @@ const path = require('path'); // Core Node.js module to handle and transform fil
 const cookieParser = require('cookie-parser'); // Middleware to parse and set cookies in request objects
 const logger = require('morgan'); // HTTP request logger middleware for node.js
 const session = require('express-session');
+
 const flash = require('connect-flash');
+
 
 // Initialize database schema
 const db = require('./db/database');

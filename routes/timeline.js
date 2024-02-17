@@ -64,6 +64,7 @@ router.post('/add_message', requireAuth, async function (req, res, next) {
 		const currentDate = Math.floor(new Date().getTime() / 1000);
 		await userService.addMessage(userId, messageContent, currentDate);
 		req.flash('success', 'Your message was recorded');
+
 		res.redirect('/')
 	} catch (error) {
 		console.log(error);
@@ -157,6 +158,7 @@ router.get('/:username/follow', requireAuth, async function (req, res, next) {
 
 		req.flash('success', `You are now following ${whom_username}`)
 		res.redirect(`/${whom_username}`);
+
 	} catch (error) {
 		console.error(error.message);
 		res.status(500).send('Server error');
@@ -174,6 +176,7 @@ router.get('/:username/unfollow', requireAuth, async function (req, res, next) {
 
 		req.flash('success', `You have unfollowed ${whom_username}`)
 		res.redirect(`/${whom_username}`);
+
 	} catch (error) {
 		console.error(error.message);
 		res.status(500).send('Server error');
