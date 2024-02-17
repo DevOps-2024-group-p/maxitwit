@@ -156,7 +156,7 @@ router.get('/:username/follow', requireAuth, async function (req, res, next) {
 
 		await userService.followUser(g.user.id, whom_id.user_id)
 
-		req.flash('success', `You are now following ${whom_username}`)
+		req.flash('success', `You are now following \"${whom_username}\"`)
 		res.redirect(`/${whom_username}`);
 
 	} catch (error) {
@@ -174,7 +174,7 @@ router.get('/:username/unfollow', requireAuth, async function (req, res, next) {
 
 		await userService.unfollowUser(g.user.id, whom_id.user_id);
 
-		req.flash('success', `You have unfollowed ${whom_username}`)
+		req.flash('success', `You are no longer following \"${whom_username}\"`)
 		res.redirect(`/${whom_username}`);
 
 	} catch (error) {

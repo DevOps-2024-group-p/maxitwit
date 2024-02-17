@@ -74,7 +74,6 @@ router.post('/', async function (req, res, next) {
 		return res.redirect('/register')
 	}
 
-	const validEmail = validateEmail(email);
 
 	if (!validEmail) {
 		req.flash('error', 'Please enter a valid email address')
@@ -85,13 +84,13 @@ router.post('/', async function (req, res, next) {
 		const emailExists = await userService.getUserIdByEmailIfExists(email);
 		const usernameExists = await userService.getUserIdByUsernameIfExists(username);
 
-		if (emailExists) {
-			req.flash('error', 'That email is taken');
+		if (usernameExists) {
+			req.flash('error', 'The username is already taken')
 			return res.redirect('/register')
 		}
 
-		if (usernameExists) {
-			req.flash('error', 'The username is already taken')
+		if (emailExists) {
+			req.flash('error', 'That email is taken');
 			return res.redirect('/register')
 		}
 
