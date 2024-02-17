@@ -11,14 +11,18 @@ const path = require('path'); // Core Node.js module to handle and transform fil
 const cookieParser = require('cookie-parser'); // Middleware to parse and set cookies in request objects
 const logger = require('morgan'); // HTTP request logger middleware for node.js
 const session = require('express-session');
-var flash = require('connect-flash');
+const flash = require('connect-flash');
 
-// DB Modules
-const sqlite3 = require('sqlite3').verbose();
-const db = new sqlite3.Database('./db/minitwit.db'); // todo This needs to be set up in an init function with error handling instead
-const fs = require('fs');
-const sqlFilePath = path.join(__dirname, 'db', 'schema.sql');
-const sql = fs.readFileSync(sqlFilePath, 'utf8');
+// Initialize database schema
+const db = require('./db/database');
+
+db.initSchema()
+  .then(() => {
+    console.log('Database schema initialized successfully.');
+  })
+  .catch((err) => {
+    console.error('Error initializing database schema:', err);
+  });
 
 
 // Import routers for different paths

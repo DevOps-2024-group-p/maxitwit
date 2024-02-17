@@ -2,7 +2,7 @@ extends layout.pug
 
 block content
   h2= title
-  if g.user
+  if g.user.id
     if endpoint === 'user'
       .followstatus
         if g.user.id === profile_user.user.id
