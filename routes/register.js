@@ -74,13 +74,6 @@ router.post('/', async function (req, res, next) {
 		return res.redirect('/register')
 	}
 
-	const validEmail = validateEmail(email);
-
-	if (!validEmail) {
-		req.flash('error', 'Please enter a valid email address')
-		return res.redirect('/register')
-	}
-
 	try {
 		const emailExists = await userService.getUserIdByEmailIfExists(email);
 		const usernameExists = await userService.getUserIdByUsernameIfExists(username);
