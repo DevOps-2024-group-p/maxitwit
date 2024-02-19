@@ -118,7 +118,7 @@ router.get('/msgs', requireRequestFromSimulator, async function (req, res, next)
     res.json(formatMessagesAsJSON(messages));
 });
 
-router.get('/msgs/:username', requireRequestFromSimulator, async function (req, res, next) {
+router.post('/msgs/:username', requireRequestFromSimulator, async function (req, res, next) {
     updateLatest(req);
     const { username } = req.params;
     const id = await userService.getUserIdByUsername(username);
@@ -129,4 +129,31 @@ router.get('/msgs/:username', requireRequestFromSimulator, async function (req, 
     res.json(formatMessagesAsJSON(messages));
 });
 
+router.post('/fllws/:username', requireRequestFromSimulator, async function (req, res, next) {
+    updateLatest(req);
+    const latest = getLatest();
+    const { username } = req.params;
+    const id = await userService.getUserIdByUsername(username);
+
+    if (!id) {
+        res.status(404).send();
+    }
+    const{follow} = req.body;
+    await userService.followUser(id.user_id, follow)
+    res.json(formatMessagesAsJSON(messages));
+});
+
+router.post('/fllws/:username', requireRequestFromSimulator, async function (req, res, next) {
+    updateLatest(req);
+    const latest = getLatest();
+    const { username } = req.params;
+    const id = await userService.getUserIdByUsername(username);
+
+    if (!id) {
+        res.status(404).send();
+    }
+    const{unfollow} = req.body;
+    await userService.unfollowUser(id.user_id, unfollow)
+    res.json(formatMessagesAsJSON(messages));
+});
 module.exports = router;
