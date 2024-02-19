@@ -1,21 +1,22 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+
+const router = express.Router();
 const bcrypt = require('bcrypt');
 const sqlite3 = require('sqlite3').verbose();
-var session = require('express-session');
+const session = require('express-session');
 const db = require('../db/database');
 
 router.use(session({
 	secret: 'devving-and-opssing',
 	resave: false,
-	saveUninitialized: true
+	saveUninitialized: true,
 }));
 
-router.use(function (req, res, next) {
+router.use((req, res, next) => {
 	res.locals.success_messages = req.flash('success');
 	res.locals.error_messages = req.flash('error');
 	next();
-})
+});
 
 // If user is logged in, return id and username from session, otherwise empty user
 // Use the returned value to populate views
@@ -24,16 +25,16 @@ function getUserCredentialsFromSession(req) {
 		return {
 			user: {
 				id: req.session.username.id,
-				username: req.session.username.username
-			}
-		}
-	} return { user: {} }
+				username: req.session.username.username,
+			},
+		};
+	} return { user: {} };
 }
 
 /* GET login page. */
-router.get('/', function (req, res) {
+router.get('/', (req, res) => {
 	const g = getUserCredentialsFromSession(req);
-	res.render('login', { title: 'Login', g: g });
+	res.render('login', { title: 'Login', g });
 });
 
 router.post('/', (req, res, next) => {
@@ -64,15 +65,14 @@ router.post('/', (req, res, next) => {
 				if (result) {
 					req.session.username = {
 						id: user.user_id,
-						username: username
+						username,
 					};
-					console.log(req.session.username)
+					console.log(req.session.username);
 					req.flash('success', 'You were logged in');
 					return res.redirect('/');
-				} else {
-					req.flash('error', 'Invalid password');
-					return res.redirect('/login');
 				}
+				req.flash('error', 'Invalid password');
+				return res.redirect('/login');
 			});
 		}
 	});

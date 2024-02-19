@@ -14,18 +14,16 @@ const session = require('express-session');
 
 const flash = require('connect-flash');
 
-
 // Initialize database schema
 const db = require('./db/database');
 
 db.initSchema()
-  .then(() => {
-    console.log('Database schema initialized successfully.');
-  })
-  .catch((err) => {
-    console.error('Error initializing database schema:', err);
-  });
-
+	.then(() => {
+		console.log('Database schema initialized successfully.');
+	})
+	.catch((err) => {
+		console.error('Error initializing database schema:', err);
+	});
 
 // Import routers for different paths
 const loginRouter = require('./routes/login'); // Router for login related paths
@@ -33,7 +31,6 @@ const logoutRouter = require('./routes/logout'); // Router for logout related pa
 const registerRouter = require('./routes/register'); // Router for register related paths
 const timelineRouter = require('./routes/timeline'); // Router for public timeline related paths
 const apiRouter = require('./routes/api'); // Router for public timeline related paths
-
 
 // Initialize the Express application
 const app = express();
@@ -51,9 +48,9 @@ app.use(express.static(path.join(__dirname, 'public'))); // Serve static files (
 app.use(flash());
 
 app.use(session({
-  secret: 'devving-and-opssing',
-  resave: false,
-  saveUninitialized: true
+	secret: 'devving-and-opssing',
+	resave: false,
+	saveUninitialized: true,
 }));
 
 // Route handlers
@@ -64,20 +61,20 @@ app.use('/register', registerRouter); // Use the register router for requests to
 app.use('/', timelineRouter); // Use the public timeline router for requests to '/'
 
 // Error handler middleware
-app.use(function (err, req, res, next) {
-  // Set locals, providing error details only in development environment
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
+app.use((err, req, res, next) => {
+	// Set locals, providing error details only in development environment
+	res.locals.message = err.message;
+	res.locals.error = req.app.get('env') === 'development' ? err : {};
 
-  // Render the error page, setting the status code
-  res.status(err.status || 500);
-  res.render('error'); // Uses the view engine to render the error page
+	// Render the error page, setting the status code
+	res.status(err.status || 500);
+	res.render('error'); // Uses the view engine to render the error page
 });
 
-app.use(function (req, res, next) {
-  res.success_messages = req.flash('success');
-  res.error_messages = req.flash('error');
-  next();
-})
+app.use((req, res, next) => {
+	res.success_messages = req.flash('success');
+	res.error_messages = req.flash('error');
+	next();
+});
 // Export the app for use by other modules (like the server starter script)
 module.exports = app;
