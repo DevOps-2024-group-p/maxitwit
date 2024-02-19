@@ -32,6 +32,7 @@ const loginRouter = require('./routes/login'); // Router for login related paths
 const logoutRouter = require('./routes/logout'); // Router for logout related paths
 const registerRouter = require('./routes/register'); // Router for register related paths
 const timelineRouter = require('./routes/timeline'); // Router for public timeline related paths
+const apiRouter = require('./routes/api'); // Router for public timeline related paths
 
 
 // Initialize the Express application
@@ -56,6 +57,7 @@ app.use(session({
 }));
 
 // Route handlers
+app.use('/api', apiRouter); // Use the public timeline router for requests to '/'
 app.use('/login', loginRouter); // Use the login router for requests to '/login'
 app.use('/logout', logoutRouter); // Use the logout router for requests to '/login'
 app.use('/register', registerRouter); // Use the register router for requests to '/register'

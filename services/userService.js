@@ -57,15 +57,15 @@ class UserService {
         });
     }
 
-    async getPublicTimelineMessages() {
+    async getPublicTimelineMessages(limit) {
         const sql = `SELECT message.text, message.pub_date, message.flagged, user.username, user.email 
                     FROM message
                     JOIN user ON message.author_id = user.user_id
                     WHERE message.flagged != 1
                     ORDER BY message.pub_date DESC
-                    LIMIT 50`;
+                    LIMIT ?`;
         return new Promise((resolve, reject) => {
-            db.getDb().all(sql, [], (err, messages) => {
+            db.getDb().all(sql, [limit], (err, messages) => {
                 if (err) {
                     reject(err);
                 } else {
