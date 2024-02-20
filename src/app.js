@@ -55,12 +55,15 @@ app.use(session({
 	secret: 'your secret',
 	cookie: { maxAge: 7 * 24 * 60 * 60 * 1000 } // 1 week
 }));
-// Route handlers
-app.use('/api', apiRouter); // Use the public timeline router for requests to '/'
-app.use('/login', loginRouter); // Use the login router for requests to '/login'
-app.use('/logout', logoutRouter); // Use the logout router for requests to '/login'
-app.use('/register', registerRouter); // Use the register router for requests to '/register'
-app.use('/', timelineRouter); // Use the public timeline router for requests to '/'
+
+if (process.env.NODE_ENV === 'api') {
+	app.use('/', apiRouter); // Use the API router for requests to '/api'
+} else {
+	app.use('/login', loginRouter); // Use the login router for requests to '/login'
+	app.use('/logout', logoutRouter); // Use the logout router for requests to '/login'
+	app.use('/register', registerRouter); // Use the register router for requests to '/register'
+	app.use('/', timelineRouter); // Use the public timeline router for requests to '/'
+}
 // Error handler middleware
 app.use((err, req, res, next) => {
 	// Set locals, providing error details only in development environment
