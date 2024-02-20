@@ -7,14 +7,14 @@
 # You can add other services your application may depend on here, such as a
 # database or a cache. For examples, see the Awesome Compose repository:
 # https://github.com/docker/awesome-compose
+
 services:
   server:
     build:
       context: .
-      target: dev
-    environment:
-      NODE_ENV: development
+      target: ${target}
     volumes:
+      - ./db:/usr/src/app/db
       - ./src:/usr/src/app/src
     ports:
       - 3000:3000
@@ -51,4 +51,5 @@ services:
 # secrets:
 #   db-password:
 #     file: db/password.txt
+
 
