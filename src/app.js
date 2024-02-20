@@ -15,7 +15,7 @@ const session = require('express-session');
 const flash = require('connect-flash');
 
 // Initialize database schema
-const db = require('./db/database');
+const db = require('../db/database');
 
 db.initSchema()
 	.then(() => {
@@ -26,11 +26,11 @@ db.initSchema()
 	});
 
 // Import routers for different paths
-const loginRouter = require('./src/routes/login'); // Router for login related paths
-const logoutRouter = require('./src/routes/logout'); // Router for logout related paths
-const registerRouter = require('./src/routes/register'); // Router for register related paths
-const timelineRouter = require('./src/routes/timeline'); // Router for public timeline related paths
-const apiRouter = require('./src/routes/api'); // Router for public timeline related paths
+const loginRouter = require('./routes/login'); // Router for login related paths
+const logoutRouter = require('./routes/logout'); // Router for logout related paths
+const registerRouter = require('./routes/register'); // Router for register related paths
+const timelineRouter = require('./routes/timeline'); // Router for public timeline related paths
+const apiRouter = require('./routes/api'); // Router for public timeline related paths
 
 // Initialize the Express application
 const app = express();
