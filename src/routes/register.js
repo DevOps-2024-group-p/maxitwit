@@ -2,22 +2,10 @@ const express = require('express');
 
 const router = express.Router();
 const bcrypt = require('bcrypt');
-const session = require('express-session');
 const UserService = require('../services/userService');
 
 const userService = new UserService();
 
-router.use(session({
-	secret: 'devving-and-opssing',
-	resave: false,
-	saveUninitialized: true,
-}));
-
-router.use((req, res, next) => {
-	res.locals.success_messages = req.flash('success');
-	res.locals.error_messages = req.flash('error');
-	next();
-});
 
 function getUserCredentialsFromSession(req) {
 	if (req.session.username) {

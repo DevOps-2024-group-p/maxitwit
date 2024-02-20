@@ -2,16 +2,9 @@ const express = require('express');
 
 const router = express.Router();
 const crypto = require('crypto');
-const session = require('express-session');
 const UserService = require('../services/userService');
 
 const userService = new UserService();
-
-router.use(session({
-	secret: 'devving-and-opssing',
-	resave: false,
-	saveUninitialized: true,
-}));
 
 function getUserCredentialsFromSession(req) {
 	if (req.session.username) {
@@ -23,12 +16,6 @@ function getUserCredentialsFromSession(req) {
 		};
 	} return { user: {} };
 }
-
-router.use((req, res, next) => {
-	res.locals.success_messages = req.flash('success');
-	res.locals.error_messages = req.flash('error');
-	next();
-});
 
 const requireAuth = (req, res, next) => {
 	if (req.session.username) {

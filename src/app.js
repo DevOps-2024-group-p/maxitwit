@@ -5,19 +5,18 @@
  */
 
 // Import necessary modules
-const createError = require('http-errors'); // Module to create HTTP errors for Express, simplifies error handling
 const express = require('express'); // The main Express framework
 const path = require('path'); // Core Node.js module to handle and transform file paths
 const cookieParser = require('cookie-parser'); // Middleware to parse and set cookies in request objects
 const logger = require('morgan'); // HTTP request logger middleware for node.js
 const session = require('express-session');
-
+const SQLiteStore = require('connect-sqlite3')(session);
 const flash = require('connect-flash');
 
 // Initialize database schema
-const db = require('../db/database');
+const database = require('../db/database');
 
-db.initSchema()
+database.initSchema()
 	.then(() => {
 		console.log('Database schema initialized successfully.');
 	})
@@ -35,10 +34,9 @@ const apiRouter = require('./routes/api'); // Router for public timeline related
 // Initialize the Express application
 const app = express();
 
-// Set up the view engine (jade/pug)
+
 app.set('views', path.join(__dirname, 'views')); // Specifies the directory where the Jade template files are located
 app.set('view engine', 'pug'); // Sets Jade (now Pug) as the template engine for rendering views
-
 // Middleware setup
 app.use(logger('dev')); // Use Morgan to log requests to the console in 'dev' format, which includes method, url, status, response time
 app.use(express.json()); // Parses incoming requests with JSON payloads, making it easy to handle JSON data
@@ -46,20 +44,22 @@ app.use(express.urlencoded({ extended: false })); // Parses incoming requests wi
 app.use(cookieParser()); // Parse Cookie header and populate req.cookies with an object keyed by cookie names
 app.use(express.static(path.join(__dirname, 'public'))); // Serve static files (images, CSS, JavaScript) from the 'public' directory
 app.use(flash());
-
 app.use(session({
-	secret: 'devving-and-opssing',
 	resave: false,
-	saveUninitialized: true,
+	saveUninitialized: false,
+	store: new SQLiteStore({
+		dir: './db',
+		db: 'sessions.db'
+	}),
+	secret: 'your secret',
+	cookie: { maxAge: 7 * 24 * 60 * 60 * 1000 } // 1 week
 }));
-
 // Route handlers
 app.use('/api', apiRouter); // Use the public timeline router for requests to '/'
 app.use('/login', loginRouter); // Use the login router for requests to '/login'
 app.use('/logout', logoutRouter); // Use the logout router for requests to '/login'
 app.use('/register', registerRouter); // Use the register router for requests to '/register'
 app.use('/', timelineRouter); // Use the public timeline router for requests to '/'
-
 // Error handler middleware
 app.use((err, req, res, next) => {
 	// Set locals, providing error details only in development environment
@@ -76,5 +76,6 @@ app.use((req, res, next) => {
 	res.error_messages = req.flash('error');
 	next();
 });
+
 // Export the app for use by other modules (like the server starter script)
 module.exports = app;

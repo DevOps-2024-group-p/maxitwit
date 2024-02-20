@@ -2,7 +2,6 @@ const express = require('express');
 
 const router = express.Router();
 const UserService = require('../services/userService');
-const path = require('path');
 const userService = new UserService();
 const fs = require('fs');
 
@@ -48,14 +47,14 @@ function getLatest() {
 	return parseInt(last);
 }
 
-router.get('/', requireRequestFromSimulator, (req, res, next) => res.status(404).send());
+router.get('/', requireRequestFromSimulator, (req, res) => res.status(404).send());
 
-router.get('/latest', requireRequestFromSimulator, (req, res, next) => {
+router.get('/latest', requireRequestFromSimulator, (req, res) => {
 	const latest = getLatest();
 	return res.json({ latest });
 });
 
-router.post('/register', requireRequestFromSimulator, async (req, res, next) => {
+router.post('/register', requireRequestFromSimulator, async (req, res) => {
 	const { username, email, pwd } = req.body;
 	updateLatest(req);
 
@@ -96,7 +95,7 @@ router.post('/register', requireRequestFromSimulator, async (req, res, next) => 
 	return res.status(204).send();
 });
 
-router.post('/msgs/:username', requireRequestFromSimulator, async (req, res, next) => {
+router.post('/msgs/:username', requireRequestFromSimulator, async (req, res) => {
 	updateLatest(req);
 	const { username } = req.params;
 	const { content } = req.body;
@@ -106,7 +105,7 @@ router.post('/msgs/:username', requireRequestFromSimulator, async (req, res, nex
 	return res.status(204).send();
 });
 
-router.get('/msgs', requireRequestFromSimulator, async (req, res, next) => {
+router.get('/msgs', requireRequestFromSimulator, async (req, res) => {
 	updateLatest(req);
 	const { no } = req.query;
 	const messages = await userService.getPublicTimelineMessages(no);
