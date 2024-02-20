@@ -11,6 +11,7 @@
 services:
   server:
     build:
+      dockerfile: Dockerfile.app
       context: .
       target: ${target}
     volumes:
@@ -18,6 +19,16 @@ services:
       - ./src:/usr/src/app/src
     ports:
       - 3000:3000
+  api:
+    build:
+      dockerfile: Dockerfile.api
+      context: .
+      target: ${target}
+    volumes:
+      - ./db:/usr/src/app/db
+      - ./src:/usr/src/app/src
+    ports:
+      - 3001:3000
 
 # The commented out section below is an example of how to define a PostgreSQL
 # database that your application can use. `depends_on` tells Docker Compose to
