@@ -1,4 +1,4 @@
-const db = require('../db/database');
+const db = require('../../db/database');
 
 class UserService {
 	async addMessage(userId, messageContent, currentDate) {

@@ -2,9 +2,8 @@ const express = require('express');
 
 const router = express.Router();
 const bcrypt = require('bcrypt');
-const sqlite3 = require('sqlite3').verbose();
 const session = require('express-session');
-const db = require('../db/database');
+const db = require('../../db/database');
 
 router.use(session({
 	secret: 'devving-and-opssing',
@@ -12,11 +11,15 @@ router.use(session({
 	saveUninitialized: true,
 }));
 
+
+
 router.use((req, res, next) => {
 	res.locals.success_messages = req.flash('success');
 	res.locals.error_messages = req.flash('error');
 	next();
 });
+
+
 
 // If user is logged in, return id and username from session, otherwise empty user
 // Use the returned value to populate views

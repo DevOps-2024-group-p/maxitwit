@@ -4,7 +4,7 @@ const router = express.Router();
 const bcrypt = require('bcrypt');
 const sqlite3 = require('sqlite3').verbose();
 const session = require('express-session');
-const db = require('../db/database');
+const db = require('../../db/database');
 
 router.use(session({
 	secret: 'devving-and-opssing',
