@@ -13,7 +13,7 @@ services:
     build:
       dockerfile: Dockerfile.app
       context: .
-      target: ${target}
+      target: dev # todo set target in .env
     volumes:
       - ./db:/usr/src/app/db
       - ./src:/usr/src/app/src
@@ -23,7 +23,7 @@ services:
     build:
       dockerfile: Dockerfile.api
       context: .
-      target: ${target}
+      target: dev # todo set target in .env
     volumes:
       - ./db:/usr/src/app/db
       - ./src:/usr/src/app/src
@@ -62,5 +62,3 @@ services:
 # secrets:
 #   db-password:
 #     file: db/password.txt
-
-

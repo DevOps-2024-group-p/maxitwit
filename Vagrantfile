@@ -18,9 +18,14 @@ Vagrant.configure("2") do |config|
       provider.privatenetworking = true
     end
 
-    server.vm.hostname = "webserver"
+    server.vm.hostname = "webserver"      
 
-    config.vm.provision :docker
-    config.vm.provision :docker_compose, yml: "/vagrant/docker-compose.yml", run: "always"
   end
+
+  config.vm.provision "shell", privileged: false, inline: <<-SHELL
+    sudo apt-get update
+  SHELL
+
+  config.vm.provision :docker
+  config.vm.provision :docker_compose, yml: "/vagrant/compose.yml", run: "always"
 end
