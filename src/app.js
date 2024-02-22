@@ -5,6 +5,7 @@
  */
 
 // Import necessary modules
+require('dotenv').config(); // Load environment variables from a .env file into process.env
 const express = require('express'); // The main Express framework
 const path = require('path'); // Core Node.js module to handle and transform file paths
 const cookieParser = require('cookie-parser'); // Middleware to parse and set cookies in request objects
