@@ -1,31 +1,3 @@
-### Dev setup:
-
-#### Locally
-
-- **Install Dependencies:** 
-npm install
-
-- **Start the Server:** 
-DEBUG=neotwit:* npm start
-
-qDEBUG=neotwit:* npm stop
-
-- **Alternative Way to Start the Server + Watch for Changes:** 
-npx nodemon
-
-#### Containerized
-
-- **Build Image:**
-
-docker build -t maxitwit/app .
-
-- **Run Container:**
-
-docker run -it -dp 3000:3000 maxitwit/app
-
-- **Alternatively use docker compose:**
-
-docker compose up
 # Product Name
 > This is a student project for the course, DevOps, Software Evolution and Software Maintenance, at ITU.
 > The project is an implementation of the minitwit application, based on flask, created in Express.js with pug.
