@@ -17,14 +17,19 @@ If you wish to run the application locally, node.js and npm are required, which 
 
 ## Development setup
 
-
 The application can be run locally using npm, or packaged by a docker in a development environment.
-Both approaches should allow for development, however the docker-setup is the one closest to the actuall deployment environment.
+Both approaches should allow for development, however the docker-setup is the one closest to the actual deployment environment.
 However, test can currently only run in the npm-setup.
 
 ### Docker Setup
 
-To build the application in a dockerized enviroment, firstly go to .env and set it to 'dev' for development, or 'prod' for production.
+To build the application in a dockerized enviroment, firstly create an .env in project root and set it to 'dev' for development, or 'prod' for production.
+
+```
+cd <repo_location>
+echo "TARGET=dev" > .env
+```
+
 Then, run the following command to create your containers with the development dependencies.
 
 ```
@@ -37,12 +42,27 @@ docker compose down
 ```
 
 ### NPM setup
-To run the application outside of a docker, run:
+To run the application outside of a container, run:
 
 ```
 npm install
 npm run devstart 
 ```
+
+#### Contribution
+
+Make a feature branch and make your changes, then stage your changes. Use commitizen cli tool to format your commit message [to the standard](https://www.conventionalcommits.org/en/v1.0.0/#summary)
+
+Example:
+
+```
+git status
+$ modified:   Dockerfile.api
+git add Dockerfile.api
+npm run cz
+```
+
+Then open a pull request.
 
 #### Testing: 
 next release

@@ -36,7 +36,6 @@
     "eslint-plugin-import": "^2.29.1",
     "eslint-plugin-n": "^16.6.2",
     "eslint-plugin-promise": "^6.1.1",
-    "husky": "^9.0.11",
     "morgan": "~1.9.1",
     "nodemon": "^3.0.3",
     "npx": "^10.2.2",
@@ -46,5 +45,8 @@
     "commitizen": {
       "path": "./node_modules/cz-conventional-changelog"
     }
+  },
+  "optionalDependencies": {
+    "husky": "^9.0.11"
   }
 }

@@ -16,6 +16,7 @@ WORKDIR /usr/src/app
 # into this layer.
 FROM base as dev
 ENV NODE_ENV api
+ENV HUSKY=0
 RUN --mount=type=bind,source=package.json,target=package.json \
     --mount=type=bind,source=package-lock.json,target=package-lock.json \
     --mount=type=cache,target=/root/.npm \
@@ -26,6 +27,7 @@ CMD npm run devstart
 
 FROM base as prod
 ENV NODE_ENV api
+ENV HUSKY=0
 RUN --mount=type=bind,source=package.json,target=package.json \
     --mount=type=bind,source=package-lock.json,target=package-lock.json \
     --mount=type=cache,target=/root/.npm \
