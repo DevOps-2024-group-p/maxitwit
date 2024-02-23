@@ -1,17 +1,19 @@
 # Product Name
 > This is a student project for the course, DevOps, Software Evolution and Software Maintenance, at ITU.
-> The project is an implementation of the minitwit application, based on flask, created in Express.js with pug.
-> The original flask application can be found on: https://github.com/itu-devops/flask-minitwit-mongodb/tree/Containerize
+The project is an implementation of the minitwit application, based on flask, created in Express.js with pug.
+The original flask application can be found on: https://github.com/itu-devops/flask-minitwit-mongodb/tree/Containerize
 
 
 Some basics of the project:
     - Empty for now
 
 ## Installation
-To get the repo, run the following command:  'git clone https://github.com/itu-devops/flask-minitwit-mongodb.git'
+To get the repo, run the following command:  ```git clone https://github.com/AAFredsted/maxitwit.git```
 
-Docker is required to run the application. Help with the install can be found at: https://docs.docker.com/engine/install/ubuntu/
+Docker is required to run the application. 
+Help with the install can be found at: https://docs.docker.com/engine/install/ubuntu/
 
+If you wish to run the application locally, node.js and npm are required, which you can find here: https://nodejs.org/en
 
 ## Development setup
 
