@@ -13,7 +13,7 @@ services:
     build:
       dockerfile: Dockerfile.app
       context: .
-      target: dev # todo set target in .env
+      target: ${TARGET} # todo set target in .env
     volumes:
       - ./db:/usr/src/app/db
       - ./src:/usr/src/app/src
@@ -23,7 +23,7 @@ services:
     build:
       dockerfile: Dockerfile.api
       context: .
-      target: dev # todo set target in .env
+      target: ${TARGET} # todo set target in .env
     volumes:
       - ./db:/usr/src/app/db
       - ./src:/usr/src/app/src

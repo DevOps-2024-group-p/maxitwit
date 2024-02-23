@@ -9,7 +9,6 @@ require('dotenv').config(); // Load environment variables from a .env file into 
 const express = require('express'); // The main Express framework
 const path = require('path'); // Core Node.js module to handle and transform file paths
 const cookieParser = require('cookie-parser'); // Middleware to parse and set cookies in request objects
-const logger = require('morgan'); // HTTP request logger middleware for node.js
 const session = require('express-session');
 const SQLiteStore = require('connect-sqlite3')(session);
 const flash = require('connect-flash');
@@ -32,14 +31,21 @@ const registerRouter = require('./routes/register'); // Router for register rela
 const timelineRouter = require('./routes/timeline'); // Router for public timeline related paths
 const apiRouter = require('./routes/api'); // Router for public timeline related paths
 
+
 // Initialize the Express application
 const app = express();
 
 
 app.set('views', path.join(__dirname, 'views')); // Specifies the directory where the Jade template files are located
 app.set('view engine', 'pug'); // Sets Jade (now Pug) as the template engine for rendering views
+
 // Middleware setup
-app.use(logger('dev')); // Use Morgan to log requests to the console in 'dev' format, which includes method, url, status, response time
+//middleware only used during development
+if(process.env.NODE_ENV === 'dev'){
+	const logger = require('morgan') //http request logger middleware for node.js
+	app.use(logger('dev')); // Use Morgan to log requests to the console in 'dev' format, which includes method, url, status, response time
+}
+//middleware for use in production environment
 app.use(express.json()); // Parses incoming requests with JSON payloads, making it easy to handle JSON data
 app.use(express.urlencoded({ extended: false })); // Parses incoming requests with URL-encoded payloads, useful for form submissions
 app.use(cookieParser()); // Parse Cookie header and populate req.cookies with an object keyed by cookie names
@@ -69,6 +75,7 @@ app.use((err, req, res, next) => {
 	// Set locals, providing error details only in development environment
 	res.locals.message = err.message;
 	res.locals.error = req.app.get('env') === 'development' ? err : {};
+	console.log(process.env.NODE_ENV);
 
 	// Render the error page, setting the status code
 	res.status(err.status || 500);
