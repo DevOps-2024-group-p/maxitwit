@@ -3,8 +3,8 @@ const path = require('path')
 const sqlite3 = require('sqlite3').verbose()
 const request = require('supertest')
 
-const BASE_URL = 'http://127.0.0.1:4000/api'
-const DATABASE = './tmp/minitwit.db'
+const BASE_URL = 'http://127.0.0.1:3000/api'
+const DATABASE = './src/api/tmp/minitwit.db'
 const USERNAME = 'simulator'
 const PWD = 'super_safe!'
 const CREDENTIALS = Buffer.from(`${USERNAME}:${PWD}`).toString('base64')
