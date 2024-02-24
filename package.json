@@ -9,7 +9,8 @@
     "lint": "eslint .",
     "cz": "cz",
     "docker": "docker-compose up --build",
-    "prepare": "husky"
+    "prepare": "husky",
+    "test": "jest"
   },
   "dependencies": {
     "bcrypt": "^5.1.1",
