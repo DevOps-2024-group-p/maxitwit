@@ -65,4 +65,18 @@ npm run cz
 Then open a pull request.
 
 #### Testing: 
-next release
+
+Testing has been implemented through the jest-framework.
+To run tests, first run the command:
+```
+node server.js
+```
+This command puts the website on localhost:3000 and makes it visible to jest through a listen-function.
+
+Then, to run the tests from jest.test.js, use the following command:
+
+```
+npm test
+```
+
+
