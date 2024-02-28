@@ -16,7 +16,12 @@ const requireRequestFromSimulator = (req, res, next) => {
   next()
 }
 
-function formatMessagesAsJSON(messages) {
+const logIncomingRequests = (req, res, next) => {
+  console.log(`Incoming request: ${req.method} ${req.url}`)
+  next()
+}
+
+function formatMessagesAsJSON (messages) {
   const formattedMessages = []
   messages.forEach((msg) => {
     const formatted = {}
@@ -28,7 +33,7 @@ function formatMessagesAsJSON(messages) {
   return formattedMessages
 }
 
-function updateLatest(req) {
+function updateLatest (req) {
   const { latest } = req.query
   if (!latest) {
     return
@@ -40,14 +45,14 @@ function updateLatest(req) {
   })
 }
 
-function getLatest() {
+function getLatest () {
   const fileContent = fs.readFileSync('latest.txt', 'utf8')
   const parsed = fileContent.trim().split('\n')
   const last = parsed[parsed.length - 1]
   return parseInt(last)
 }
 
-router.get('/', requireRequestFromSimulator, (req, res) => res.status(404).send())
+router.get('/', logIncomingRequests, requireRequestFromSimulator, (req, res) => res.status(404).send())
 
 router.get('/latest', requireRequestFromSimulator, (req, res) => {
   try {
@@ -59,7 +64,7 @@ router.get('/latest', requireRequestFromSimulator, (req, res) => {
   }
 })
 
-router.post('/register', requireRequestFromSimulator, async (req, res) => {
+router.post('/register', logIncomingRequests, requireRequestFromSimulator, async (req, res) => {
   try {
     const { username, email, pwd } = req.body
     updateLatest(req)
@@ -103,10 +108,9 @@ router.post('/register', requireRequestFromSimulator, async (req, res) => {
     console.error(err)
     res.status(500).send()
   }
-
 })
 
-router.post('/msgs/:username', requireRequestFromSimulator, async (req, res) => {
+router.post('/msgs/:username', logIncomingRequests, requireRequestFromSimulator, async (req, res) => {
   try {
     updateLatest(req)
     const { username } = req.params
@@ -121,7 +125,7 @@ router.post('/msgs/:username', requireRequestFromSimulator, async (req, res) => 
   }
 })
 
-router.get('/msgs', requireRequestFromSimulator, async (req, res) => {
+router.get('/msgs', logIncomingRequests, requireRequestFromSimulator, async (req, res) => {
   try {
     updateLatest(req)
     const { no } = req.query
@@ -133,7 +137,7 @@ router.get('/msgs', requireRequestFromSimulator, async (req, res) => {
   }
 })
 
-router.get('/msgs/:username', requireRequestFromSimulator, async (req, res, next) => {
+router.get('/msgs/:username', logIncomingRequests, requireRequestFromSimulator, async (req, res, next) => {
   try {
     updateLatest(req)
     const { username } = req.params
@@ -149,7 +153,7 @@ router.get('/msgs/:username', requireRequestFromSimulator, async (req, res, next
   }
 })
 
-router.all('/fllws/:username', requireRequestFromSimulator, async (req, res, next) => {
+router.all('/fllws/:username', logIncomingRequests, requireRequestFromSimulator, async (req, res, next) => {
   try {
     updateLatest(req)
     const { username } = req.params
