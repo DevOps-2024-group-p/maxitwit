@@ -1,34 +1,14 @@
-# syntax=docker/dockerfile:1
+FROM python:3.7-alpine
 
+RUN mkdir /minitwit-tests
 
-ARG NODE_VERSION=21.6.2
+COPY minitwit_test.py /minitwit-tests/
+COPY src/api/tmp/requirements/requirements.txt /minitwit-tests/
 
-FROM node:${NODE_VERSION}-alpine as base
+WORKDIR /minitwit-tests
 
-# Expose the port that the application listens on.
+RUN pip install -r requirements.txt
+
 EXPOSE 3001
 
-WORKDIR /usr/src/app
-
-
-
-FROM base as prod
-ENV NODE_ENV api
-ENV HUSKY=0
-RUN --mount=type=bind,source=package.json,target=package.json \
-    --mount=type=bind,source=package-lock.json,target=package-lock.json \
-    --mount=type=cache,target=/root/.npm \
-    npm ci --omit=dev
-USER node
-COPY . .
-CMD npm run start
-
-FROM python:3
-
-COPY src/api/tmp/requirements/requirements.txt ./api/tmp/requirements/
-RUN pip install --no-cache-dir -r ./api/tmp/requirements/requirements.txt
-
-COPY src/api/minitwit_sim_api_test.py ./api/
-COPY src/api/tmp/minitwit.db ./api/tmp/
-
-CMD [ "python3", "./src/api/minitwit_sim_api_test.py" ]
+ENTRYPOINT ["pytest", "-s", "minitwit_tests.py"]
