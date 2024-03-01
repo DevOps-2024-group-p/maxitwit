@@ -22,6 +22,7 @@ RUN --mount=type=bind,source=package.json,target=package.json \
     npm ci --include=dev
 USER root
 COPY . .
+RUN npx prisma generate
 CMD npm run devstart
 
 FROM base as prod
@@ -30,6 +31,7 @@ RUN --mount=type=bind,source=package.json,target=package.json \
     --mount=type=bind,source=package-lock.json,target=package-lock.json \
     --mount=type=cache,target=/root/.npm \
     npm ci --omit=dev
-USER node
+USER root
 COPY . .
+RUN npx prisma generate
 CMD npm run start
