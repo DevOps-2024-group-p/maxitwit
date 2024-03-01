@@ -1,21 +1,27 @@
 const db = require('../../db/database')
 
+const { PrismaClient } = require('@prisma/client')
+const prisma = new PrismaClient()
+
 class UserService {
-  async addMessage (userId, messageContent, currentDate) {
-    const flagged = 0
-    const sql = 'INSERT INTO message (author_id, text, pub_date, flagged) VALUES (?, ?, ?, ?)'
-    return new Promise((resolve, reject) => {
-      db.getDb().run(sql, [userId, messageContent, currentDate, flagged], (err) => {
-        if (err) {
-          reject(err)
-        } else {
-          resolve()
-        }
+  async addMessage(userId, messageContent, currentDate) {
+    try {
+      const message = await prisma.message.create({
+        data: {
+          author_id: userId,
+          text: messageContent,
+          pub_date: currentDate,
+          flagged: 0,
+        },
       })
-    })
+      return message;
+    } catch (err) {
+      console.error(err)
+      throw new Error(`Error adding message to database: ${err.messsage}`)
+    }
   }
 
-  async getMessagesByUserId (id) {
+  async getMessagesByUserId(id) {
     const sql = `SELECT message.text, message.pub_date, message.flagged, user.username, user.email 
                     FROM message
                     JOIN user ON message.author_id = user.user_id
@@ -33,7 +39,7 @@ class UserService {
     })
   }
 
-  async getMessagesFromUserAndFollowedUsers (userId) {
+  async getMessagesFromUserAndFollowedUsers(userId) {
     const sql = `SELECT message.text, message.pub_date, message.flagged, user.username, user.email 
                     FROM message
                     JOIN user on message.author_id = user.user_id
@@ -56,7 +62,7 @@ class UserService {
     })
   }
 
-  async getPublicTimelineMessages (limit) {
+  async getPublicTimelineMessages(limit) {
     const sql = `SELECT message.text, message.pub_date, message.flagged, user.username, user.email 
                     FROM message
                     JOIN user ON message.author_id = user.user_id
@@ -74,7 +80,7 @@ class UserService {
     })
   }
 
-  async getUserIdByUsernameIfExists (username) {
+  async getUserIdByUsernameIfExists(username) {
     const sql = `SELECT user_id FROM user 
                     WHERE user.username = ?`
     return new Promise((resolve, reject) => {
@@ -88,7 +94,7 @@ class UserService {
     })
   }
 
-  async getUserByUsername (username) {
+  async getUserByUsername(username) {
     const sql = 'SELECT * FROM user WHERE username = ?'
     return new Promise((resolve, reject) => {
       db.getDb().get(sql, [username], (err, row) => {
@@ -101,7 +107,7 @@ class UserService {
     })
   }
 
-  async getUserIdByUsername (username) {
+  async getUserIdByUsername(username) {
     const sql = `SELECT user_id FROM user 
                     WHERE user.username = ?`
     return new Promise((resolve, reject) => {
@@ -115,7 +121,7 @@ class UserService {
     })
   }
 
-  async getUserIdByEmail (email) {
+  async getUserIdByEmail(email) {
     const sql = `SELECT user_id FROM user 
                     WHERE user.email = ?`
     return new Promise((resolve, reject) => {
@@ -129,7 +135,7 @@ class UserService {
     })
   }
 
-  async getUserIdByEmailIfExists (email) {
+  async getUserIdByEmailIfExists(email) {
     const sql = `SELECT user_id FROM user 
                     WHERE user.email = ?`
     return new Promise((resolve, reject) => {
@@ -143,7 +149,7 @@ class UserService {
     })
   }
 
-  async isFollowing (whoId, whomId) {
+  async isFollowing(whoId, whomId) {
     const sql = `SELECT * FROM follower 
                     WHERE who_id = ? AND whom_id = ?`
     return new Promise((resolve, reject) => {
@@ -160,7 +166,7 @@ class UserService {
     })
   }
 
-  async getAllFollowed (userId, limit) {
+  async getAllFollowed(userId, limit) {
     const sql = `SELECT user.username FROM user
                     INNER JOIN follower ON follower.whom_id=user.user_id
                     WHERE follower.who_id=?
@@ -176,7 +182,7 @@ class UserService {
     })
   }
 
-  async followUser (userId, followedId) {
+  async followUser(userId, followedId) {
     const sql = 'INSERT INTO follower (who_id, whom_id) VALUES (?, ?)'
     return new Promise((resolve, reject) => {
       db.getDb().run(sql, [userId, followedId], (err) => {
@@ -189,7 +195,7 @@ class UserService {
     })
   }
 
-  async unfollowUser (userId, followedId) {
+  async unfollowUser(userId, followedId) {
     const sql = 'DELETE FROM follower WHERE who_id = ? AND whom_id = ?'
     return new Promise((resolve, reject) => {
       db.getDb().run(sql, [userId, followedId], (err) => {
@@ -202,7 +208,7 @@ class UserService {
     })
   }
 
-  async registerUser (username, email, hash) {
+  async registerUser(username, email, hash) {
     const sql = 'INSERT INTO user (username, email, pw_hash) VALUES (?, ?, ?)'
     return new Promise((resolve, reject) => {
       db.getDb().run(sql, [username, email, hash], (err) => {
