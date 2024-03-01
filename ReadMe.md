@@ -66,17 +66,10 @@ Then open a pull request.
 
 #### Testing: 
 
-Testing has been implemented through the jest-framework.
-To run tests, first run the command:
-```
-node server.js
-```
-This command puts the website on localhost:3000 and makes it visible to jest through a listen-function.
+Testing has been implemented in a seperate docker-container.
+To run the environment locally, use the following commands:
 
-Then, to run the tests from jest.test.js, use the following command:
-
+``` 
+docker build -t mypytest -f Dockerfile.pytest .
+docker run -d -p 3001:3001 mypytest
 ```
-npm test
-```
-
-
