@@ -10,3 +10,4 @@ node_modules/
 .vagrant
 latest.txt
 **/*.db
+.notes
