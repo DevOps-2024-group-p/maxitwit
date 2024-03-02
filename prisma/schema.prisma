@@ -1,0 +1,32 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Follower {
+  who_id  Int
+  whom_id Int
+
+  @@id([who_id, whom_id])
+}
+
+model Message {
+  message_id Int    @id @default(autoincrement())
+  author     User   @relation(fields: [author_id], references: [user_id])
+  author_id  Int
+  text       String
+  pub_date   Int?
+  flagged    Int?
+}
+
+model User {
+  user_id  Int       @id @default(autoincrement())
+  username String    @unique
+  email    String    @unique
+  pw_hash  String
+  message  Message[]
+}

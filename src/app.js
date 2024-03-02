@@ -16,7 +16,7 @@ const flash = require('connect-flash')
 // Initialize database schema
 const database = require('../db/database')
 
-if (process.env.MIGRATE === 0) {
+if (process.env.MIGRATE === '0') {
   database.initSchema()
     .then(() => {
       console.log('Database schema initialized successfully.')
