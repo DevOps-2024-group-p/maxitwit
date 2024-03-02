@@ -1,7 +1,7 @@
 const { PrismaClient } = require('@prisma/client')
 const prisma = new PrismaClient()
 
-function formatGetMessages(messages) {
+function formatGetMessages (messages) {
   const FormattedMessages = messages.map((message) => ({
     text: message.text,
     pub_date: message.pub_date,
@@ -13,7 +13,7 @@ function formatGetMessages(messages) {
 }
 
 class UserService {
-  async addMessage(userId, messageContent, currentDate) {
+  async addMessage (userId, messageContent, currentDate) {
     try {
       const message = await prisma.message.create({
         data: {
@@ -30,7 +30,7 @@ class UserService {
     }
   }
 
-  async getMessagesByUserId(id) {
+  async getMessagesByUserId (id) {
     try {
       const messages = await prisma.message.findMany({
         where: {
@@ -60,7 +60,7 @@ class UserService {
     }
   }
 
-  async getMessagesFromUserAndFollowedUsers(userId) {
+  async getMessagesFromUserAndFollowedUsers (userId) {
     // First, get the IDs of the users that the current user is following
     const followedUsers = await prisma.follower.findMany({
       where: { who_id: userId },
@@ -97,7 +97,7 @@ class UserService {
     return formatGetMessages(messages)
   }
 
-  async getPublicTimelineMessages(limit) {
+  async getPublicTimelineMessages (limit) {
     try {
       const messages = await prisma.message.findMany({
         where: {
@@ -126,7 +126,7 @@ class UserService {
     }
   }
 
-  async getUserIdByUsernameIfExists(username) {
+  async getUserIdByUsernameIfExists (username) {
     try {
       const user = await prisma.user.findFirst({
         where: {
@@ -140,7 +140,7 @@ class UserService {
     }
   }
 
-  async getUserByUsername(username) {
+  async getUserByUsername (username) {
     try {
       const user = await prisma.user.findFirst({
         where: {
@@ -154,7 +154,7 @@ class UserService {
     }
   }
 
-  async getUserIdByUsername(username) {
+  async getUserIdByUsername (username) {
     try {
       const user = await prisma.user.findFirst({
         where: {
@@ -168,7 +168,7 @@ class UserService {
     }
   }
 
-  async getUserIdByEmail(email) {
+  async getUserIdByEmail (email) {
     try {
       const user = await prisma.user.findFirst({
         where: {
@@ -182,7 +182,7 @@ class UserService {
     }
   }
 
-  async getUserIdByEmailIfExists(email) {
+  async getUserIdByEmailIfExists (email) {
     try {
       const user = await prisma.user.findFirst({
         where: {
@@ -196,7 +196,7 @@ class UserService {
     }
   }
 
-  async isFollowing(whoId, whomId) {
+  async isFollowing (whoId, whomId) {
     try {
       const follower = await prisma.follower.findFirst({
         where: {
@@ -215,7 +215,7 @@ class UserService {
     }
   }
 
-  async getAllFollowed(userId, limit) {
+  async getAllFollowed (userId, limit) {
     try {
       const followed = await prisma.follower.findMany({
         where: {
@@ -233,7 +233,7 @@ class UserService {
     }
   }
 
-  async followUser(userId, followedId) {
+  async followUser (userId, followedId) {
     try {
       const follower = await prisma.follower.create({
         data: {
@@ -248,7 +248,7 @@ class UserService {
     }
   }
 
-  async unfollowUser(userId, followedId) {
+  async unfollowUser (userId, followedId) {
     try {
       const follower = await prisma.follower.delete({
         where: {
@@ -265,7 +265,7 @@ class UserService {
     }
   }
 
-  async registerUser(username, email, hash) {
+  async registerUser (username, email, hash) {
     try {
       const user = await prisma.user.create({
         data: {
