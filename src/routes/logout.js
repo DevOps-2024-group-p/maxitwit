@@ -11,7 +11,8 @@ const requireAuth = (req, res, next) => {
 }
 
 router.get('/', requireAuth, (req, res) => {
-  req.session.destroy()
+  req.session.username = null;
+  console.log('You were logged out')
   req.flash('success', 'You were logged out')
   res.redirect('/public')
 })
