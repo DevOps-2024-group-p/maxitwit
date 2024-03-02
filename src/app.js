@@ -50,7 +50,10 @@ app.use(express.json()) // Parses incoming requests with JSON payloads, making i
 app.use(express.urlencoded({ extended: false })) // Parses incoming requests with URL-encoded payloads, useful for form submissions
 app.use(cookieParser()) // Parse Cookie header and populate req.cookies with an object keyed by cookie names
 app.use(express.static(path.join(__dirname, 'public'))) // Serve static files (images, CSS, JavaScript) from the 'public' directory
-
+const { SESSION_SECRET } = process.env
+if (!SESSION_SECRET) {
+  throw new Error('SESSION_SECRET is not set')
+}
 app.use(session({
   resave: false,
   saveUninitialized: true,
@@ -58,7 +61,7 @@ app.use(session({
     dir: './db',
     db: 'sessions.db'
   }),
-  secret: 'your secret',
+  secret: SESSION_SECRET,
   cookie: { maxAge: 7 * 24 * 60 * 60 * 1000 } // 1 week
 }))
 
