@@ -11,6 +11,6 @@ node_modules/
 latest.txt
 /db/minitwit.db
 /db/minitwit.db-journal
-/db/session.db
+/db/sessions.db
 .notes
 .env

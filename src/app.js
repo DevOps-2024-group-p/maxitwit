@@ -41,7 +41,7 @@ app.set('view engine', 'pug') // Sets Jade (now Pug) as the template engine for 
 
 // Middleware setup
 // middleware only used during development
-if (process.env.NODE_ENV === 'dev') {
+if (process.env.NODE_ENV === 'development') {
   const logger = require('morgan') // http request logger middleware for node.js
   app.use(logger('dev')) // Use Morgan to log requests to the console in 'dev' format, which includes method, url, status, response time
 }
@@ -73,7 +73,7 @@ app.use((req, res, next) => {
   next()
 })
 
-if (process.env.NODE_ENV === 'api') {
+if (process.env.API) {
   app.use('/', apiRouter) // Use the API router for requests to '/api'
 } else {
   app.use('/login', loginRouter) // Use the login router for requests to '/login'
