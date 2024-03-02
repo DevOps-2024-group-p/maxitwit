@@ -13,19 +13,6 @@ const session = require('express-session')
 const SQLiteStore = require('connect-sqlite3')(session)
 const flash = require('connect-flash')
 
-// Initialize database schema
-const database = require('../db/database')
-
-if (process.env.MIGRATE === '0') {
-  database.initSchema()
-    .then(() => {
-      console.log('Database schema initialized successfully.')
-    })
-    .catch((err) => {
-      console.error('Error initializing database schema:', err)
-    })
-}
-
 // Import routers for different paths
 const loginRouter = require('./routes/login') // Router for login related paths
 const logoutRouter = require('./routes/logout') // Router for logout related paths
