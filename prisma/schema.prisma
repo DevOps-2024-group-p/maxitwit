@@ -28,5 +28,5 @@ model User {
   username String    @unique
   email    String    @unique
   pw_hash  String
-  Message  Message[]
+  message  Message[]
 }

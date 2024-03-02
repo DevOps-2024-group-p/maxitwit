@@ -39,8 +39,7 @@ function formatMessages (messages) {
     const hours = (`0${date.getUTCHours()}`).slice(-2)
     const minutes = (`0${date.getUTCMinutes()}`).slice(-2)
     message.pub_date = `${year}-${month}-${day} @ ${hours}:${minutes}`
-    message.gravatar = gravatarUrl(message.author.email, 48)
-    delete message.author
+    message.gravatar = gravatarUrl(message.email, 48)
   })
   return messages
 }

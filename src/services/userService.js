@@ -1,7 +1,16 @@
-const db = require('../../db/database')
-
 const { PrismaClient } = require('@prisma/client')
 const prisma = new PrismaClient()
+
+function formatGetMessages (messages) {
+  const FormattedMessages = messages.map((message) => ({
+    text: message.text,
+    pub_date: message.pub_date,
+    flagged: message.flagged,
+    username: message.author.username,
+    email: message.author.email
+  }))
+  return FormattedMessages
+}
 
 class UserService {
   async addMessage (userId, messageContent, currentDate) {
@@ -16,7 +25,7 @@ class UserService {
       })
       return message
     } catch (err) {
-      console.error(err)
+      console.log(err)
       throw new Error(`Error adding message to database: ${err.messsage}`)
     }
   }
@@ -28,219 +37,248 @@ class UserService {
           author_id: id,
           flagged: 0
         },
-        include: {
-          author: true
+        select: {
+          text: true,
+          pub_date: true,
+          flagged: true,
+          author: {
+            select: {
+              username: true,
+              email: true
+            }
+          }
         },
         orderBy: {
           pub_date: 'desc'
         },
         take: 50
       })
-      return messages
+      return formatGetMessages(messages)
     } catch (err) {
       console.error(err)
       throw new Error(`Error getting messages from database: ${err.message}`)
     }
   }
 
-  /*  async getMessagesByUserId(id) {
-     const sql = `SELECT message.text, message.pub_date, message.flagged, user.username, user.email
-                     FROM message
-                     JOIN user ON message.author_id = user.user_id
-                     WHERE message.flagged != 1 AND message.author_id = ?
-                     ORDER BY message.pub_date DESC
-                     LIMIT 50`
-     return new Promise((resolve, reject) => {
-       db.getDb().all(sql, [id], (err, messages) => {
-         if (err) {
-           reject(err)
-         } else {
-           resolve(messages)
-         }
-       })
-     })
-   } */
-
   async getMessagesFromUserAndFollowedUsers (userId) {
-    const sql = `SELECT message.text, message.pub_date, message.flagged, user.username, user.email 
-                    FROM message
-                    JOIN user on message.author_id = user.user_id
-                    WHERE message.flagged = 0 
-                    AND (
-                        user.user_id = ?
-                        OR user.user_id IN (
-                            SELECT whom_id FROM follower
-                            WHERE who_id = ?))
-                    ORDER BY message.pub_date DESC
-                    LIMIT 50`
-    return new Promise((resolve, reject) => {
-      db.getDb().all(sql, [userId, userId], (err, messages) => {
-        if (err) {
-          reject(err)
-        } else {
-          resolve(messages)
-        }
-      })
+    // First, get the IDs of the users that the current user is following
+    const followedUsers = await prisma.follower.findMany({
+      where: { who_id: userId },
+      select: { whom_id: true }
     })
+
+    const followedUserIds = followedUsers.map(user => user.whom_id)
+
+    // Then, get the messages from the current user and the users they are following
+    const messages = await prisma.message.findMany({
+      where: {
+        flagged: 0,
+        author: {
+          OR: [
+            { user_id: userId },
+            { user_id: { in: followedUserIds } }
+          ]
+        }
+      },
+      orderBy: { pub_date: 'desc' },
+      take: 50,
+      select: {
+        text: true,
+        pub_date: true,
+        flagged: true,
+        author: {
+          select: {
+            username: true,
+            email: true
+          }
+        }
+      }
+    })
+    return formatGetMessages(messages)
   }
 
   async getPublicTimelineMessages (limit) {
-    const sql = `SELECT message.text, message.pub_date, message.flagged, user.username, user.email 
-                    FROM message
-                    JOIN user ON message.author_id = user.user_id
-                    WHERE message.flagged != 1
-                    ORDER BY message.pub_date DESC
-                    LIMIT ?`
-    return new Promise((resolve, reject) => {
-      db.getDb().all(sql, [limit], (err, messages) => {
-        if (err) {
-          reject(err)
-        } else {
-          resolve(messages)
-        }
+    try {
+      const messages = await prisma.message.findMany({
+        where: {
+          flagged: 0
+        },
+        select: {
+          text: true,
+          pub_date: true,
+          flagged: true,
+          author: {
+            select: {
+              username: true,
+              email: true
+            }
+          }
+        },
+        orderBy: {
+          pub_date: 'desc'
+        },
+        take: limit
       })
-    })
+      return formatGetMessages(messages)
+    } catch (err) {
+      console.error(err)
+      throw new Error(`Error getting messages from database: ${err.message}`)
+    }
   }
 
   async getUserIdByUsernameIfExists (username) {
-    const sql = `SELECT user_id FROM user 
-                    WHERE user.username = ?`
-    return new Promise((resolve, reject) => {
-      db.getDb().get(sql, [username], (err, row) => {
-        if (err) {
-          reject(err)
-        } else {
-          resolve(row)
+    try {
+      const user = await prisma.user.findFirst({
+        where: {
+          username
         }
       })
-    })
+      return user
+    } catch (err) {
+      console.error(err)
+      throw new Error(`Error getting user by username from database: ${err.message}`)
+    }
   }
 
   async getUserByUsername (username) {
-    const sql = 'SELECT * FROM user WHERE username = ?'
-    return new Promise((resolve, reject) => {
-      db.getDb().get(sql, [username], (err, row) => {
-        if (err) {
-          console.error(err.message)
-          reject(err)
+    try {
+      const user = await prisma.user.findFirst({
+        where: {
+          username
         }
-        resolve(row)
       })
-    })
+      return user
+    } catch (err) {
+      console.error(err)
+      throw new Error(`Error getting user by username from database: ${err.message}`)
+    }
   }
 
   async getUserIdByUsername (username) {
-    const sql = `SELECT user_id FROM user 
-                    WHERE user.username = ?`
-    return new Promise((resolve, reject) => {
-      db.getDb().get(sql, [username], (err, id) => {
-        if (err) {
-          reject(err)
-        } else {
-          resolve(id)
+    try {
+      const user = await prisma.user.findFirst({
+        where: {
+          username
         }
       })
-    })
+      return user
+    } catch (err) {
+      console.error(err)
+      throw new Error(`Error getting user by username from database: ${err.message}`)
+    }
   }
 
   async getUserIdByEmail (email) {
-    const sql = `SELECT user_id FROM user 
-                    WHERE user.email = ?`
-    return new Promise((resolve, reject) => {
-      db.getDb().get(sql, [email], (err, id) => {
-        if (err) {
-          reject(err)
-        } else {
-          resolve(id)
+    try {
+      const user = await prisma.user.findFirst({
+        where: {
+          email
         }
       })
-    })
+      return user
+    } catch (err) {
+      console.error(err)
+      throw new Error(`Error getting user by email from database: ${err.message}`)
+    }
   }
 
   async getUserIdByEmailIfExists (email) {
-    const sql = `SELECT user_id FROM user 
-                    WHERE user.email = ?`
-    return new Promise((resolve, reject) => {
-      db.getDb().get(sql, [email], (err, row) => {
-        if (err) {
-          reject(err)
-        } else {
-          resolve(row)
+    try {
+      const user = await prisma.user.findFirst({
+        where: {
+          email
         }
       })
-    })
+      return user
+    } catch (err) {
+      console.error(err)
+      throw new Error(`Error getting user by email from database: ${err.message}`)
+    }
   }
 
   async isFollowing (whoId, whomId) {
-    const sql = `SELECT * FROM follower 
-                    WHERE who_id = ? AND whom_id = ?`
-    return new Promise((resolve, reject) => {
-      db.getDb().get(sql, [whoId, whomId], (err, row) => {
-        if (err) {
-          reject(err)
-        }
-        if (!row) {
-          resolve(false)
-        } else {
-          resolve(true)
+    try {
+      const follower = await prisma.follower.findFirst({
+        where: {
+          who_id: whoId,
+          whom_id: whomId
         }
       })
-    })
+      if (follower) {
+        return true
+      } else {
+        return false
+      }
+    } catch (err) {
+      console.error(err)
+      throw new Error(`Error checking if user is following another user: ${err.message}`)
+    }
   }
 
   async getAllFollowed (userId, limit) {
-    const sql = `SELECT user.username FROM user
-                    INNER JOIN follower ON follower.whom_id=user.user_id
-                    WHERE follower.who_id=?
-                    LIMIT ?`
-    return new Promise((resolve, reject) => {
-      db.getDb().all(sql, [userId, limit], (err, followed) => {
-        if (err) {
-          reject(err)
-        } else {
-          resolve(followed)
-        }
+    try {
+      const followed = await prisma.follower.findMany({
+        where: {
+          who_id: userId
+        },
+        include: {
+          user: true
+        },
+        take: limit
       })
-    })
+      return followed
+    } catch (err) {
+      console.error(err)
+      throw new Error(`Error getting followed users from database: ${err.message}`)
+    }
   }
 
   async followUser (userId, followedId) {
-    const sql = 'INSERT INTO follower (who_id, whom_id) VALUES (?, ?)'
-    return new Promise((resolve, reject) => {
-      db.getDb().run(sql, [userId, followedId], (err) => {
-        if (err) {
-          reject(err)
-        } else {
-          resolve(true)
+    try {
+      const follower = await prisma.follower.create({
+        data: {
+          who_id: userId,
+          whom_id: followedId
         }
       })
-    })
+      return follower
+    } catch (err) {
+      console.error(err)
+      throw new Error(`Error adding follower to database: ${err.message}`)
+    }
   }
 
   async unfollowUser (userId, followedId) {
-    const sql = 'DELETE FROM follower WHERE who_id = ? AND whom_id = ?'
-    return new Promise((resolve, reject) => {
-      db.getDb().run(sql, [userId, followedId], (err) => {
-        if (err) {
-          reject(err)
-        } else {
-          resolve(false)
+    try {
+      const follower = await prisma.follower.delete({
+        where: {
+          who_id_whom_id: {
+            who_id: userId,
+            whom_id: followedId
+          }
         }
       })
-    })
+      return follower
+    } catch (err) {
+      console.error(err)
+      throw new Error(`Error removing follower from database: ${err.message}`)
+    }
   }
 
   async registerUser (username, email, hash) {
-    const sql = 'INSERT INTO user (username, email, pw_hash) VALUES (?, ?, ?)'
-    return new Promise((resolve, reject) => {
-      db.getDb().run(sql, [username, email, hash], (err) => {
-        if (err) {
-          console.error(err.message)
-          reject(err)
+    try {
+      const user = await prisma.user.create({
+        data: {
+          username,
+          email,
+          pw_hash: hash
         }
-        resolve()
       })
-    })
+      return user
+    } catch (err) {
+      console.error(err)
+      throw new Error(`Error adding user to database: ${err.messsage}`)
+    }
   }
 }
 module.exports = UserService
