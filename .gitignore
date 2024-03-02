@@ -9,6 +9,8 @@ node_modules/
 .DS_STORE
 .vagrant
 latest.txt
-**/*.db
+/db/minitwit.db
+/db/minitwit.db-journal
+/db/session.db
 .notes
 .env
