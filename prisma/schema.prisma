@@ -29,4 +29,5 @@ model User {
   email    String    @unique
   pw_hash  String
   message  Message[]
+  role     String    @default("USER")
 }

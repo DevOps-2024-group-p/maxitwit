@@ -32,6 +32,7 @@ const logoutRouter = require('./routes/logout') // Router for logout related pat
 const registerRouter = require('./routes/register') // Router for register related paths
 const timelineRouter = require('./routes/timeline') // Router for public timeline related paths
 const apiRouter = require('./routes/api') // Router for public timeline related paths
+const adminRouter = require('./routes/admin') // Router for public timeline related paths
 
 // Initialize the Express application
 const app = express()
@@ -76,6 +77,7 @@ app.use((req, res, next) => {
 if (process.env.API) {
   app.use('/', apiRouter) // Use the API router for requests to '/api'
 } else {
+  app.use('/adminpanel', adminRouter) // Use the register router for requests to '/register'
   app.use('/login', loginRouter) // Use the login router for requests to '/login'
   app.use('/logout', logoutRouter) // Use the logout router for requests to '/login'
   app.use('/register', registerRouter) // Use the register router for requests to '/register'

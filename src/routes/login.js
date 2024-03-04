@@ -6,7 +6,7 @@ const db = require('../../db/database')
 
 // If user is logged in, return id and username from session, otherwise empty user
 // Use the returned value to populate views
-function getUserCredentialsFromSession (req) {
+function getUserCredentialsFromSession(req) {
   if (req.session.username) {
     return {
       user: {
@@ -51,7 +51,8 @@ router.post('/', (req, res, next) => {
         if (result) {
           req.session.username = {
             id: user.user_id,
-            username
+            username,
+            role: user.role
           }
           console.log(req.session.username)
           req.flash('success', 'You were logged in')

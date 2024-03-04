@@ -1,0 +1,23 @@
+extends layout
+
+block content
+  h2= title
+  .twitbox
+     form(action='/add_message', method='post')
+      p
+        input(type='text', name='text', size='60')
+        input(type='submit', value='Share')
+  ul.messages
+    if messages && messages.length > 0
+      each message in messages
+        li
+          img(src=message.gravatar)
+          p
+            strong
+              a(href=`${message.username}`)
+                | #{message.username}
+            | #{message.text}
+            small &mdash; #{message.pub_date}
+    else
+      li
+        em There's no message so far.
