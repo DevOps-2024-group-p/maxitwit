@@ -13,4 +13,4 @@ RUN pip install -r requirements.txt
 
 EXPOSE 5000
 
-ENTRYPOINT ["pytest", "-s", "minitwit_tests.py"]
+ENTRYPOINT ["pytest", "-s", "minitwit_test.py"]

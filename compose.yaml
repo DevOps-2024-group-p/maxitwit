@@ -29,5 +29,5 @@ services:
       - HUSKY=0
       - DATABASE_URL=file:../db/minitwit.db
     env_file:
-      - path: ./.env
+      - path: "./.env"
         required: true
