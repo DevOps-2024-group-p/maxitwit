@@ -16,7 +16,7 @@ const flash = require('connect-flash')
 // Initialize database schema
 const database = require('../db/database')
 
-if (process.env.MIGRATE === 0) {
+if (process.env.MIGRATE === '0') {
   database.initSchema()
     .then(() => {
       console.log('Database schema initialized successfully.')
@@ -41,7 +41,7 @@ app.set('view engine', 'pug') // Sets Jade (now Pug) as the template engine for 
 
 // Middleware setup
 // middleware only used during development
-if (process.env.NODE_ENV === 'dev') {
+if (process.env.NODE_ENV === 'development') {
   const logger = require('morgan') // http request logger middleware for node.js
   app.use(logger('dev')) // Use Morgan to log requests to the console in 'dev' format, which includes method, url, status, response time
 }
@@ -50,7 +50,10 @@ app.use(express.json()) // Parses incoming requests with JSON payloads, making i
 app.use(express.urlencoded({ extended: false })) // Parses incoming requests with URL-encoded payloads, useful for form submissions
 app.use(cookieParser()) // Parse Cookie header and populate req.cookies with an object keyed by cookie names
 app.use(express.static(path.join(__dirname, 'public'))) // Serve static files (images, CSS, JavaScript) from the 'public' directory
-
+const { SESSION_SECRET } = process.env
+if (!SESSION_SECRET) {
+  throw new Error('SESSION_SECRET is not set')
+}
 app.use(session({
   resave: false,
   saveUninitialized: true,
@@ -58,7 +61,7 @@ app.use(session({
     dir: './db',
     db: 'sessions.db'
   }),
-  secret: 'your secret',
+  secret: SESSION_SECRET,
   cookie: { maxAge: 7 * 24 * 60 * 60 * 1000 } // 1 week
 }))
 
@@ -70,7 +73,7 @@ app.use((req, res, next) => {
   next()
 })
 
-if (process.env.NODE_ENV === 'api') {
+if (process.env.API) {
   app.use('/', apiRouter) // Use the API router for requests to '/api'
 } else {
   app.use('/login', loginRouter) // Use the login router for requests to '/login'

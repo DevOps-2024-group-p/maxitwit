@@ -23,7 +23,7 @@ However, test can currently only run in the npm-setup.
 
 ### Docker Setup
 
-To build the application in a dockerized enviroment, firstly create an .env in project root and set it to 'dev' for development, or 'prod' for production.
+To build the application in a dockerized enviroment, firstly update .env with appropriate values
 
 ```
 cd <repo_location>
@@ -42,6 +42,8 @@ docker compose down
 ```
 
 ### NPM setup
+
+Change enviroment variables in .env appropriately.
 To run the application outside of a container, run:
 
 ```

@@ -1,6 +1,9 @@
 const sqlite3 = require('sqlite3').verbose()
-const fs = require('fs')
-const path = require('path')
+
+const { exec } = require('child_process')
+const { PrismaClient } = require('@prisma/client')
+
+const prisma = new PrismaClient()
 
 class Database {
   constructor () {
@@ -16,17 +19,13 @@ class Database {
   }
 
   async initSchema () {
-    const sqlFilePath = path.join(__dirname, 'schema.sql')
-    const sql = fs.readFileSync(sqlFilePath, 'utf8')
-    return new Promise((resolve, reject) => {
-      this.db.exec(sql, (err) => {
-        if (err) {
-          reject(err)
-        } else {
-          resolve()
-        }
-      })
+    exec('npx prisma migrate reset --force', (error) => {
+      if (error) {
+        console.log(`error: ${error.message}`)
+      }
     })
+
+    await prisma.$connect()
   }
 }
 
