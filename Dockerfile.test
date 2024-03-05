@@ -11,6 +11,6 @@ WORKDIR /minitwit-tests
 
 RUN pip install -r requirements.txt
 
-EXPOSE 5000
+EXPOSE 3000
 
 ENTRYPOINT ["pytest", "-s", "minitwit_test.py"]

@@ -15,7 +15,7 @@ import requests
 # import schema
 # import data
 # otherwise use the database that you got previously
-BASE_URL = "http://localhost:3000"
+BASE_URL = "http://maxitwitserver:3000"
 
 
 def register(username, password, password2=None, email=None):
