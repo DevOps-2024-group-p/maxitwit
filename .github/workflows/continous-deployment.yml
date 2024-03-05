@@ -70,13 +70,3 @@ jobs:
           chmod 600 ~/.ssh/id_rsa
         env:
           SSH_KEY: ${{ secrets.SSH_KEY }}
-
-      - name: Deploy to server
-        # Configure the ~./bash_profile and deploy.sh file on the Vagrantfile
-        run: >
-          ssh $SSH_USER@$SSH_HOST
-          -i ~/.ssh/do_ssh_key -o StrictHostKeyChecking=no
-          '/minitwit/deploy.sh'
-        env:
-          SSH_USER: ${{ secrets.SSH_USER }}
-          SSH_HOST: ${{ secrets.SSH_HOST }}
