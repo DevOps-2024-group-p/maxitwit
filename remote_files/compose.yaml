@@ -1,27 +1,33 @@
 services:
+
   server:
-    image: ${DOCKER_USERNAME}/minitwitserver
+    image: ${DOCKER_USERNAME}/maxitwitserver
     volumes:
-      - ./db:/usr/src/app/db
-      - ./src:/usr/src/app/src
+      - ../db:/usr/src/app/db
+      - ../src:/usr/src/app/src
     ports:
       - 3000:3000
+    networks:
+      - itu-minitwit-network
     environment:
       - HUSKY=0
       - DATABASE_URL=file:../db/minitwit.db
-    env_file:
-      - path: ./.env
-        required: true
+      - SESSION_SECRET=${SESSION_SECRET}
+
   api:
-    image: ${DOCKER_USERNAME}/minitwitapi
+    image: ${DOCKER_USERNAME}/maxitwitapi
     volumes:
-      - ./db:/usr/src/app/db
-      - ./src:/usr/src/app/src
+      - ../db:/usr/src/app/db
+      - ../src:/usr/src/app/src
     ports:
       - 3001:3000
+    networks:
+      - itu-minitwit-network
     environment:
       - HUSKY=0
       - DATABASE_URL=file:../db/minitwit.db
-    env_file:
-      - path: ./.env
-        required: true
+      - SESSION_SECRET=${SESSION_SECRET}
+
+networks:
+  itu-minitwit-network:
+    name: itu-minitwit-network

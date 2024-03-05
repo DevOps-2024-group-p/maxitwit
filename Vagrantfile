@@ -6,10 +6,9 @@ Vagrant.configure("2") do |config|
   config.vm.box_url = "https://github.com/devopsgroup-io/vagrant-digitalocean/raw/master/box/digital_ocean.box"
   config.ssh.private_key_path = '~/.ssh/id_rsa'
 
-  config.vm.synced_folder "remote_files", "/minitwit", type: "rsync"
-  config.vm.synced_folder '.', '/vagrant', disabled: true
+  config.vm.synced_folder '.', '/maxitwit', type: "rsync"
 
-  config.vm.define "minitwit", primary: true do |server|
+  config.vm.define "maxitwit", primary: true do |server|
 
     server.vm.provider :digital_ocean do |provider|
       provider.ssh_key_name = ENV["SSH_KEY_NAME"]
@@ -20,7 +19,7 @@ Vagrant.configure("2") do |config|
       provider.privatenetworking = true
     end
 
-    server.vm.hostname = "minitwit-ci-server"
+    server.vm.hostname = "maxitwit-prod"
 
     server.vm.provision "shell", inline: 'echo "export DOCKER_USERNAME=' + "'" + ENV["DOCKER_USERNAME"] + "'" + '" >> ~/.bash_profile'
     server.vm.provision "shell", inline: 'echo "export DOCKER_PASSWORD=' + "'" + ENV["DOCKER_PASSWORD"] + "'" + '" >> ~/.bash_profile'
@@ -45,6 +44,7 @@ Vagrant.configure("2") do |config|
 
     echo -e "\nOpening port for minitwit ...\n"
     ufw allow 3000 && \
+    ufw allow 3001 && \
     ufw allow 22/tcp
 
     echo ". $HOME/.bashrc" >> $HOME/.bash_profile
@@ -54,12 +54,12 @@ Vagrant.configure("2") do |config|
     source $HOME/.bash_profile
 
     echo -e "\nSelecting Minitwit Folder as default folder when you ssh into the server...\n"
-    echo "cd /minitwit" >> ~/.bash_profile
+    echo "cd /maxitwit" >> ~/.bash_profile
 
-    chmod +x /minitwit/deploy.sh
+    chmod +x /maxitwit/remote_files/deploy.sh
 
     echo -e "\nVagrant setup done ..."
-    echo -e "minitwit will later be accessible at http://$(hostname -I | awk '{print $1}'):3000"
+    echo -e "maxitwit will later be accessible at http://$(hostname -I | awk '{print $1}'):3000"
     SHELL
   end
 end

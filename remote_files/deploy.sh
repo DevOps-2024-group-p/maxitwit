@@ -1,6 +1,6 @@
 source ~/.bash_profile
 
-cd /minitwit
+cd /maxitwit/remote_files
 
-docker compose -f compose.yml pull
-docker compose -f compose.yml up -d
+docker compose -f compose.yaml pull
+docker compose -f compose.yaml up -d
