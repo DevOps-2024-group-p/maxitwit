@@ -5,9 +5,11 @@ Vagrant.configure("2") do |config|
   config.vm.box = 'digital_ocean'
   config.vm.box_url = "https://github.com/devopsgroup-io/vagrant-digitalocean/raw/master/box/digital_ocean.box"
   config.ssh.private_key_path = '~/.ssh/id_rsa'
-  config.vm.synced_folder ".", "/vagrant", type: "rsync"
 
-  config.vm.define "webserver", primary: false do |server|
+  config.vm.synced_folder "remote_files", "/minitwit", type: "rsync"
+  config.vm.synced_folder '.', '/vagrant', disabled: true
+
+  config.vm.define "minitwit", primary: true do |server|
 
     server.vm.provider :digital_ocean do |provider|
       provider.ssh_key_name = ENV["SSH_KEY_NAME"]
@@ -18,14 +20,46 @@ Vagrant.configure("2") do |config|
       provider.privatenetworking = true
     end
 
-    server.vm.hostname = "webserver"      
+    server.vm.hostname = "minitwit-ci-server"
 
-  end
+    server.vm.provision "shell", inline: 'echo "export DOCKER_USERNAME=' + "'" + ENV["DOCKER_USERNAME"] + "'" + '" >> ~/.bash_profile'
+    server.vm.provision "shell", inline: 'echo "export DOCKER_PASSWORD=' + "'" + ENV["DOCKER_PASSWORD"] + "'" + '" >> ~/.bash_profile'
 
-  config.vm.provision "shell", privileged: false, inline: <<-SHELL
+    server.vm.provision "shell", inline: <<-SHELL
+
     sudo apt-get update
-  SHELL
 
-  config.vm.provision :docker
-  config.vm.provision :docker_compose, yml: "/vagrant/compose.yml", run: "always"
+    # The following address an issue in DO's Ubuntu images, which still contain a lock file
+    sudo killall apt apt-get
+    sudo rm /var/lib/dpkg/lock-frontend
+
+    # Install docker and docker compose
+    sudo apt-get install -y docker.io docker-compose-v2
+
+    sudo systemctl status docker
+    # sudo usermod -aG docker ${USER}
+
+    echo -e "\nVerifying that docker works ...\n"
+    docker run --rm hello-world
+    docker rmi hello-world
+
+    echo -e "\nOpening port for minitwit ...\n"
+    ufw allow 3000 && \
+    ufw allow 22/tcp
+
+    echo ". $HOME/.bashrc" >> $HOME/.bash_profile
+
+    echo -e "\nConfiguring credentials as environment variables...\n"
+
+    source $HOME/.bash_profile
+
+    echo -e "\nSelecting Minitwit Folder as default folder when you ssh into the server...\n"
+    echo "cd /minitwit" >> ~/.bash_profile
+
+    chmod +x /minitwit/deploy.sh
+
+    echo -e "\nVagrant setup done ..."
+    echo -e "minitwit will later be accessible at http://$(hostname -I | awk '{print $1}'):3000"
+    SHELL
+  end
 end
