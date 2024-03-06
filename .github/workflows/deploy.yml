@@ -63,6 +63,8 @@ jobs:
           yes 2>/dev/null | docker compose up -d
           docker run --rm --network=itu-minitwit-network $DOCKER_USERNAME/maxitwittest
         env:
+          target: production
+          SESSION_SECRET: ${{ secrets.SESSION_SECRET }}
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
 
       - name: Configure SSH
