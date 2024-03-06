@@ -1,6 +1,9 @@
 ---
 name: Continuous Deployment
 
+env:
+  target: production
+
 on:
   push:
     # Run workflow every time something is pushed to release
@@ -63,9 +66,9 @@ jobs:
           yes 2>/dev/null | docker compose up -d
           docker run --rm --network=itu-minitwit-network $DOCKER_USERNAME/maxitwittest
         env:
-          TARGET: production
           SESSION_SECRET: ${{ secrets.SESSION_SECRET }}
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          
 
       - name: Configure SSH
         run: |
