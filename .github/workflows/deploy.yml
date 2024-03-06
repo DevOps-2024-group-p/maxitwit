@@ -3,6 +3,7 @@ name: Continuous Deployment
 
 env:
   target: production
+  SESSION_SECRET: ${{ secrets.SESSION_SECRET }}
 
 on:
   push:
@@ -61,13 +62,13 @@ jobs:
           cache-to: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/maxitwitapi:webbuildcache,mode=max
 
       - name: Test maxitwit
+        env:
+          SESSION_SECRET: ${{ secrets.SESSION_SECRET }}
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
         run: |
           docker build -t $DOCKER_USERNAME/maxitwittest -f Dockerfile.test .
           yes 2>/dev/null | docker compose up -d --build
           docker run --rm --network=itu-minitwit-network $DOCKER_USERNAME/maxitwittest
-        env:
-          SESSION_SECRET: ${{ secrets.SESSION_SECRET }}
-          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           
 
       - name: Configure SSH
