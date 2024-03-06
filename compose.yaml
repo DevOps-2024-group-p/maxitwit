@@ -16,7 +16,6 @@ services:
     environment:
       - HUSKY=0
       - DATABASE_URL=file:../db/minitwit.db
-    env_file: .env
 
   api:
     build:
@@ -33,7 +32,6 @@ services:
     environment:
       - HUSKY=0
       - DATABASE_URL=file:../db/minitwit.db
-    env_file: .env
 
 networks:
   itu-minitwit-network:
