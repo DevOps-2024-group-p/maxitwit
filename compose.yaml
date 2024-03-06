@@ -5,7 +5,7 @@ services:
     build:
       dockerfile: Dockerfile.app
       context: .
-      target: ${TARGET}
+      target: production
     volumes:
       - ./db:/usr/src/app/db
       - ./src:/usr/src/app/src
@@ -22,7 +22,7 @@ services:
     build:
       dockerfile: Dockerfile.api
       context: .
-      target: ${TARGET}
+      target: production
     volumes:
       - ./db:/usr/src/app/db
       - ./src:/usr/src/app/src
