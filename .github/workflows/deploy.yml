@@ -63,7 +63,7 @@ jobs:
       - name: Test maxitwit
         run: |
           docker build -t $DOCKER_USERNAME/maxitwittest -f Dockerfile.test .
-          yes 2>/dev/null | docker compose up -d
+          yes 2>/dev/null | docker compose up -d --build
           docker run --rm --network=itu-minitwit-network $DOCKER_USERNAME/maxitwittest
         env:
           SESSION_SECRET: ${{ secrets.SESSION_SECRET }}
