@@ -6,6 +6,7 @@
 
 // Import necessary modules
 require('dotenv').config() // Load environment variables from a .env file into process.env
+console.log(process.env)
 const express = require('express') // The main Express framework
 const path = require('path') // Core Node.js module to handle and transform file paths
 const cookieParser = require('cookie-parser') // Middleware to parse and set cookies in request objects
@@ -51,6 +52,11 @@ app.use(express.urlencoded({ extended: false })) // Parses incoming requests wit
 app.use(cookieParser()) // Parse Cookie header and populate req.cookies with an object keyed by cookie names
 app.use(express.static(path.join(__dirname, 'public'))) // Serve static files (images, CSS, JavaScript) from the 'public' directory
 
+const SESSION_SECRET = process.env.SESSION_SECRET
+if (!SESSION_SECRET) {
+  throw new Error('SESSION_SECRET environment variable is not set')
+}
+
 app.use(session({
   resave: false,
   saveUninitialized: true,
@@ -58,7 +64,7 @@ app.use(session({
     dir: './db',
     db: 'sessions.db'
   }),
-  secret: 'your secret',
+  secret: SESSION_SECRET,
   cookie: { maxAge: 7 * 24 * 60 * 60 * 1000 } // 1 week
 }))
 
