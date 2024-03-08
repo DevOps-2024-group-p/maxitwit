@@ -16,7 +16,7 @@ services:
     environment:
       - HUSKY=0
       - DATABASE_URL=file:../db/minitwit.db
-      - SESSION_SECRET=${SESSION_SECRET}
+      - SESSION_SECRET
 
   api:
     build:
@@ -33,7 +33,7 @@ services:
     environment:
       - HUSKY=0
       - DATABASE_URL=file:../db/minitwit.db
-      - SESSION_SECRET=${SESSION_SECRET}
+      - SESSION_SECRET
 
 networks:
   itu-minitwit-network:

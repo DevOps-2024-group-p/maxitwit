@@ -3,8 +3,7 @@ name: Continuous Deployment
 
 env:
   target: production
-  SESSION_SECRET: ${{ secrets.SESSION_SECRET }}
-
+  
 on:
   push:
     # Run workflow every time something is pushed to release
