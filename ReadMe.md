@@ -48,13 +48,18 @@ Make a feature branch and make your changes, then stage your changes. Use commit
 
 Example:
 
+
 ```
 git checkout -b feature/<my-feature-branch>
 ```
 
 make your changes, then:
 
+``` 
+docker build -t mypytest -f Dockerfile.pytest .
+docker run -d -p 3001:3001 mypytest
 ```
+
 git status
 $ modified:   Dockerfile.api
 git add Dockerfile.api

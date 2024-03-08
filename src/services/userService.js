@@ -126,34 +126,6 @@ class UserService {
     }
   }
 
-  async getUserIdByUsernameIfExists (username) {
-    try {
-      const user = await prisma.user.findFirst({
-        where: {
-          username
-        }
-      })
-      return user
-    } catch (err) {
-      console.error(err)
-      throw new Error(`Error getting user by username from database: ${err.message}`)
-    }
-  }
-
-  async getUserByUsername (username) {
-    try {
-      const user = await prisma.user.findFirst({
-        where: {
-          username
-        }
-      })
-      return user
-    } catch (err) {
-      console.error(err)
-      throw new Error(`Error getting user by username from database: ${err.message}`)
-    }
-  }
-
   async getUserIdByUsername (username) {
     try {
       const user = await prisma.user.findFirst({
@@ -169,20 +141,6 @@ class UserService {
   }
 
   async getUserIdByEmail (email) {
-    try {
-      const user = await prisma.user.findFirst({
-        where: {
-          email
-        }
-      })
-      return user
-    } catch (err) {
-      console.error(err)
-      throw new Error(`Error getting user by email from database: ${err.message}`)
-    }
-  }
-
-  async getUserIdByEmailIfExists (email) {
     try {
       const user = await prisma.user.findFirst({
         where: {
@@ -212,24 +170,6 @@ class UserService {
     } catch (err) {
       console.error(err)
       throw new Error(`Error checking if user is following another user: ${err.message}`)
-    }
-  }
-
-  async getAllFollowed (userId, limit) {
-    try {
-      const followed = await prisma.follower.findMany({
-        where: {
-          who_id: userId
-        },
-        include: {
-          user: true
-        },
-        take: limit
-      })
-      return followed
-    } catch (err) {
-      console.error(err)
-      throw new Error(`Error getting followed users from database: ${err.message}`)
     }
   }
 

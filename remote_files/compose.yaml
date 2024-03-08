@@ -1,14 +1,10 @@
 services:
 
   server:
-    container_name: maxitwitserver
-    build:
-      dockerfile: Dockerfile.app
-      context: .
-      target: ${TARGET}
+    image: ${DOCKER_USERNAME}/maxitwitserver
     volumes:
-      - ./db:/usr/src/app/db
-      - ./src:/usr/src/app/src
+      - ../db:/usr/src/app/db
+      - ../src:/usr/src/app/src
     ports:
       - 3000:3000
     networks:
@@ -16,16 +12,13 @@ services:
     environment:
       - HUSKY=0
       - DATABASE_URL=file:../db/minitwit.db
-    env_file: .env
+      - SESSION_SECRET=${SESSION_SECRET}
 
   api:
-    build:
-      dockerfile: Dockerfile.api
-      context: .
-      target: ${TARGET}
+    image: ${DOCKER_USERNAME}/maxitwitapi
     volumes:
-      - ./db:/usr/src/app/db
-      - ./src:/usr/src/app/src
+      - ../db:/usr/src/app/db
+      - ../src:/usr/src/app/src
     ports:
       - 3001:3000
     networks:
@@ -33,7 +26,7 @@ services:
     environment:
       - HUSKY=0
       - DATABASE_URL=file:../db/minitwit.db
-    env_file: .env
+      - SESSION_SECRET=${SESSION_SECRET}
 
 networks:
   itu-minitwit-network:

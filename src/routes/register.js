@@ -68,8 +68,8 @@ router.post('/', async (req, res, next) => {
   }
 
   try {
-    const emailExists = await userService.getUserIdByEmailIfExists(email)
-    const usernameExists = await userService.getUserIdByUsernameIfExists(username)
+    const emailExists = await userService.getUserIdByEmail(email)
+    const usernameExists = await userService.getUserIdByUsername(username)
 
     if (usernameExists) {
       req.flash('error', 'The username is already taken')

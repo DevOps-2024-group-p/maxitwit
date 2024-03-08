@@ -2,6 +2,9 @@
   "name": "maxitwit",
   "version": "1.2.1",
   "private": true,
+  "prisma": {
+    "seed": "node prisma/seed.js"
+  },
   "scripts": {
     "start": "node src/bin/www",
     "devstart": "nodemon src/bin/www",
