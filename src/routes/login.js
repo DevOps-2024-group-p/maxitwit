@@ -2,11 +2,12 @@ const express = require('express')
 
 const router = express.Router()
 const bcrypt = require('bcrypt')
-const db = require('../../db/database')
+const UserService = require('../services/userService')
+const userService = new UserService()
 
 // If user is logged in, return id and username from session, otherwise empty user
 // Use the returned value to populate views
-function getUserCredentialsFromSession (req) {
+function getUserCredentialsFromSession(req) {
   if (req.session.username) {
     return {
       user: {
@@ -23,7 +24,7 @@ router.get('/', (req, res) => {
   res.render('login', { title: 'Login', g })
 })
 
-router.post('/', (req, res, next) => {
+router.post('/', async (req, res, next) => {
   const { username, password } = req.body
 
   // Input validation
@@ -32,35 +33,28 @@ router.post('/', (req, res, next) => {
     return res.redirect('/login')
   }
 
-  // Check user in DB
-  const sql = 'SELECT * FROM user WHERE username = ?'
-  db.getDb().get(sql, [username], (err, user) => {
+  const user = await userService.getUserByUsername(username)
+
+  if (!user) {
+    req.flash('error', 'Invalid username')
+    return res.redirect('/login')
+  }
+
+  bcrypt.compare(password, user.pw_hash, (err, result) => {
     if (err) {
       console.error(err.message)
       return res.status(500).send('Server error')
     }
-    if (!user) {
-      req.flash('error', 'Invalid username')
-      res.redirect('/login')
-    } else {
-      bcrypt.compare(password, user.pw_hash, (err, result) => {
-        if (err) {
-          console.error(err.message)
-          return res.status(500).send('Server error')
-        }
-        if (result) {
-          req.session.username = {
-            id: user.user_id,
-            username
-          }
-          console.log(req.session.username)
-          req.flash('success', 'You were logged in')
-          return res.redirect('/')
-        }
-        req.flash('error', 'Invalid password')
-        return res.redirect('/login')
-      })
+    if (result) {
+      req.session.username = {
+        id: user.user_id,
+        username
+      }
+      req.flash('success', 'You were logged in')
+      return res.redirect('/')
     }
+    req.flash('error', 'Invalid password')
+    return res.redirect('/login')
   })
 })
 
