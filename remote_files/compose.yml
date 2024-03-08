@@ -1,0 +1,26 @@
+services:
+  server:
+    image: ${DOCKER_USERNAME}/maxitwit-server
+    volumes:
+      - ./db:/db
+      - ./src:/src
+    ports:
+      - 3000:3000
+    environment:
+      - HUSKY=0
+      - DATABASE_URL=file:../db/minitwit.db
+      - SESSION_SECRET=${SESSION_SECRET}
+      - TARGET=prod
+
+  api:
+    image: ${DOCKER_USERNAME}/maxitwit-api
+    volumes:
+      - ./db:/db
+      - ./src:/src
+    ports:
+      - 3001:3000
+    environment:
+      - HUSKY=0
+      - DATABASE_URL=file:../db/minitwit.db
+      - SESSION_SECRET=${SESSION_SECRET}
+      - TARGET=prod
