@@ -10,5 +10,6 @@ node_modules/
 .vagrant
 latest.txt
 *.db
+*.db-journal
 .notes
 .env

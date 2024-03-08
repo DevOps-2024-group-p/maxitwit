@@ -15,7 +15,6 @@ WORKDIR /usr/src/app
 # Leverage a bind mounts to package.json and package-lock.json to avoid having to copy them into
 # into this layer.
 FROM base as dev
-ENV NODE_ENV development
 RUN --mount=type=bind,source=package.json,target=package.json \
     --mount=type=bind,source=package-lock.json,target=package-lock.json \
     --mount=type=cache,target=/root/.npm \
@@ -26,7 +25,6 @@ RUN npx prisma generate
 CMD npm run devstart
 
 FROM base as prod
-ENV NODE_ENV production
 RUN --mount=type=bind,source=package.json,target=package.json \
     --mount=type=bind,source=package-lock.json,target=package-lock.json \
     --mount=type=cache,target=/root/.npm \

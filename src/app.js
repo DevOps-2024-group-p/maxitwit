@@ -6,6 +6,7 @@
 
 // Import necessary modules
 require('dotenv').config() // Load environment variables from a .env file into process.env
+console.log(process.env)
 const express = require('express') // The main Express framework
 const path = require('path') // Core Node.js module to handle and transform file paths
 const cookieParser = require('cookie-parser') // Middleware to parse and set cookies in request objects
@@ -16,7 +17,7 @@ const flash = require('connect-flash')
 // Initialize database schema
 const database = require('../db/database')
 
-if (process.env.MIGRATE === '0') {
+if (process.env.RESET_DB === 'true' && process.env.TARGET === 'dev') {
   database.initSchema()
     .then(() => {
       console.log('Database schema initialized successfully.')
@@ -41,7 +42,7 @@ app.set('view engine', 'pug') // Sets Jade (now Pug) as the template engine for 
 
 // Middleware setup
 // middleware only used during development
-if (process.env.NODE_ENV === 'dev') {
+if (process.env.TARGET === 'dev') {
   const logger = require('morgan') // http request logger middleware for node.js
   app.use(logger('dev')) // Use Morgan to log requests to the console in 'dev' format, which includes method, url, status, response time
 }
@@ -89,7 +90,7 @@ app.use((err, req, res, next) => {
   // Set locals, providing error details only in development environment
   res.locals.message = err.message
   res.locals.error = req.app.get('env') === 'development' ? err : {}
-  console.log(process.env.NODE_ENV)
+  console.log(process.env.TARGET)
 
   // Render the error page, setting the status code
   res.status(err.status || 500)
