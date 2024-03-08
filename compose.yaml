@@ -3,7 +3,7 @@ services:
   server:
     container_name: maxitwitserver
     build:
-      dockerfile: Dockerfile.app
+      dockerfile: docker/Dockerfile.app
       context: .
       target: ${TARGET}
     volumes:
@@ -20,7 +20,7 @@ services:
 
   api:
     build:
-      dockerfile: Dockerfile.api
+      dockerfile: docker/Dockerfile.api
       context: .
       target: ${TARGET}
     volumes:
