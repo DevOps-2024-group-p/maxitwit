@@ -6,7 +6,6 @@
 
 // Import necessary modules
 require('dotenv').config() // Load environment variables from a .env file into process.env
-console.log(process.env)
 const express = require('express') // The main Express framework
 const path = require('path') // Core Node.js module to handle and transform file paths
 const cookieParser = require('cookie-parser') // Middleware to parse and set cookies in request objects
@@ -76,7 +75,7 @@ app.use((req, res, next) => {
   next()
 })
 
-if (process.env.NODE_ENV === 'api') {
+if (process.env.API) {
   app.use('/', apiRouter) // Use the API router for requests to '/api'
 } else {
   app.use('/login', loginRouter) // Use the login router for requests to '/login'
