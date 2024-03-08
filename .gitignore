@@ -11,3 +11,4 @@ node_modules/
 latest.txt
 **/*.db
 .notes
+.env

@@ -13,7 +13,7 @@ services:
     build:
       dockerfile: Dockerfile.app
       context: .
-      target: ${TARGET} # todo set target in .env
+      target: ${TARGET}
     volumes:
       - ./db:/usr/src/app/db
       - ./src:/usr/src/app/src
@@ -21,11 +21,13 @@ services:
       - 3000:3000
     environment:
       - HUSKY=0
+    env_file: .env
+  
   api:
     build:
       dockerfile: Dockerfile.api
       context: .
-      target: ${TARGET} # todo set target in .env
+      target: ${TARGET}
     volumes:
       - ./db:/usr/src/app/db
       - ./src:/usr/src/app/src
@@ -33,6 +35,7 @@ services:
       - 3001:3000
     environment:
       - HUSKY=0
+    env_file: .env
 
 # The commented out section below is an example of how to define a PostgreSQL
 # database that your application can use. `depends_on` tells Docker Compose to
