@@ -33,7 +33,7 @@ router.post('/', async (req, res, next) => {
     return res.redirect('/login')
   }
 
-  const user = await userService.getUserByUsername(username)
+  const user = await userService.getUserIdByUsername(username)
 
   if (!user) {
     req.flash('error', 'Invalid username')
