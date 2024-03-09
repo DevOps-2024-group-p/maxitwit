@@ -6,6 +6,8 @@ services:
       - ./src:/src
     ports:
       - 3000:3000
+    networks:
+      - itu-minitwit-network
     environment:
       - HUSKY=0
       - DATABASE_URL=file:../db/minitwit.db
@@ -19,8 +21,14 @@ services:
       - ./src:/src
     ports:
       - 3001:3000
+    networks:
+      - itu-minitwit-network
     environment:
       - HUSKY=0
       - DATABASE_URL=file:../db/minitwit.db
       - SESSION_SECRET=${SESSION_SECRET}
       - TARGET=prod
+  
+  networks:
+    itu-minitwit-network:
+      name: itu-minitwit-network

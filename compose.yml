@@ -10,6 +10,7 @@
 
 services:
   server:
+    container_name: maxitwit-server
     build:
       dockerfile: Dockerfile.app
       context: .
@@ -19,11 +20,14 @@ services:
       - ./src:/usr/src/app/src
     ports:
       - 3000:3000
+    networks:
+      - itu-minitwit-network
     environment:
       - HUSKY=0
     env_file: .env
   
   api:
+    container_name: maxitwit-api
     build:
       dockerfile: Dockerfile.api
       context: .
@@ -33,6 +37,12 @@ services:
       - ./src:/usr/src/app/src
     ports:
       - 3001:3000
+    networks:
+      - itu-minitwit-network
     environment:
       - HUSKY=0
     env_file: .env
+
+networks:
+  itu-minitwit-network:
+    name: itu-minitwit-network
