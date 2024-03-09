@@ -7,7 +7,7 @@ services:
     ports:
       - 3000:3000
     networks:
-      - itu-minitwit-network
+      - maxitwit-network
     environment:
       - HUSKY=0
       - DATABASE_URL=file:../db/minitwit.db
@@ -22,7 +22,7 @@ services:
     ports:
       - 3001:3000
     networks:
-      - itu-minitwit-network
+      - maxitwit-network
     environment:
       - HUSKY=0
       - DATABASE_URL=file:../db/minitwit.db
@@ -30,5 +30,5 @@ services:
       - TARGET=prod
   
   networks:
-    itu-minitwit-network:
-      name: itu-minitwit-network
+    maxitwit-network:
+      name: maxitwit-network
