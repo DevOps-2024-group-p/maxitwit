@@ -126,34 +126,6 @@ class UserService {
     }
   }
 
-  async getUserIdByUsernameIfExists (username) {
-    try {
-      const user = await prisma.user.findFirst({
-        where: {
-          username
-        }
-      })
-      return user
-    } catch (err) {
-      console.error(err)
-      throw new Error(`Error getting user by username from database: ${err.message}`)
-    }
-  }
-
-  async getUserByUsername (username) {
-    try {
-      const user = await prisma.user.findFirst({
-        where: {
-          username
-        }
-      })
-      return user
-    } catch (err) {
-      console.error(err)
-      throw new Error(`Error getting user by username from database: ${err.message}`)
-    }
-  }
-
   async getUserIdByUsername (username) {
     try {
       const user = await prisma.user.findFirst({
@@ -169,20 +141,6 @@ class UserService {
   }
 
   async getUserIdByEmail (email) {
-    try {
-      const user = await prisma.user.findFirst({
-        where: {
-          email
-        }
-      })
-      return user
-    } catch (err) {
-      console.error(err)
-      throw new Error(`Error getting user by email from database: ${err.message}`)
-    }
-  }
-
-  async getUserIdByEmailIfExists (email) {
     try {
       const user = await prisma.user.findFirst({
         where: {

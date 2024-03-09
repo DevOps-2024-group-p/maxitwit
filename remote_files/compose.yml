@@ -28,7 +28,7 @@ services:
       - DATABASE_URL=file:../db/minitwit.db
       - SESSION_SECRET=${SESSION_SECRET}
       - TARGET=prod
-  
-  networks:
-    maxitwit-network:
-      name: maxitwit-network
+      
+networks:
+  maxitwit-network:
+    name: maxitwit-network

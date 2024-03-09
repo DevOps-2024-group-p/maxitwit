@@ -4,7 +4,7 @@
 Vagrant.configure("2") do |config|
   config.vm.box = 'digital_ocean'
   config.vm.box_url = "https://github.com/devopsgroup-io/vagrant-digitalocean/raw/master/box/digital_ocean.box"
-  config.ssh.private_key_path = '~/.ssh/id_rsa'
+  config.ssh.private_key_path = '~/.ssh/BenceID'
 
   config.vm.synced_folder '.', '/maxitwit', type: 'rsync'
 
@@ -60,7 +60,7 @@ Vagrant.configure("2") do |config|
     echo "cd /maxitwit" >> ~/.bash_profile
 
     chmod +x /maxitwit/remote_files/deploy.sh
-    
+
     echo -e "\nVagrant setup done ..."
     echo -e "maxitwit will later be accessible at http://$(hostname -I | awk '{print $1}'):3000"
     SHELL
