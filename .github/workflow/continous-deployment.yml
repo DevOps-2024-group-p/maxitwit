@@ -40,6 +40,7 @@ jobs:
         with:
           context: .
           file: ./Dockerfile.app
+          target: 'prod'
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/maxitwit-server:latest
           cache-from: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/maxitwit-server:webbuildcache
@@ -50,6 +51,7 @@ jobs:
         with:
           context: .
           file: ./Dockerfile.api
+          target: 'prod'
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/maxitwit-api:latest
           cache-from: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/maxitwit-api:apibuildcache
@@ -68,8 +70,8 @@ jobs:
         # Configure the ~./bash_profile and deploy.sh file on the Vagrantfile
         run: >
           ssh $SSH_USER@$SSH_HOST
-          -i ~/.ssh/do_ssh_key -o StrictHostKeyChecking=no
+          -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no
           '/minitwit/deploy.sh'
         env:
-          SSH_USER: ${{ secrets.SSH_USER }}
-          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_KEY: ${{ secrets.SSH_KEY }}
+          SESSION_SECRET: ${{ secrets.SESSION_SECRET }}
