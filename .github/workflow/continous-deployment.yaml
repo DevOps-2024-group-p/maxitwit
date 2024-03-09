@@ -5,8 +5,7 @@ on:
   push:
     # Run workflow every time something is pushed to the main branch
     branches:
-      - main
-      - master
+      - release
   # allow manual triggers for now too
   workflow_dispatch:
     manual: true
@@ -36,49 +35,32 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
 
-      - name: Build and push minitwitimage
+      - name: Build and push maxiwtit-server
         uses: docker/build-push-action@v2
         with:
           context: .
-          file: ./Dockerfile-minitwit
+          file: ./Dockerfile.app
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/minitwitimage:latest
-          cache-from: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/minitwitimage:webbuildcache
-          cache-to: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/minitwitimage:webbuildcache,mode=max
+          tags: ${{ secrets.DOCKER_USERNAME }}/maxitwit-server:latest
+          cache-from: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/maxitwit-server:webbuildcache
+          cache-to: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/maxitwit-server:webbuildcache,mode=max
 
-      - name: Build and push mysqlimage
+      - name: Build and push maxitwit-api
         uses: docker/build-push-action@v2
         with:
           context: .
-          file: ./Dockerfile-mysql
+          file: ./Dockerfile.api
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/mysqlimage:latest
-          cache-from: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/mysqlimage:mysqlbuildcache
-          cache-to: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/mysqlimage:mysqlbuildcache,mode=max
+          tags: ${{ secrets.DOCKER_USERNAME }}/maxitwit-api:latest
+          cache-from: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/maxitwit-api:apibuildcache
+          cache-to: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/maxitwit-api:apibuildcache,mode=max
 
-      - name: Build and push flagtoolimage
-        uses: docker/build-push-action@v2
-        with:
-          context: .
-          file: ./Dockerfile-flagtool
-          push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/flagtoolimage:latest
-          cache-from: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/flagtoolimage:flagtoolbuildcache
-          cache-to: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/flagtoolimage:flagtoolbuildcache,mode=max
-
-      - name: Test minitwit
-        run: |
-          docker build -t $DOCKER_USERNAME/minitwittestimage -f Dockerfile-minitwit-tests .
-          yes 2>/dev/null | docker-compose up -d
-          docker run --rm --network=itu-minitwit-network $DOCKER_USERNAME/minitwittestimage
-        env:
-          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
 
       - name: Configure SSH
         run: |
           mkdir -p ~/.ssh/
-          echo "$SSH_KEY" > ~/.ssh/do_ssh_key
-          chmod 600 ~/.ssh/do_ssh_key
+          echo "$SSH_KEY" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
         env:
           SSH_KEY: ${{ secrets.SSH_KEY }}
 

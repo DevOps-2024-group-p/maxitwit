@@ -60,9 +60,7 @@ Vagrant.configure("2") do |config|
     echo "cd /maxitwit" >> ~/.bash_profile
 
     chmod +x /maxitwit/remote_files/deploy.sh
-    cd /maxitwit/remote_files
-    ./deploy.sh
-
+    
     echo -e "\nVagrant setup done ..."
     echo -e "maxitwit will later be accessible at http://$(hostname -I | awk '{print $1}'):3000"
     SHELL
