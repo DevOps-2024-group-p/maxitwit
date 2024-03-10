@@ -179,7 +179,7 @@ router.all('/fllws/:username', logIncomingRequests, requireRequestFromSimulator,
       await userService.unfollowUser(whoId.user_id, whomId.user_id)
       return res.status(204).send()
     }
-    const followed = await userService.getAllFollowed(whoId.user_id, no)
+    const followed = await userService.getAllFollowedUsers(whoId.user_id, no)
     return res.json({ follows: JSON.stringify(followed) })
   } catch (err) {
     console.error(err)
