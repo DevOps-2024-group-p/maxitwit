@@ -1,17 +1,17 @@
 FROM python:3.12.1-alpine
 
-RUN mkdir /minitwit-tests
+RUN mkdir /maxitwit-tests
 
 WORKDIR .
 
-COPY conftest.py /minitwit-tests/
-COPY minitwit_test.py /minitwit-tests/
-COPY test_requirements.txt /minitwit-tests/
+COPY conftest.py /maxitwit-tests/
+COPY maxitwit_test.py /maxitwit-tests/
+COPY test_requirements.txt /maxitwit-tests/
 
-WORKDIR /minitwit-tests
+WORKDIR /maxitwit-tests
 
 RUN pip install -r test_requirements.txt
 
 EXPOSE 3000
 
-ENTRYPOINT ["pytest", "minitwit_test.py", "--force", "--container"]
+ENTRYPOINT ["pytest", "maxitwit_test.py", "--force", "--container"]
