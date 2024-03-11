@@ -1,0 +1,48 @@
+services:
+  test_server:
+    container_name: test_server
+    build:
+      dockerfile: Dockerfile.app
+      context: .
+      target: development
+    ports:
+      - 3000:3000
+    networks:
+      - maxitwit-test
+    environment:
+      - HUSKY=0
+      - DATABASE_URL=file:../db/minitwit.db
+    env_file: .env
+
+  test_api:
+    container_name: test_api
+    build:
+      dockerfile: Dockerfile.api
+      context: .
+      target: development
+    ports:
+      - 3001:3001
+    networks:
+      - maxitwit-test
+    environment:
+      - HUSKY=0
+      - DATABASE_URL=file:../db/minitwit.db
+    env_file: .env
+
+  test:
+    container_name: test_container
+    build:
+      dockerfile: Dockerfile.test
+      context: .
+    ports:
+      # - 3002:3000
+      - 3003:3001
+    networks:
+      - maxitwit-test
+    depends_on:
+      - test_server
+      - test_api
+
+networks:
+  maxitwit-test:
+    name: maxitwit-test

@@ -1,16 +1,17 @@
-FROM python:3.7-alpine
+FROM python:3.12.1-alpine
 
 RUN mkdir /minitwit-tests
 
 WORKDIR .
 
+COPY conftest.py /minitwit-tests/
 COPY minitwit_test.py /minitwit-tests/
-COPY requirements.txt /minitwit-tests/
+COPY test_requirements.txt /minitwit-tests/
 
 WORKDIR /minitwit-tests
 
-RUN pip install -r requirements.txt
+RUN pip install -r test_requirements.txt
 
 EXPOSE 3000
 
-ENTRYPOINT ["pytest", "-s", "minitwit_test.py"]
+ENTRYPOINT ["pytest", "minitwit_test.py", "--force", "--container"]
