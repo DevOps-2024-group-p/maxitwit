@@ -1,5 +1,5 @@
 -- CreateTable
-CREATE TABLE "follower" (
+CREATE TABLE "Follower" (
     "who_id" INTEGER NOT NULL,
     "whom_id" INTEGER NOT NULL,
 
@@ -7,16 +7,17 @@ CREATE TABLE "follower" (
 );
 
 -- CreateTable
-CREATE TABLE "message" (
+CREATE TABLE "Message" (
     "message_id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     "author_id" INTEGER NOT NULL,
     "text" TEXT NOT NULL,
     "pub_date" INTEGER,
-    "flagged" INTEGER
+    "flagged" INTEGER,
+    CONSTRAINT "Message_author_id_fkey" FOREIGN KEY ("author_id") REFERENCES "User" ("user_id") ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
 -- CreateTable
-CREATE TABLE "user" (
+CREATE TABLE "User" (
     "user_id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     "username" TEXT NOT NULL,
     "email" TEXT NOT NULL,
@@ -24,7 +25,8 @@ CREATE TABLE "user" (
 );
 
 -- CreateIndex
-CREATE UNIQUE INDEX "user_username_key" ON "user"("username");
+CREATE UNIQUE INDEX "User_username_key" ON "User"("username");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "user_email_key" ON "user"("email");
+CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
+
