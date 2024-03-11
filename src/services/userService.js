@@ -98,6 +98,7 @@ class UserService {
   }
 
   async getPublicTimelineMessages (limit) {
+    const limitInt = parseInt(limit)
     try {
       const messages = await prisma.message.findMany({
         where: {
@@ -117,7 +118,7 @@ class UserService {
         orderBy: {
           pub_date: 'desc'
         },
-        take: limit
+        take: limitInt
       })
       return formatGetMessages(messages)
     } catch (err) {
@@ -174,6 +175,7 @@ class UserService {
   }
 
   async followUser (userId, followedId) {
+    console.log(userId, followedId)
     try {
       const follower = await prisma.follower.create({
         data: {
@@ -218,6 +220,25 @@ class UserService {
     } catch (err) {
       console.error(err)
       throw new Error(`Error adding user to database: ${err.messsage}`)
+    }
+  }
+
+  async getAllFollowedUsers (userId, limit) {
+    const limitInt = parseInt(limit)
+    try {
+      const followed = await prisma.follower.findMany({
+        where: {
+          who_id: userId
+        },
+        select: {
+          whom: true
+        },
+        take: limitInt
+      })
+      return followed
+    } catch (err) {
+      console.error(err)
+      throw new Error(`Error getting followed users from database: ${err.message}`)
     }
   }
 }

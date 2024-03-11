@@ -10,6 +10,7 @@ datasource db {
 model Follower {
   who_id  Int
   whom_id Int
+  whom    User @relation("Follows", fields: [whom_id], references: [user_id])
 
   @@id([who_id, whom_id])
 }
@@ -24,9 +25,10 @@ model Message {
 }
 
 model User {
-  user_id  Int       @id @default(autoincrement())
-  username String    @unique
-  email    String    @unique
-  pw_hash  String
-  message  Message[]
+  user_id       Int        @id @default(autoincrement())
+  username      String     @unique
+  email         String     @unique
+  pw_hash       String
+  message       Message[]
+  follows_users Follower[] @relation("Follows")
 }
