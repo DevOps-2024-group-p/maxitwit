@@ -37,6 +37,17 @@ npm install
 npm run devstart 
 ```
 
+### Testing
+WARNING Currently testing requires to reset the local DB! Proceed with caution!
+
+To run tests locally:
+```
+docker compose up --build
+```
+```
+pytest -s maxitwit_test.py
+```
+
 ### Helpful docs
 
 [Prisma](https://www.prisma.io/docs)
