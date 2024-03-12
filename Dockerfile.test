@@ -4,14 +4,14 @@ RUN mkdir /maxitwit-tests
 
 WORKDIR .
 
-COPY conftest.py /maxitwit-tests/
-COPY maxitwit_test.py /maxitwit-tests/
-COPY test_requirements.txt /maxitwit-tests/
+COPY /tests/conftest.py /maxitwit-tests/
+COPY /tests/maxitwit_test.py /maxitwit-tests/
+COPY /tests/test_requirements.txt /maxitwit-tests/
 
 WORKDIR /maxitwit-tests
 
 RUN pip install -r test_requirements.txt
 
-EXPOSE 3000
+EXPOSE 3002
 
 ENTRYPOINT ["pytest", "maxitwit_test.py", "--force", "--container"]
