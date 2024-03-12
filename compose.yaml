@@ -12,13 +12,14 @@ services:
     ports:
       - 3000:3000
     networks:
-      - itu-minitwit-network
+      - maxitwit-network
     environment:
       - HUSKY=0
       - DATABASE_URL=file:../db/minitwit.db
     env_file: .env
 
   api:
+    container_name: maxitwitapi
     build:
       dockerfile: Dockerfile.api
       context: .
@@ -27,14 +28,14 @@ services:
       - ./db:/usr/src/app/db
       - ./src:/usr/src/app/src
     ports:
-      - 3001:3000
+      - 3001:3001
     networks:
-      - itu-minitwit-network
+      - maxitwit-network
     environment:
       - HUSKY=0
       - DATABASE_URL=file:../db/minitwit.db
     env_file: .env
 
 networks:
-  itu-minitwit-network:
-    name: itu-minitwit-network
+  maxitwit-network:
+    name: maxitwit-network
