@@ -13,7 +13,7 @@
     "cz": "cz",
     "docker": "docker-compose up --build",
     "prepare": "husky",
-    "test": "jest"
+    "test": "pytest -s tests/maxitwit_test.py"
   },
   "dependencies": {
     "@prisma/client": "^5.10.2",

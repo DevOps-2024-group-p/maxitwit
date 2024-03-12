@@ -23,6 +23,8 @@ import os
 APP_URL = API_URL = "http://localhost"
 APP_PORT = "3000"
 API_PORT = "3001"
+# APP_URL = "http://maxitwitapi"
+# API_URL = "http://maxitwitapi"
 DATABASE = "src/api/tmp/minitwit.db"
 USERNAME = "simulator"
 PWD = "super_safe!"
@@ -35,15 +37,65 @@ HEADERS = {
 }
 
 
+def register(username, password, password2=None, email=None):
+    """Helper function to register a user"""
+    if password2 is None:
+        password2 = password
+    if email is None:
+        email = username + "@example.com"
+    return requests.post(
+        f"{APP_URL}:{APP_PORT}/register",
+        data={
+            "username": username,
+            "password": password,
+            "password2": password2,
+            "email": email,
+        },
+        allow_redirects=True,
+    )
+
+
+def login(username, password):
+    """Helper function to login"""
+    http_session = requests.Session()
+    r = http_session.post(
+        f"{APP_URL}:{APP_PORT}/login",
+        data={"username": username, "password": password},
+        allow_redirects=True,
+    )
+    return r, http_session
+
+
+def register_and_login(username, password):
+    """Registers and logs in in one go"""
+    register(username, password)
+    return login(username, password)
+
+
+def logout(http_session):
+    """Helper function to logout"""
+    return http_session.get(f"{APP_URL}:{APP_PORT}/logout", allow_redirects=True)
+
+
+def add_message(http_session, text):
+    """Records a message"""
+    r = http_session.post(
+        f"{APP_URL}:{APP_PORT}/add_message", data={"text": text}, allow_redirects=True
+    )
+    if text:
+        assert "Your message was recorded" in r.text
+    return r
+
+
 @pytest.fixture(scope="session", autouse=True)
 def setup(request):
     if request.config.getoption("--force"):
         os.system("npx prisma migrate reset --skip-seed --force > /dev/null 2>&1")
     else:
         confirmation = input(
-            "WARNING, this will erase the current database, are you sure you want to start? Y/n "
+            "WARNING, this will erase the local database, are you sure you want to start? y/N "
         )
-        if confirmation.lower() in ["", "y", "yes"]:
+        if confirmation.lower() in ["y", "yes"]:
             os.system("npx prisma migrate reset --skip-seed --force > /dev/null 2>&1")
         else:
             pytest.exit("Tests cancelled by user.")
@@ -51,14 +103,14 @@ def setup(request):
     if request.config.getoption("--container"):
         global APP_URL
         global API_URL
-        APP_URL = "http://test_server"
-        API_URL = "http://test_api"
+        APP_URL = "http://maxitwitserver"
+        API_URL = "http://maxitwitapi"
 
 
 # ---- API TESTS ----
 def test_api_latest():
     # post something to updaet LATEST
-    url = f"{APP_URL}:{API_PORT}/register"
+    url = f"{API_URL}:{API_PORT}/register"
     data = {"username": "test", "email": "test@test", "pwd": "foo"}
     params = {"latest": 1337}
     response = requests.post(url, data=json.dumps(data), params=params, headers=HEADERS)
@@ -230,57 +282,6 @@ def test_api_a_unfollows_b():
 
 
 # ---- APP TESTS ----
-def register(username, password, password2=None, email=None):
-    """Helper function to register a user"""
-    if password2 is None:
-        password2 = password
-    if email is None:
-        email = username + "@example.com"
-    return requests.post(
-        f"{APP_URL}:{APP_PORT}/register",
-        data={
-            "username": username,
-            "password": password,
-            "password2": password2,
-            "email": email,
-        },
-        allow_redirects=True,
-    )
-
-
-def login(username, password):
-    """Helper function to login"""
-    http_session = requests.Session()
-    r = http_session.post(
-        f"{APP_URL}:{APP_PORT}/login",
-        data={"username": username, "password": password},
-        allow_redirects=True,
-    )
-    return r, http_session
-
-
-def register_and_login(username, password):
-    """Registers and logs in in one go"""
-    register(username, password)
-    return login(username, password)
-
-
-def logout(http_session):
-    """Helper function to logout"""
-    return http_session.get(f"{APP_URL}:{APP_PORT}/logout", allow_redirects=True)
-
-
-def add_message(http_session, text):
-    """Records a message"""
-    r = http_session.post(
-        f"{APP_URL}:{APP_PORT}/add_message", data={"text": text}, allow_redirects=True
-    )
-    if text:
-        assert "Your message was recorded" in r.text
-    return r
-
-
-# testing functions
 
 
 def test_app_register():
