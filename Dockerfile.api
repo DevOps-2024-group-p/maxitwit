@@ -39,3 +39,19 @@ USER root
 COPY . .
 RUN npx prisma generate
 CMD npm run start
+
+
+FROM base as test
+ENV NODE_ENV test
+ENV API true
+ENV HUSKY=0
+RUN --mount=type=bind,source=package.json,target=package.json \
+    --mount=type=bind,source=package-lock.json,target=package-lock.json \
+    --mount=type=cache,target=/root/.npm \
+    npm ci --include=dev
+USER root
+COPY . .
+
+CMD npx prisma generate && \
+    npx prisma migrate reset --skip-seed --force && \
+    npm run devstart

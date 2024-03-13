@@ -1,41 +1,34 @@
 services:
-
-  server:
+  maxitwitserver:
     container_name: maxitwitserver
     build:
       dockerfile: Dockerfile.app
       context: .
-      target: ${TARGET}
-    volumes:
-      - ./db:/usr/src/app/db
-      - ./src:/usr/src/app/src
+      target: test
     ports:
       - 3000:3000
     networks:
-      - maxitwit-network
+      - main
     environment:
       - HUSKY=0
       - DATABASE_URL=file:../db/minitwit.db
     env_file: .env
 
-  api:
+  maxitwitapi:
     container_name: maxitwitapi
     build:
       dockerfile: Dockerfile.api
       context: .
-      target: ${TARGET}
-    volumes:
-      - ./db:/usr/src/app/db
-      - ./src:/usr/src/app/src
+      target: test
     ports:
       - 3001:3001
     networks:
-      - maxitwit-network
+      - main
     environment:
       - HUSKY=0
       - DATABASE_URL=file:../db/minitwit.db
     env_file: .env
 
 networks:
-  maxitwit-network:
-    name: maxitwit-network
+  main:
+    name: maxitwit-test
