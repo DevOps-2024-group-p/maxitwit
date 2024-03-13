@@ -70,7 +70,7 @@ jobs:
       - name: Test maxitwit
         run: |
           docker build -t $DOCKER_USERNAME/maxitwittest -f Dockerfile.test .
-          yes 2>/dev/null | docker compose -f tests_compose.yaml up -d
+          yes 2>/dev/null | docker compose -f tests_compose.yaml up --build -d
           docker run --rm --network=maxitwit-test $DOCKER_USERNAME/maxitwittest
         env:
           TARGET: production
