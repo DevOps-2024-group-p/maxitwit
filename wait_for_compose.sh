@@ -2,21 +2,14 @@
 
 # wait-for-apis.sh
 
-set -e
-
-server="$1"
-api="$2"
 shift
 cmd="$@"
 
-until $(curl --output /dev/null --silent --head --fail "$server"); do
-    printf 'Waiting ffor maxitwitserver'
+until $(curl --output /dev/null --silent --head --fail "http://localhost:3000/"); do
+    printf 'Waiting for servers to be available\n'
     sleep 2
 done
 
-until $(curl --output /dev/null --silent --head --fail "$api"); do
-    printf 'Waiting for maxitwitapi'
-    sleep 2
-done
+printf 'Server is up!\n'
 
 exec $cmd

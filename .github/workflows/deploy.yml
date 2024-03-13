@@ -72,7 +72,7 @@ jobs:
           docker build -t $DOCKER_USERNAME/maxitwittest -f Dockerfile.test .
           yes 2>/dev/null | docker compose -f tests_compose.yaml up --build -d
           chmod +x ./wait_for_compose.sh
-          ./wait_for_compose.sh http://localhost:3000 http://localhost:3001
+          ./wait_for_compose.sh
           docker run --rm --network=maxitwit-test $DOCKER_USERNAME/maxitwittest
         env:
           TARGET: production
