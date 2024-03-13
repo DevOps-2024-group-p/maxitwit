@@ -43,8 +43,8 @@ jobs:
           file: ./Dockerfile.app
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/maxitwitserver:latest
-          cache-from: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/maxitwitserver:webbuildcache
-          cache-to: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/maxitwitserver:webbuildcache,mode=max
+          cache-from: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/maxitwitserver:serverbuildcache
+          cache-to: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/maxitwitserver:serverbuildcache,mode=max
       
       - name: Build and push minitwit api
         uses: docker/build-push-action@v2
@@ -54,8 +54,18 @@ jobs:
           target: "production"
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/maxitwitapi:latest
-          cache-from: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/maxitwitapi:webbuildcache
-          cache-to: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/maxitwitapi:webbuildcache,mode=max
+          cache-from: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/maxitwitapi:apibuildcache
+          cache-to: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/maxitwitapi:apibuildcache,mode=max
+
+      - name: Build and push minitwit test
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          file: ./Dockerfile.test
+          push: true
+          tags: ${{ secrets.DOCKER_USERNAME }}/maxitwittest:latest
+          cache-from: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/maxitwittest:testbuildcache
+          cache-to: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/maxitwittest:testbuildcache,mode=max
 
       - name: Test maxitwit
         run: |
