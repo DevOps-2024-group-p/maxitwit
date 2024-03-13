@@ -64,7 +64,15 @@ npm run test
 ```
 
 ### Helpful docs
+=======
+### Prisma FAQ
 
+
+How do i...
+
+[Modify the DB schema](https://www.prisma.io/docs/orm/prisma-migrate/workflows/prototyping-your-schema#prototyping-with-an-existing-migration-history)
+[Seed or skip seeding](https://www.prisma.io/docs/orm/prisma-migrate/workflows/seeding#integrated-seeding-with-prisma-migrate)
+[Edit DB visually](https://www.prisma.io/docs/orm/tools/prisma-studio)
 [Prisma](https://www.prisma.io/docs)
 
 
@@ -74,6 +82,12 @@ Make a feature branch and make your changes, then stage your changes. Use commit
 
 Example:
 
+
+```
+git checkout -b feature/<my-feature-branch>
+```
+
+make your changes, then:
 
 ```
 git checkout -b feature/<my-feature-branch>
