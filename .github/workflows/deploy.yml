@@ -71,6 +71,7 @@ jobs:
         run: |
           docker build -t $DOCKER_USERNAME/maxitwittest -f Dockerfile.test .
           yes 2>/dev/null | docker compose -f tests_compose.yaml up --build -d
+          ./wait-for-apis.sh http://maxitwitserver:3000 http://maxitwitapi:3001
           docker run --rm --network=maxitwit-test $DOCKER_USERNAME/maxitwittest
         env:
           TARGET: production
