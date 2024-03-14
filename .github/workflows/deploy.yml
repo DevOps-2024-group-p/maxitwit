@@ -87,3 +87,13 @@ jobs:
         env:
           SSH_KEY: ${{ secrets.SSH_KEY }}
           SESSION_SECRET: ${{ secrets.SESSION_SECRET }}
+      
+      - name: Deploy to server
+        # Configure the ~./bash_profile and deploy.sh file on the Vagrantfile
+        run: >
+          ssh $SSH_USER@$SSH_HOST
+          -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no
+          '/vagrant/remote_files/deploy.sh'
+        env:
+          SSH_USER: ${{ secrets.SSH_USER }}
+          SSH_HOST: ${{ secrets.SSH_HOST }}
