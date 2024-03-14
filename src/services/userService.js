@@ -223,8 +223,7 @@ class UserService {
     }
   }
 
-  async getAllFollowedUsers (userId, limit) {
-    const limitInt = parseInt(limit)
+  async getAllFollowedUsers (userId) {
     try {
       const followed = await prisma.follower.findMany({
         where: {
@@ -232,8 +231,7 @@ class UserService {
         },
         select: {
           whom: true
-        },
-        take: limitInt
+        }
       })
       return followed
     } catch (err) {
