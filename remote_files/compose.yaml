@@ -7,7 +7,7 @@ services:
     ports:
       - 3000:3000
     networks:
-      - itu-minitwit-network
+      - maxitwit
     environment:
       - HUSKY=0
       - DATABASE_URL=file:../db/minitwit.db
@@ -19,9 +19,9 @@ services:
     volumes:
       - ../db:/usr/src/app/db
     ports:
-      - 3001:3000
+      - 3001:3001
     networks:
-      - itu-minitwit-network
+      - maxitwit
     environment:
       - HUSKY=0
       - DATABASE_URL=file:../db/minitwit.db
@@ -29,5 +29,5 @@ services:
     restart: always
 
 networks:
-  itu-minitwit-network:
-    name: itu-minitwit-network
+  maxitwit:
+    name: maxitwit
