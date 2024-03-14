@@ -12,6 +12,7 @@ services:
       - HUSKY=0
       - DATABASE_URL=file:../db/minitwit.db
       - SESSION_SECRET=${SESSION_SECRET}
+    restart: always
 
   api:
     image: ${DOCKER_USERNAME}/maxitwitapi
@@ -25,6 +26,7 @@ services:
       - HUSKY=0
       - DATABASE_URL=file:../db/minitwit.db
       - SESSION_SECRET=${SESSION_SECRET}
+    restart: always
 
 networks:
   itu-minitwit-network:
