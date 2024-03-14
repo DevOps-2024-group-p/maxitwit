@@ -4,7 +4,6 @@ services:
     image: ${DOCKER_USERNAME}/maxitwitserver
     volumes:
       - ../db:/usr/src/app/db
-      - ../src:/usr/src/app/src
     ports:
       - 3000:3000
     networks:
@@ -18,7 +17,6 @@ services:
     image: ${DOCKER_USERNAME}/maxitwitapi
     volumes:
       - ../db:/usr/src/app/db
-      - ../src:/usr/src/app/src
     ports:
       - 3001:3000
     networks:
