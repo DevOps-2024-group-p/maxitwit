@@ -92,9 +92,9 @@ jobs:
         # Configure the ~./bash_profile and deploy.sh file on the Vagrantfile
         run: >
           ssh $SSH_USER@$SSH_HOST
-          export DOCKER_USERNAME=$DOCKER_USERNAME
-          export SESSION_SECRET=$SESSION_SECRET
           -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no
+          'export DOCKER_USERNAME=$DOCKER_USERNAME'
+          'export SESSION_SECRET=$SESSION_SECRET'
           '/vagrant/remote_files/deploy.sh'
         env:
           SSH_USER: ${{ secrets.SSH_USER }}
