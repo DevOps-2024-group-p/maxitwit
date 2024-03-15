@@ -1,4 +1,4 @@
-source ~/.bash_profile
+source ~/.bashrc
 
 cd /vagrant/remote_files
 
