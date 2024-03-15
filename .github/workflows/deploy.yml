@@ -91,7 +91,8 @@ jobs:
       - name: Deploy to server
         # Configure the ~./bash_profile and deploy.sh file on the Vagrantfile
         run: >
-          sh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no $SSH_USER@$SSH_HOST
+          ssh $SSH_USER@$SSH_HOST
+          -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no
           "export DOCKER_USERNAME=$DOCKER_USERNAME;
           export SESSION_SECRET=$SESSION_SECRET;
           /vagrant/remote_files/deploy.sh"
