@@ -1,0 +1,32 @@
+---
+name: Continuous Integration
+
+on:
+  pull_request:
+    branches:
+      - main
+      # Run workflow every time a pull request is opened or reopened
+    types: [opened, reopened]
+  # allow manual triggers for now too
+  workflow_dispatch:
+    manual: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Test maxitwit
+        run: |
+          docker build -t $DOCKER_USERNAME/maxitwittest -f Dockerfile.test .
+          yes 2>/dev/null | docker compose -f tests_compose.yaml up --build -d
+          chmod +x ./wait_for_compose.sh
+          ./wait_for_compose.sh
+          docker run --rm --network=maxitwit-test $DOCKER_USERNAME/maxitwittest
+        env:
+          TARGET: production
+          SESSION_SECRET: ${{ secrets.SESSION_SECRET }}
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
