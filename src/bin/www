@@ -1,39 +1,27 @@
 #!/usr/bin/env node
 
-/**
- * Module dependencies.
- */
-
-var app = require('../app');
+const { on } = require('events');
+var { app, api } = require('../app');
 var debug = require('debug')('neotwit:server');
 var http = require('http');
 
-/**
- * Get port from environment and store in Express.
- */
-var port = normalizePort(process.env.PORT || '3000');
-if (process.env.API) {
-  port = normalizePort(process.env.PORT || '3001'); // use port 3001 for API
-}
-app.set('port', port);
+// Get port from environment and store in Express.
 
-/**
- * Create HTTP server.
- */
+const PORT_APP = normalizePort(process.env.PORT || '3000');
+const PORT_API = normalizePort(process.env.PORT || '3001');
 
-var server = http.createServer(app);
+app.set('port', PORT_APP);
+api.set('port', PORT_API);
 
-/**
- * Listen on provided port, on all network interfaces.
- */
+const SERVER_APP = http.createServer(app);
+const SERVER_API = http.createServer(api);
 
-server.listen(port);
-server.on('error', onError);
-server.on('listening', onListening);
+SERVER_APP.listen(PORT_APP);
+SERVER_APP.on('error', onError);
+SERVER_APP.on('listening', () => onListening(SERVER_APP));
 
-/**
- * Normalize a port into a number, string, or false.
- */
+SERVER_API.listen(PORT_API)
+SERVER_API.on('listening', () => onListening(SERVER_API));
 
 function normalizePort(val) {
   var port = parseInt(val, 10);
@@ -50,10 +38,6 @@ function normalizePort(val) {
 
   return false;
 }
-
-/**
- * Event listener for HTTP server "error" event.
- */
 
 function onError(error) {
   if (error.syscall !== 'listen') {
@@ -79,11 +63,7 @@ function onError(error) {
   }
 }
 
-/**
- * Event listener for HTTP server "listening" event.
- */
-
-function onListening() {
+function onListening(server) {
   var addr = server.address();
   var bind = typeof addr === 'string'
     ? 'pipe ' + addr

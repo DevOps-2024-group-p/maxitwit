@@ -7,6 +7,7 @@ FROM node:${NODE_VERSION}-alpine as base
 
 # Expose the port that the application listens on.
 EXPOSE 3000
+EXPOSE 3001
 
 WORKDIR /usr/src/app
 
