@@ -13,6 +13,9 @@ const session = require('express-session')
 const SQLiteStore = require('connect-sqlite3')(session)
 const flash = require('connect-flash')
 
+const promBundle = require('express-prom-bundle')
+const metricsMiddleware = promBundle({ includeMethod: true, includePath: true })
+
 // Import routers for different paths
 const loginRouter = require('./routes/login') // Router for login related paths
 const logoutRouter = require('./routes/logout') // Router for logout related paths
@@ -58,6 +61,11 @@ app.use((req, res, next) => {
   res.locals.success_messages = req.flash('success')
   res.locals.error_messages = req.flash('error')
   next()
+})
+app.use(metricsMiddleware)
+app.get('/metrics', (req, res) => {
+  res.set('Content-Type', metricsMiddleware.contentType)
+  res.end(metricsMiddleware.metrics())
 })
 
 if (process.env.API) {

@@ -26,4 +26,8 @@ scrape_configs:
     static_configs:
       - targets: ["maxitwitserver:3000"]
         labels:
-          group: "production"
+          group: "maxitwit-server"
+
+      - targets: ["maxitwitapi:3001"]
+        labels:
+          group: "maxitwit-api"
