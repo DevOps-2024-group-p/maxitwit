@@ -12,8 +12,15 @@ const cookieParser = require('cookie-parser') // Middleware to parse and set coo
 const session = require('express-session')
 const SQLiteStore = require('connect-sqlite3')(session)
 const flash = require('connect-flash')
-
 const promBundle = require('express-prom-bundle')
+const promClient = require('prom-client')
+const collectDefaultMetrics = promClient.collectDefaultMetrics;
+const Registry = promClient.Registry;
+const register = new Registry();
+collectDefaultMetrics({ register });
+
+
+
 const metricsMiddleware = promBundle({ includeMethod: true, includePath: true })
 
 // Import routers for different paths
@@ -23,8 +30,9 @@ const registerRouter = require('./routes/register') // Router for register relat
 const timelineRouter = require('./routes/timeline') // Router for public timeline related paths
 const apiRouter = require('./routes/api') // Router for public timeline related paths
 
-// Initialize the Express application
 const app = express()
+
+const api = express()
 
 app.set('views', path.join(__dirname, 'views')) // Specifies the directory where the Jade template files are located
 app.set('view engine', 'pug') // Sets Jade (now Pug) as the template engine for rendering views
@@ -34,16 +42,36 @@ app.set('view engine', 'pug') // Sets Jade (now Pug) as the template engine for 
 if (process.env.NODE_ENV === 'development') {
   const logger = require('morgan') // http request logger middleware for node.js
   app.use(logger('dev')) // Use Morgan to log requests to the console in 'dev' format, which includes method, url, status, response time
+  api.use(logger('dev'))
 }
-// middleware for use in production environment
+
+// APPLICATION MIDDLWARE
 app.use(express.json()) // Parses incoming requests with JSON payloads, making it easy to handle JSON data
 app.use(express.urlencoded({ extended: false })) // Parses incoming requests with URL-encoded payloads, useful for form submissions
 app.use(cookieParser()) // Parse Cookie header and populate req.cookies with an object keyed by cookie names
 app.use(express.static(path.join(__dirname, 'public'))) // Serve static files (images, CSS, JavaScript) from the 'public' directory
+app.use(metricsMiddleware)
+
+app.use(flash())
+
+
+
+app.use((req, res, next) => {
+  res.locals.success_messages = req.flash('success')
+  res.locals.error_messages = req.flash('error')
+  next()
+})
+
+// API MIDDLEWARE
+api.use(express.json())
+api.use(cookieParser())
+api.use(metricsMiddleware)
+
 const { SESSION_SECRET } = process.env
 if (!SESSION_SECRET) {
   throw new Error('SESSION_SECRET is not set')
 }
+
 app.use(session({
   resave: false,
   saveUninitialized: true,
@@ -55,12 +83,11 @@ app.use(session({
   cookie: { maxAge: 7 * 24 * 60 * 60 * 1000 } // 1 week
 }))
 
-app.use(flash())
+api.use('/', apiRouter)
 
-app.use((req, res, next) => {
-  res.locals.success_messages = req.flash('success')
-  res.locals.error_messages = req.flash('error')
-  next()
+app.get('/metrics', (req, res) => {
+  res.set('Content-Type', metricsMiddleware.contentType)
+  res.end(metricsMiddleware.metrics())
 })
 app.use(metricsMiddleware)
 app.get('/metrics', (req, res) => {
@@ -68,14 +95,17 @@ app.get('/metrics', (req, res) => {
   res.end(metricsMiddleware.metrics())
 })
 
-if (process.env.API) {
-  app.use('/', apiRouter) // Use the API router for requests to '/api'
-} else {
-  app.use('/login', loginRouter) // Use the login router for requests to '/login'
-  app.use('/logout', logoutRouter) // Use the logout router for requests to '/login'
-  app.use('/register', registerRouter) // Use the register router for requests to '/register'
-  app.use('/', timelineRouter) // Use the public timeline router for requests to '/'
-}
+api.get('/metrics', (req, res) => {
+  res.set('Content-Type', metricsMiddleware.contentType)
+  res.end(metricsMiddleware.metrics())
+})
+
+
+
+app.use('/login', loginRouter) // Use the login router for requests to '/login'
+app.use('/logout', logoutRouter) // Use the logout router for requests to '/login'
+app.use('/register', registerRouter) // Use the register router for requests to '/register'
+app.use('/', timelineRouter) // Use the public timeline router for requests to '/'
 
 // Error handler middleware
 app.use((err, req, res, next) => {
@@ -90,4 +120,4 @@ app.use((err, req, res, next) => {
 })
 
 // Export the app for use by other modules (like the server starter script)
-module.exports = app
+module.exports = { app, api }
