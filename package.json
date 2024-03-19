@@ -16,7 +16,7 @@
     "test": "pytest -s tests/maxitwit_test.py"
   },
   "dependencies": {
-    "@prisma/client": "^5.10.2",
+    "@prisma/client": "^5.11.0",
     "bcrypt": "^5.1.1",
     "connect-flash": "^0.1.1",
     "connect-pg-simple": "^9.0.1",
@@ -47,7 +47,7 @@
     "morgan": "~1.9.1",
     "nodemon": "^3.0.3",
     "npx": "^3.0.0",
-    "prisma": "^5.10.2",
+    "prisma": "^5.11.0",
     "standard-version": "^9.5.0",
     "superagent": "^8.1.2"
   },
