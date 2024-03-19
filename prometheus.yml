@@ -28,6 +28,12 @@ scrape_configs:
         labels:
           group: "maxitwit-server"
 
+  - job_name: "maxitwit-api"
+
+    # Override the global default and scrape targets from this job every 5 seconds.
+    scrape_interval: 5s
+
+    static_configs:
       - targets: ["maxitwitapi:3001"]
         labels:
           group: "maxitwit-api"
