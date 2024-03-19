@@ -14,6 +14,16 @@ First, clone the repo.
 
 Then, populate ```.env``` with appropriate values. 
 
+A basic .env-file will for running the application will look like this:
+```
+TARGET= # sets docker image build target, valid values: development, production
+ 
+# Prisma db path
+ 
+DATABASE_URL="postgresql://[user[:password]@][netloc][:port][/dbname][?param1=value1&...]"
+SESSION_SECRET= # session store secret, must be set. use random value for development
+```
+
 Then chose if you want to build locally or in a container and pic
 
 ### Docker Setup
