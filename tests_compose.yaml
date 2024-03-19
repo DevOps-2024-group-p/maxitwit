@@ -13,7 +13,6 @@ services:
       - HUSKY=0
       - DATABASE_URL=file:../db/minitwit.db
       - SESSION_SECRET=secret
-      - TARGET=test
 
   maxitwitapi:
     container_name: maxitwitapi
@@ -29,7 +28,6 @@ services:
       - HUSKY=0
       - DATABASE_URL=file:../db/minitwit.db
       - SESSION_SECRET=secret
-      - TARGET=test
 
 networks:
   main:
