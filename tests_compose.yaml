@@ -1,4 +1,15 @@
 services:
+  postgres:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: testdb
+    ports:
+      - 5432:5432
+    networks:
+      - main
+
   maxitwitserver:
     container_name: maxitwitserver
     build:
@@ -9,9 +20,11 @@ services:
       - 3000:3000
     networks:
       - main
+    depends_on:
+      - postgres
     environment:
       - HUSKY=0
-      - DATABASE_URL=file:../db/minitwit.db
+      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/testdb
       - SESSION_SECRET=secret
 
   maxitwitapi:
@@ -24,9 +37,11 @@ services:
       - 3001:3001
     networks:
       - main
+    depends_on:
+      - postgres
     environment:
       - HUSKY=0
-      - DATABASE_URL=file:../db/minitwit.db
+      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/testdb
       - SESSION_SECRET=secret
 
 networks:
