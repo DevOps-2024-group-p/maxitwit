@@ -34,7 +34,7 @@ RUN --mount=type=bind,source=package.json,target=package.json \
 USER root
 COPY . .
 RUN npx prisma generate
-CMD npm run start
+CMD npm run start:migrate
 
 FROM base as test
 ENV NODE_ENV test
