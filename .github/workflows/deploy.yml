@@ -67,35 +67,6 @@ jobs:
           cache-from: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/maxitwittest:testbuildcache
           cache-to: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/maxitwittest:testbuildcache,mode=max
 
-#      - name: Build and push grafana
-#        uses: docker/build-push-action@v2
-#        with:
-#          username: ${{ secrets.GRAPHANA_USERNAME }}
-#          password: ${{ secrets.GRAPHANA_PASSWORD }}
-#          context: .
-#          push: true
-#          tags: ${{ secrets.password }}/prometheus:latest
-
-#      - name: Configure Grafana
-#        with:
-#          GRAFANA_TOKEN: ${{ secrets.GRAFANA_TOKEN }}
-#        run: |
-#            # Example: Create a data source in Grafana
-#            curl -X POST -H "Content-Type: application/json" \
-#                 -H "Authorization: Bearer ${GRAFANA_TOKEN}" \
-#                 -d '{"name":"Prometheus","type":"prometheus","url":"http://prometheus:9090","access":"proxy","isDefault":true}' \
-#                 http://grafana:3000/api/datasources
-
-      - name: Build and push prometheus
-        uses: docker/build-push-action@v2
-        with:
-          username: ${{ secrets.PROMETHEUS_USERNAME }}
-          password: ${{ secrets.PROMETHEUS_PASSWORD }}
-          context: .
-          push: true
-          tags: ${{ secrets.password }}/grafana:latest
-
-
       - name: Test maxitwit
         run: |
           docker build -t $DOCKER_USERNAME/maxitwittest -f Dockerfile.test .

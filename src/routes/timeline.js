@@ -3,14 +3,8 @@ const express = require('express')
 const router = express.Router()
 const crypto = require('crypto')
 const UserService = require('../services/userService')
-const promClient = require('prom-client')
 
 const userService = new UserService()
-
-const publicCounter = new promClient.Counter({
-  name: 'metric_name',
-  help: 'metric_help'
-})
 
 function getUserCredentialsFromSession (req) {
   if (req.session.username) {
@@ -90,7 +84,6 @@ router.get('/public', async (req, res, next) => {
   try {
     const g = getUserCredentialsFromSession(req)
     const messages = await userService.getPublicTimelineMessages(50)
-    publicCounter.inc()
     res.render('timeline', {
       title: 'Public Timeline',
       messages: formatMessages(messages),
