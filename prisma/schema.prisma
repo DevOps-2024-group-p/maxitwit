@@ -20,8 +20,10 @@ model Message {
   author     User   @relation(fields: [author_id], references: [user_id])
   author_id  Int
   text       String
-  pub_date   Int?
+  pub_date   Int
   flagged    Int?
+
+  @@index([author_id, pub_date(sort: Desc)])
 }
 
 model User {
@@ -31,4 +33,6 @@ model User {
   pw_hash       String
   message       Message[]
   follows_users Follower[] @relation("Follows")
+
+  @@index([user_id])
 }
