@@ -6,7 +6,7 @@ const UserService = require('../services/userService')
 
 const userService = new UserService()
 
-function getUserCredentialsFromSession (req) {
+function getUserCredentialsFromSession(req) {
   if (req.session.username) {
     return {
       user: {
@@ -59,11 +59,6 @@ router.post('/', async (req, res, next) => {
 
   if (!password) {
     req.flash('error', 'You have to enter a password')
-    return res.redirect('/register')
-  }
-
-  if (!validEmail) {
-    req.flash('error', 'Please enter a valid email address')
     return res.redirect('/register')
   }
 

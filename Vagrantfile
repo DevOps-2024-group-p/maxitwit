@@ -4,11 +4,11 @@
 Vagrant.configure("2") do |config|
   config.vm.box = 'digital_ocean'
   config.vm.box_url = "https://github.com/devopsgroup-io/vagrant-digitalocean/raw/master/box/digital_ocean.box"
-  config.ssh.private_key_path = '~/.ssh/id_rsa'
+  config.ssh.private_key_path = '~/.ssh/new_ssh_key'
 
   config.vm.synced_folder '.', '/maxitwit', type: "rsync"
 
-  config.vm.define "maxitwit", primary: true do |server|
+  config.vm.define "webserver", primary: true do |server|
 
     server.vm.provider :digital_ocean do |provider|
       provider.ssh_key_name = ENV["SSH_KEY_NAME"]
@@ -19,7 +19,7 @@ Vagrant.configure("2") do |config|
       provider.privatenetworking = true
     end
 
-    server.vm.hostname = "maxitwit-prod"
+    server.vm.hostname = "webserver"
 
     server.vm.provision "shell", inline: 'echo "export DOCKER_USERNAME=' + "'" + ENV["DOCKER_USERNAME"] + "'" + '" >> ~/.bash_profile'
     server.vm.provision "shell", inline: 'echo "export DOCKER_PASSWORD=' + "'" + ENV["DOCKER_PASSWORD"] + "'" + '" >> ~/.bash_profile'

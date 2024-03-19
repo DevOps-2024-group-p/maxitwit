@@ -12,7 +12,7 @@ services:
     environment:
       - HUSKY=0
       - DATABASE_URL=file:../db/minitwit.db
-    env_file: .env
+      - SESSION_SECRET=secret
 
   maxitwitapi:
     container_name: maxitwitapi
@@ -27,7 +27,7 @@ services:
     environment:
       - HUSKY=0
       - DATABASE_URL=file:../db/minitwit.db
-    env_file: .env
+      - SESSION_SECRET=secret
 
 networks:
   main:

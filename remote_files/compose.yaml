@@ -2,29 +2,25 @@ services:
 
   server:
     image: ${DOCKER_USERNAME}/maxitwitserver
-    volumes:
-      - ../db:/usr/src/app/db
     ports:
       - 3000:3000
     networks:
       - maxitwit
     environment:
       - HUSKY=0
-      - DATABASE_URL=file:../db/minitwit.db
+      - DATABASE_URL=${DATABASE_URL}
       - SESSION_SECRET=${SESSION_SECRET}
     restart: always
 
   api:
     image: ${DOCKER_USERNAME}/maxitwitapi
-    volumes:
-      - ../db:/usr/src/app/db
     ports:
       - 3001:3001
     networks:
       - maxitwit
     environment:
       - HUSKY=0
-      - DATABASE_URL=file:../db/minitwit.db
+      - DATABASE_URL=${DATABASE_URL}
       - SESSION_SECRET=${SESSION_SECRET}
     restart: always
 
