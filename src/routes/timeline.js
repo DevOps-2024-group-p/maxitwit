@@ -6,6 +6,19 @@ const UserService = require('../services/userService')
 
 const userService = new UserService()
 
+
+const client = require('prom-client');
+const collectDefaultMetrics = client.collectDefaultMetrics;
+const Registry = client.Registry;
+const register = new Registry();
+collectDefaultMetrics({ register });
+
+const publicCounter =  new client.Counter({
+  name: 'public_endpoint_counter',
+  help: 'Counter for public endpoint',
+
+});
+
 function getUserCredentialsFromSession (req) {
   if (req.session.username) {
     return {
@@ -84,6 +97,7 @@ router.get('/public', async (req, res, next) => {
   try {
     const g = getUserCredentialsFromSession(req)
     const messages = await userService.getPublicTimelineMessages(50)
+    publicCounter.inc();
     res.render('timeline', {
       title: 'Public Timeline',
       messages: formatMessages(messages),

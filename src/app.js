@@ -13,6 +13,12 @@ const session = require('express-session')
 const SQLiteStore = require('connect-sqlite3')(session)
 const flash = require('connect-flash')
 
+const client = require('prom-client');
+const collectDefaultMetrics = client.collectDefaultMetrics;
+const Registry = client.Registry;
+const register = new Registry();
+collectDefaultMetrics({ register });
+
 const promBundle = require('express-prom-bundle')
 const metricsMiddleware = promBundle({ includeMethod: true, includePath: true })
 
