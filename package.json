@@ -7,6 +7,7 @@
   },
   "scripts": {
     "start": "node src/bin/www",
+    "start:migrate": "npx prisma migrate deploy && npm run start",
     "devstart": "nodemon src/bin/www",
     "lint:fix": "eslint --fix .",
     "lint": "eslint .",
