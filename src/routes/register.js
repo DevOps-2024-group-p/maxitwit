@@ -6,6 +6,19 @@ const UserService = require('../services/userService')
 
 const userService = new UserService()
 
+const client = require('prom-client');
+const collectDefaultMetrics = client.collectDefaultMetrics;
+const Registry = client.Registry;
+const register = new Registry();
+collectDefaultMetrics({ register });
+
+const registerCounter =  new client.Counter({
+  name: 'register_endpoint_counter',
+  help: 'Counter for public endpoint',
+
+});
+
+
 function getUserCredentialsFromSession (req) {
   if (req.session.username) {
     return {
@@ -20,6 +33,7 @@ function getUserCredentialsFromSession (req) {
 /* GET register page. */
 router.get('/', (req, res, next) => {
   const g = getUserCredentialsFromSession(req)
+  registerCounter.inc();
   res.render('register', { title: 'Register', g })
 })
 

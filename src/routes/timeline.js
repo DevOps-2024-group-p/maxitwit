@@ -19,6 +19,20 @@ const publicCounter =  new client.Counter({
 
 });
 
+const followCounter =  new client.Counter({
+  name: 'follow_endpoint_counter',
+  help: 'Counter for public endpoint',
+
+});
+
+const unfollowCounter =  new client.Counter({
+  name: 'unfollow_endpoint_counter',
+  help: 'Counter for public endpoint',
+
+});
+
+
+
 function getUserCredentialsFromSession (req) {
   if (req.session.username) {
     return {
@@ -64,7 +78,6 @@ router.post('/add_message', requireAuth, async (req, res, next) => {
     const currentDate = Math.floor(new Date().getTime() / 1000)
     await userService.addMessage(userId, messageContent, currentDate)
     req.flash('success', 'Your message was recorded')
-
     res.redirect('/')
   } catch (error) {
     console.log(error)
@@ -129,7 +142,7 @@ router.get('/:username', async (req, res, next) => {
 
     const messages = await userService.getMessagesByUserId(whomId.user_id)
     formatMessages(messages)
-
+    publicCounter.inc();
     res.render('timeline', {
       endpoint: 'user',
       title: `${whomUsername}'s Timeline`,
@@ -152,7 +165,7 @@ router.get('/:username/follow', requireAuth, async (req, res, next) => {
     const whomId = await userService.getUserIdByUsername(whomUsername)
 
     await userService.followUser(g.user.id, whomId.user_id)
-
+    followCounter.inc();
     req.flash('success', `You are now following "${whomUsername}"`)
     res.redirect(`/${whomUsername}`)
   } catch (error) {
@@ -169,6 +182,7 @@ router.get('/:username/unfollow', requireAuth, async (req, res, next) => {
     const whomId = await userService.getUserIdByUsername(whomUsername)
 
     await userService.unfollowUser(g.user.id, whomId.user_id)
+    unfollowCounter.inc();
 
     req.flash('success', `You are no longer following "${whomUsername}"`)
     res.redirect(`/${whomUsername}`)
