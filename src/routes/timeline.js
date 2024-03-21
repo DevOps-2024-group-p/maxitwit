@@ -3,37 +3,11 @@ const express = require('express')
 const router = express.Router()
 const crypto = require('crypto')
 const UserService = require('../services/userService')
+const { publicCounter, followCounter, unfollowCounter } = require('../services/metrics')
 
 const userService = new UserService()
 
-
-const client = require('prom-client');
-const collectDefaultMetrics = client.collectDefaultMetrics;
-const Registry = client.Registry;
-const register = new Registry();
-collectDefaultMetrics({ register });
-
-const publicCounter =  new client.Counter({
-  name: 'public_endpoint_counter',
-  help: 'Counter for public endpoint',
-
-});
-
-const followCounter =  new client.Counter({
-  name: 'follow_endpoint_counter',
-  help: 'Counter for public endpoint',
-
-});
-
-const unfollowCounter =  new client.Counter({
-  name: 'unfollow_endpoint_counter',
-  help: 'Counter for public endpoint',
-
-});
-
-
-
-function getUserCredentialsFromSession (req) {
+function getUserCredentialsFromSession(req) {
   if (req.session.username) {
     return {
       user: {
@@ -52,12 +26,12 @@ const requireAuth = (req, res, next) => {
   }
 }
 
-function gravatarUrl (email, size = 80) {
+function gravatarUrl(email, size = 80) {
   const hash = crypto.createHash('md5').update(email.trim().toLowerCase()).digest('hex')
   return `http://www.gravatar.com/avatar/${hash}?d=identicon&s=${size}`
 }
 
-function formatMessages (messages) {
+function formatMessages(messages) {
   messages.forEach((message) => {
     const date = new Date(message.pub_date * 1000)
     const year = date.getUTCFullYear()

@@ -3,23 +3,11 @@ const express = require('express')
 const router = express.Router()
 const bcrypt = require('bcrypt')
 const UserService = require('../services/userService')
+const { registerCounter } = require('../services/metrics')
 
 const userService = new UserService()
 
-const client = require('prom-client');
-const collectDefaultMetrics = client.collectDefaultMetrics;
-const Registry = client.Registry;
-const register = new Registry();
-collectDefaultMetrics({ register });
-
-const registerCounter =  new client.Counter({
-  name: 'register_endpoint_counter',
-  help: 'Counter for public endpoint',
-
-});
-
-
-function getUserCredentialsFromSession (req) {
+function getUserCredentialsFromSession(req) {
   if (req.session.username) {
     return {
       user: {
