@@ -21,7 +21,7 @@ const logIncomingRequests = (req, res, next) => {
   next()
 }
 
-function formatMessagesAsJSON(messages) {
+function formatMessagesAsJSON (messages) {
   const formattedMessages = []
   messages.forEach((msg) => {
     const formatted = {}
@@ -33,7 +33,7 @@ function formatMessagesAsJSON(messages) {
   return formattedMessages
 }
 
-function updateLatest(req) {
+function updateLatest (req) {
   const { latest } = req.query
   if (!latest) {
     return
@@ -45,7 +45,7 @@ function updateLatest(req) {
   })
 }
 
-function getLatest() {
+function getLatest () {
   const fileContent = fs.readFileSync('latest.txt', 'utf8')
   const parsed = fileContent.trim().split('\n')
   const last = parsed[parsed.length - 1]

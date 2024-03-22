@@ -13,3 +13,4 @@ latest.txt
 /db/minitwit.db-journal
 /db/sessions.db
 .notes
+.env

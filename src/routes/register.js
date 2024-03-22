@@ -6,7 +6,7 @@ const UserService = require('../services/userService')
 
 const userService = new UserService()
 
-function getUserCredentialsFromSession(req) {
+function getUserCredentialsFromSession (req) {
   if (req.session.username) {
     return {
       user: {

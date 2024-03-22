@@ -41,6 +41,7 @@ const { SESSION_SECRET } = process.env
 if (!SESSION_SECRET) {
   throw new Error('SESSION_SECRET is not set')
 }
+
 app.use(session({
   resave: false,
   saveUninitialized: true,
