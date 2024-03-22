@@ -7,7 +7,7 @@ const { registerCounter } = require('../services/metrics')
 
 const userService = new UserService()
 
-function getUserCredentialsFromSession(req) {
+function getUserCredentialsFromSession (req) {
   if (req.session.username) {
     return {
       user: {
@@ -21,7 +21,7 @@ function getUserCredentialsFromSession(req) {
 /* GET register page. */
 router.get('/', (req, res, next) => {
   const g = getUserCredentialsFromSession(req)
-  registerCounter.inc();
+  registerCounter.inc()
   res.render('register', { title: 'Register', g })
 })
 

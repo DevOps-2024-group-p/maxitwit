@@ -50,6 +50,8 @@ services:
     image: grafana/grafana:10.2.4
     ports:
       - "3002:3000"
+    volumes:
+        - /grafana/grafana.ini:/var/lib/grafana.ini
     networks:
       - maxitwit-network
 

@@ -8,7 +8,7 @@ const { loginCounter } = require('../services/metrics')
 
 // If user is logged in, return id and username from session, otherwise empty user
 // Use the returned value to populate views
-function getUserCredentialsFromSession(req) {
+function getUserCredentialsFromSession (req) {
   if (req.session.username) {
     return {
       user: {
@@ -22,7 +22,7 @@ function getUserCredentialsFromSession(req) {
 /* GET login page. */
 router.get('/', (req, res) => {
   const g = getUserCredentialsFromSession(req)
-  loginCounter.inc();
+  loginCounter.inc()
   res.render('login', { title: 'Login', g })
 })
 
