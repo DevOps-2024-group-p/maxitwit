@@ -5,7 +5,7 @@ services:
     ports:
       - 3000:3000
     networks:
-      - maxitwit
+      - maxitwit-network
     environment:
       - HUSKY=0
       - DATABASE_URL=${DATABASE_URL}
@@ -17,7 +17,7 @@ services:
     ports:
       - 3001:3001
     networks:
-      - maxitwit
+      - maxitwit-network
     environment:
       - HUSKY=0
       - DATABASE_URL=${DATABASE_URL}
@@ -29,7 +29,7 @@ services:
     image: prom/prometheus
     container_name: prometheus
     volumes:
-      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - ../prometheus.yml:/etc/prometheus/prometheus.yml
     ports:
       - "9090:9090"
     networks:
@@ -47,8 +47,8 @@ services:
     restart: always
 
 networks:
-  maxitwit:
-    name: maxitwit
+  maxitwit-network:
+    name: maxitwit-network
 
 volumes:
   grafana_data:

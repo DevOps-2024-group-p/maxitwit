@@ -4,7 +4,7 @@
 Vagrant.configure("2") do |config|
   config.vm.box = 'digital_ocean'
   config.vm.box_url = "https://github.com/devopsgroup-io/vagrant-digitalocean/raw/master/box/digital_ocean.box"
-  config.ssh.private_key_path = '~/.ssh/new_ssh_key'
+  config.ssh.private_key_path = '~/.ssh/ida_rsa'
 
   config.vm.synced_folder '.', '/maxitwit', type: "rsync"
 
