@@ -14,3 +14,4 @@ latest.txt
 /db/sessions.db
 .notes
 .htpasswd
+.env
