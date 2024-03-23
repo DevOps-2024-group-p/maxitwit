@@ -51,10 +51,13 @@ services:
     ports:
       - "3002:3000"
     volumes:
-        - /grafana/grafana.ini:/var/lib/grafana.ini
+      - grafana_data:/var/lib/grafana
     networks:
       - maxitwit-network
 
 networks:
   maxitwit-network:
     name: maxitwit-network
+
+volumes:
+  grafana_data:
