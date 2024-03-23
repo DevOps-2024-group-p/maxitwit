@@ -13,12 +13,23 @@ const session = require('express-session')
 const SQLiteStore = require('connect-sqlite3')(session)
 const flash = require('connect-flash')
 
+const client = require('prom-client')
+const collectDefaultMetrics = client.collectDefaultMetrics
+const Registry = client.Registry
+const register = new Registry()
+collectDefaultMetrics({ register })
+
+const promBundle = require('express-prom-bundle')
+const metricsMiddleware = promBundle({ includeMethod: true, includePath: true })
+
 // Import routers for different paths
 const loginRouter = require('./routes/login') // Router for login related paths
 const logoutRouter = require('./routes/logout') // Router for logout related paths
 const registerRouter = require('./routes/register') // Router for register related paths
 const timelineRouter = require('./routes/timeline') // Router for public timeline related paths
 const apiRouter = require('./routes/api') // Router for public timeline related paths
+
+const { httpRequestDurationMicroseconds } = require('./services/metrics.js')
 
 // Initialize the Express application
 const app = express()
@@ -58,6 +69,19 @@ app.use(flash())
 app.use((req, res, next) => {
   res.locals.success_messages = req.flash('success')
   res.locals.error_messages = req.flash('error')
+  next()
+})
+app.use(metricsMiddleware)
+app.get('/metrics', (req, res) => {
+  res.set('Content-Type', metricsMiddleware.contentType)
+  res.end(metricsMiddleware.metrics())
+})
+
+app.use((req, res, next) => {
+  const end = httpRequestDurationMicroseconds.startTimer()
+  res.on('finish', () => {
+    end({ method: req.method, route: req.url, code: res.statusCode })
+  })
   next()
 })
 
