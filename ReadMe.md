@@ -29,8 +29,15 @@ Then chose if you want to build locally or in a container and pic
 
 ### Docker Setup
 
+Use the following connection string for containerized development:
+
 ```
-docker compose up --build
+DATABASE_URL="postgresql://pguser:pgpassword@postgres:5432/testdb"
+```
+
+
+```
+docker compose up --build -d
 ```
 
 Once you are done, use the following command to remove the established containers from your system:
