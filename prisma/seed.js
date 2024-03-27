@@ -2,7 +2,7 @@ const { PrismaClient } = require('@prisma/client')
 
 const prisma = new PrismaClient()
 
-async function main () {
+async function main() {
   const seedUsers = [
     {
       username: 'Jon Snow',
@@ -10,10 +10,11 @@ async function main () {
       message: {
         create: {
           text: 'Winter is coming',
-          flagged: 0
+          flagged: 0,
+          pub_date: 1711350992
         }
       },
-      pw_hash: '1234'
+      pw_hash: '1234',
     },
     {
       username: 'Daenerys Targaryen',
@@ -21,10 +22,11 @@ async function main () {
       message: {
         create: {
           text: 'Dracarys',
-          flagged: 0
+          flagged: 0,
+          pub_date: 1711350992
         }
       },
-      pw_hash: '1234'
+      pw_hash: '1234',
     },
     {
       username: 'Tyrion Lannister',
@@ -32,10 +34,11 @@ async function main () {
       message: {
         create: {
           text: 'I drink and I know things',
-          flagged: 0
+          flagged: 0,
+          pub_date: 1711350992
         }
       },
-      pw_hash: '1234'
+      pw_hash: '1234',
     },
     {
       username: 'Arya Stark',
@@ -43,10 +46,11 @@ async function main () {
       message: {
         create: {
           text: 'A girl has no name',
-          flagged: 0
+          flagged: 0,
+          pub_date: 1711350992
         }
       },
-      pw_hash: '1234'
+      pw_hash: '1234',
     },
     {
       username: 'Sansa Stark',
@@ -54,10 +58,11 @@ async function main () {
       message: {
         create: {
           text: 'The lone wolf dies, but the pack survives',
-          flagged: 0
+          flagged: 0,
+          pub_date: 1711350992
         }
       },
-      pw_hash: '1234'
+      pw_hash: '1234',
     },
     {
       username: 'Cersei Lannister',
@@ -65,10 +70,11 @@ async function main () {
       message: {
         create: {
           text: 'When you play the game of thrones, you win or you die',
-          flagged: 0
+          flagged: 0,
+          pub_date: 1711350992
         }
       },
-      pw_hash: '1234'
+      pw_hash: '1234',
     },
     {
       username: 'Bran Stark',
@@ -76,10 +82,11 @@ async function main () {
       message: {
         create: {
           text: 'Chaos isn\'t a pit. Chaos is a ladder.',
-          flagged: 0
+          flagged: 0,
+          pub_date: 1711350992
         }
       },
-      pw_hash: '1234'
+      pw_hash: '1234',
     }
   ]
 
