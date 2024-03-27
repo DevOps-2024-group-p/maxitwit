@@ -17,6 +17,8 @@ services:
     env_file: .env
     depends_on:
       - postgres
+    restart: always
+    
 
   api:
     container_name: maxitwitapi
@@ -35,6 +37,7 @@ services:
     env_file: .env
     depends_on:
       - postgres
+    restart: always
 
   prometheus:
     image: prom/prometheus
