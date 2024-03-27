@@ -94,7 +94,7 @@ def get_actions():
                     # make parsing for plot generation later easier
                     print("Unknown type found: (" + command + ")")
 
-            except Exception as e:
+            except Exception:
                 print("========================================")
                 print(traceback.format_exc())
 
@@ -104,7 +104,6 @@ def main(host):
         try:
             # SWITCH ON TYPE
             command = action["post_type"]
-            reponse = None
 
             if command == "register":
 
@@ -304,10 +303,10 @@ def main(host):
                     )
                 )
 
-        except requests.exceptions.ConnectionError as e:
+        except requests.exceptions.ConnectionError:
             ts_str = datetime.strftime(datetime.utcnow(), "%Y-%m-%d %H:%M:%S")
             print(",".join([ts_str, host, str(action["latest"]), "ConnectionError"]))
-        except requests.exceptions.ReadTimeout as e:
+        except requests.exceptions.ReadTimeout:
             ts_str = datetime.strftime(datetime.utcnow(), "%Y-%m-%d %H:%M:%S")
             print(",".join([ts_str, host, str(action["latest"]), "ReadTimeout"]))
         except Exception as e:
