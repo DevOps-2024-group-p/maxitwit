@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.4.1](https://github.com/DevOps-2024-group-p/maxitwit/compare/v1.4.0...v1.4.1) (2024-03-27)
+
+
+### Bug Fixes
+
+* **compose.yaml:** fixed issues with remote compose.yaml ([561d6fe](https://github.com/DevOps-2024-group-p/maxitwit/commit/561d6fe04e161a34b97dc6d103e7526de4d7e64d))
+* **vagrantfile:** changed ssh key name to default ([bc6ccd0](https://github.com/DevOps-2024-group-p/maxitwit/commit/bc6ccd06ff8a68941107fc00d242b0cce5e5c92a))
+
 ## [1.4.0](https://github.com/DevOps-2024-group-p/maxitwit/compare/v1.3.0...v1.4.0) (2024-03-23)
 
 
