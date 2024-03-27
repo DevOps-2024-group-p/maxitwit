@@ -29,7 +29,7 @@ const registerRouter = require('./routes/register') // Router for register relat
 const timelineRouter = require('./routes/timeline') // Router for public timeline related paths
 const apiRouter = require('./routes/api') // Router for public timeline related paths
 
-const { httpRequestDurationMicroseconds } = require('./services/metrics.js')
+const { httpErrorsCounter } = require('./services/metrics.js')
 
 // Initialize the Express application
 const app = express()
@@ -71,6 +71,7 @@ app.use((req, res, next) => {
   res.locals.error_messages = req.flash('error')
   next()
 })
+
 app.use(metricsMiddleware)
 app.get('/metrics', (req, res) => {
   res.set('Content-Type', metricsMiddleware.contentType)
@@ -78,10 +79,14 @@ app.get('/metrics', (req, res) => {
 })
 
 app.use((req, res, next) => {
-  const end = httpRequestDurationMicroseconds.startTimer()
-  res.on('finish', () => {
-    end({ method: req.method, route: req.url, code: res.statusCode })
-  })
+  const send = res.send
+  res.send = function (string) {
+    const body = string instanceof Buffer ? string.toString() : string
+    if (res.statusCode >= 400) {
+      httpErrorsCounter.inc()
+    }
+    send.call(this, body)
+  }
   next()
 })
 
