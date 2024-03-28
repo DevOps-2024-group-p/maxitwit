@@ -14,7 +14,8 @@
     "cz": "cz",
     "docker": "docker-compose up --build",
     "prepare": "husky",
-    "test": "pytest -s tests/maxitwit_test.py"
+    "test": "./test.sh -d",
+    "simulator": "python3 src/api/minitwit_simulator.py http://localhost:3000"
   },
   "dependencies": {
     "@prisma/client": "^5.11.0",
