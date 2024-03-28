@@ -36,7 +36,8 @@ const registerCounter = new client.Counter({
 
 const httpErrorsCounter = new client.Counter({
   name: 'http_errors_counter',
-  help: 'Counter for HTTP errors'
+  help: 'Counter for HTTP errors',
+  labelNames: ['status', 'method', 'path']
 })
 
 module.exports = {

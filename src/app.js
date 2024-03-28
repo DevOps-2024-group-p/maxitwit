@@ -83,7 +83,7 @@ app.use((req, res, next) => {
   res.send = function (string) {
     const body = string instanceof Buffer ? string.toString() : string
     if (res.statusCode >= 400) {
-      httpErrorsCounter.inc()
+      httpErrorsCounter.inc({ status: res.statusCode, method: req.method, path: req.path })
     }
     send.call(this, body)
   }
