@@ -30,7 +30,13 @@ fi
 if [ $? -eq 0 ]; then
   # Run pytest
   pytest --force
-  docker compose -f tests_compose.yaml down
+  for arg in "$@"
+do
+    if [ "$arg" == "-d" ]
+    then
+        docker compose -f tests_compose.yaml down
+    fi
+done
 else
   echo "Servers are not ready. Exiting."
   exit 1
