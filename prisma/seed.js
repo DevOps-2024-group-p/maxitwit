@@ -2,7 +2,7 @@ const { PrismaClient } = require('@prisma/client')
 
 const prisma = new PrismaClient()
 
-async function main() {
+async function main () {
   const seedUsers = [
     {
       username: 'Jon Snow',
@@ -14,7 +14,7 @@ async function main() {
           pub_date: 1711350992
         }
       },
-      pw_hash: '1234',
+      pw_hash: '1234'
     },
     {
       username: 'Daenerys Targaryen',
@@ -26,7 +26,7 @@ async function main() {
           pub_date: 1711350992
         }
       },
-      pw_hash: '1234',
+      pw_hash: '1234'
     },
     {
       username: 'Tyrion Lannister',
@@ -38,7 +38,7 @@ async function main() {
           pub_date: 1711350992
         }
       },
-      pw_hash: '1234',
+      pw_hash: '1234'
     },
     {
       username: 'Arya Stark',
@@ -50,7 +50,7 @@ async function main() {
           pub_date: 1711350992
         }
       },
-      pw_hash: '1234',
+      pw_hash: '1234'
     },
     {
       username: 'Sansa Stark',
@@ -62,7 +62,7 @@ async function main() {
           pub_date: 1711350992
         }
       },
-      pw_hash: '1234',
+      pw_hash: '1234'
     },
     {
       username: 'Cersei Lannister',
@@ -74,7 +74,7 @@ async function main() {
           pub_date: 1711350992
         }
       },
-      pw_hash: '1234',
+      pw_hash: '1234'
     },
     {
       username: 'Bran Stark',
@@ -86,7 +86,7 @@ async function main() {
           pub_date: 1711350992
         }
       },
-      pw_hash: '1234',
+      pw_hash: '1234'
     }
   ]
 

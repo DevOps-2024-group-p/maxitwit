@@ -9,17 +9,14 @@ import os
 import csv
 import sys
 import json
-import http
-import socket
 import base64
 import requests
 from time import sleep
 from datetime import datetime
-from contextlib import closing
-import sqlite3
 
 
-CSV_FILENAME = "./minitwit_scenario.csv"
+script_dir = os.path.dirname(os.path.abspath(__file__))
+CSV_FILENAME = os.path.join(script_dir, "minitwit_scenario.csv")
 USERNAME = "simulator"
 PWD = "super_safe!"
 CREDENTIALS = ":".join([USERNAME, PWD]).encode("ascii")
@@ -27,7 +24,7 @@ ENCODED_CREDENTIALS = base64.b64encode(CREDENTIALS).decode()
 HEADERS = {
     "Connection": "close",
     "Content-Type": "application/json",
-    f"Authorization": f"Basic {ENCODED_CREDENTIALS}",
+    "Authorization": f"Basic {ENCODED_CREDENTIALS}",
 }
 
 
@@ -97,7 +94,7 @@ def get_actions():
                     # make parsing for plot generation later easier
                     print("Unknown type found: (" + command + ")")
 
-            except Exception as e:
+            except Exception:
                 print("========================================")
                 print(traceback.format_exc())
 
@@ -107,7 +104,6 @@ def main(host):
         try:
             # SWITCH ON TYPE
             command = action["post_type"]
-            reponse = None
 
             if command == "register":
 
@@ -133,13 +129,8 @@ def main(host):
 
                 # error handling (204 success, 400 user exists)
                 # 400 user exists already but not an error to log
-                if not (
-                    (response.status_code == 204)
-                    or (response.status_code == 400)
-                ):
-                    ts_str = datetime.strftime(
-                        datetime.utcnow(), "%Y-%m-%d %H:%M:%S"
-                    )
+                if not ((response.status_code == 204) or (response.status_code == 400)):
+                    ts_str = datetime.strftime(datetime.utcnow(), "%Y-%m-%d %H:%M:%S")
                     print(
                         ",".join(
                             [
@@ -171,9 +162,7 @@ def main(host):
 
                 # 403 bad request
                 if response.status_code != 200:
-                    ts_str = datetime.strftime(
-                        datetime.utcnow(), "%Y-%m-%d %H:%M:%S"
-                    )
+                    ts_str = datetime.strftime(datetime.utcnow(), "%Y-%m-%d %H:%M:%S")
                     print(
                         ",".join(
                             [
@@ -211,9 +200,7 @@ def main(host):
 
                 # 403 unauthorized or 404 Not Found
                 if response.status_code != 204:
-                    ts_str = datetime.strftime(
-                        datetime.utcnow(), "%Y-%m-%d %H:%M:%S"
-                    )
+                    ts_str = datetime.strftime(datetime.utcnow(), "%Y-%m-%d %H:%M:%S")
                     print(
                         ",".join(
                             [
@@ -251,9 +238,7 @@ def main(host):
 
                 # 403 unauthorized or 404 Not Found
                 if response.status_code != 204:
-                    ts_str = datetime.strftime(
-                        datetime.utcnow(), "%Y-%m-%d %H:%M:%S"
-                    )
+                    ts_str = datetime.strftime(datetime.utcnow(), "%Y-%m-%d %H:%M:%S")
                     print(
                         ",".join(
                             [
@@ -289,9 +274,7 @@ def main(host):
                 # error handling (204 success, 403 failure)
                 # 403 unauthorized
                 if response.status_code != 204:
-                    ts_str = datetime.strftime(
-                        datetime.utcnow(), "%Y-%m-%d %H:%M:%S"
-                    )
+                    ts_str = datetime.strftime(datetime.utcnow(), "%Y-%m-%d %H:%M:%S")
                     print(
                         ",".join(
                             [
@@ -308,9 +291,7 @@ def main(host):
 
             else:
                 # throw exception. Should not be hit
-                ts_str = datetime.strftime(
-                    datetime.utcnow(), "%Y-%m-%d %H:%M:%S"
-                )
+                ts_str = datetime.strftime(datetime.utcnow(), "%Y-%m-%d %H:%M:%S")
                 print(
                     ",".join(
                         [
@@ -322,27 +303,17 @@ def main(host):
                     )
                 )
 
-        except requests.exceptions.ConnectionError as e:
+        except requests.exceptions.ConnectionError:
             ts_str = datetime.strftime(datetime.utcnow(), "%Y-%m-%d %H:%M:%S")
-            print(
-                ",".join(
-                    [ts_str, host, str(action["latest"]), "ConnectionError"]
-                )
-            )
-        except requests.exceptions.ReadTimeout as e:
+            print(",".join([ts_str, host, str(action["latest"]), "ConnectionError"]))
+        except requests.exceptions.ReadTimeout:
             ts_str = datetime.strftime(datetime.utcnow(), "%Y-%m-%d %H:%M:%S")
-            print(
-                ",".join([ts_str, host, str(action["latest"]), "ReadTimeout"])
-            )
+            print(",".join([ts_str, host, str(action["latest"]), "ReadTimeout"]))
         except Exception as e:
             print("========================================")
             print(traceback.format_exc())
             ts_str = datetime.strftime(datetime.utcnow(), "%Y-%m-%d %H:%M:%S")
-            print(
-                ",".join(
-                    [ts_str, host, str(action["latest"]), type(e).__name__]
-                )
-            )
+            print(",".join([ts_str, host, str(action["latest"]), type(e).__name__]))
 
         sleep(delay / (1000 * 100000))
 

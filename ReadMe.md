@@ -58,28 +58,14 @@ npm run devstart
 ### Testing
 
 #### Containerized testing
-Testing on the the test containers does not interact with the local or the production database, so they should be used always.
-```
-docker compose -f tests_compose.yaml up --build
-```
-```
-docker build -t test -f Dockerfile.test .
-```
-```
-docker run --rm --network=maxitwit-test test
-```
+Runs test.sh
+Builds test containers, runs pytest against them.
 
-
-#### Local testing
-WARNING! Local testing requires to reset the local DB! Proceed with caution!
-
-To run tests locally:
-```
-docker compose up --build
-```
 ```
 npm run test
 ```
+
+
 
 ### Helpful docs
 =======
