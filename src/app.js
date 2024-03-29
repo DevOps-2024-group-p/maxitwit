@@ -29,7 +29,7 @@ const registerRouter = require('./routes/register') // Router for register relat
 const timelineRouter = require('./routes/timeline') // Router for public timeline related paths
 const apiRouter = require('./routes/api') // Router for public timeline related paths
 
-const { httpErrorsCounter } = require('./services/metrics.js')
+const { httpErrorsCounter, httpRequestsCounter } = require('./services/metrics.js')
 
 // Initialize the Express application
 const app = express()
@@ -82,6 +82,7 @@ app.use((req, res, next) => {
   const send = res.send
   res.send = function (string) {
     const body = string instanceof Buffer ? string.toString() : string
+    httpRequestsCounter.inc({ method: req.method, path: req.path })
     if (res.statusCode >= 400) {
       httpErrorsCounter.inc({ status: res.statusCode, method: req.method, path: req.path })
     }
