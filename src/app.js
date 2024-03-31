@@ -29,6 +29,7 @@ const registerRouter = require('./routes/register') // Router for register relat
 const timelineRouter = require('./routes/timeline') // Router for public timeline related paths
 const apiRouter = require('./routes/api') // Router for public timeline related paths
 
+
 const { httpErrorsCounter } = require('./services/metrics.js')
 
 // Initialize the Express application
@@ -37,12 +38,6 @@ const app = express()
 app.set('views', path.join(__dirname, 'views')) // Specifies the directory where the Jade template files are located
 app.set('view engine', 'pug') // Sets Jade (now Pug) as the template engine for rendering views
 
-// Middleware setup
-// middleware only used during development
-if (process.env.NODE_ENV === 'development') {
-  const logger = require('morgan') // http request logger middleware for node.js
-  app.use(logger('dev')) // Use Morgan to log requests to the console in 'dev' format, which includes method, url, status, response time
-}
 // middleware for use in production environment
 app.use(express.json()) // Parses incoming requests with JSON payloads, making it easy to handle JSON data
 app.use(express.urlencoded({ extended: false })) // Parses incoming requests with URL-encoded payloads, useful for form submissions
@@ -53,6 +48,11 @@ if (!SESSION_SECRET) {
   throw new Error('SESSION_SECRET is not set')
 }
 
+//logging setup
+const morganMiddleware = require('./utils/morgan.middleware');
+
+
+app.use(morganMiddleware)
 app.use(session({
   resave: false,
   saveUninitialized: true,
@@ -91,12 +91,12 @@ app.use((req, res, next) => {
 })
 
 if (process.env.API) {
-  app.use('/', apiRouter) // Use the API router for requests to '/api'
+  app.use('/', morganMiddleware, apiRouter) // Use the API router for requests to '/api'
 } else {
-  app.use('/login', loginRouter) // Use the login router for requests to '/login'
-  app.use('/logout', logoutRouter) // Use the logout router for requests to '/login'
-  app.use('/register', registerRouter) // Use the register router for requests to '/register'
-  app.use('/', timelineRouter) // Use the public timeline router for requests to '/'
+  app.use('/login', morganMiddleware, loginRouter) // Use the login router for requests to '/login'
+  app.use('/logout', morganMiddleware, logoutRouter) // Use the logout router for requests to '/login'
+  app.use('/register', morganMiddleware, registerRouter) // Use the register router for requests to '/register'
+  app.use('/', morganMiddleware, timelineRouter) // Use the public timeline router for requests to '/'
 }
 
 // Error handler middleware

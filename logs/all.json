@@ -1,0 +1,251 @@
+{"@timestamp":"2024-03-31T14:54:27.629Z","ecs.version":"8.10.0","log.level":"info","message":"Starting application"}
+{"@timestamp":"2024-03-31T14:54:27.814Z","ecs.version":"8.10.0","log.level":"info","message":"Starting application"}
+{"@timestamp":"2024-03-31T14:54:27.996Z","ecs.version":"8.10.0","log.level":"info","message":"Starting application"}
+{"@timestamp":"2024-03-31T14:54:28.171Z","ecs.version":"8.10.0","log.level":"info","message":"Starting application"}
+{"@timestamp":"2024-03-31T14:54:28.393Z","ecs.version":"8.10.0","log.level":"info","message":"Starting application"}
+{"@timestamp":"2024-03-31T14:54:28.556Z","ecs.version":"8.10.0","log.level":"info","message":"Starting application"}
+{"@timestamp":"2024-03-31T14:54:28.737Z","ecs.version":"8.10.0","log.level":"info","message":"Starting application"}
+{"@timestamp":"2024-03-31T14:54:28.901Z","ecs.version":"8.10.0","log.level":"info","message":"Starting application"}
+{"@timestamp":"2024-03-31T14:54:29.068Z","ecs.version":"8.10.0","log.level":"info","message":"Starting application"}
+{"@timestamp":"2024-03-31T14:54:29.233Z","ecs.version":"8.10.0","log.level":"info","message":"Starting application"}
+{"@timestamp":"2024-03-31T14:54:29.417Z","ecs.version":"8.10.0","log.level":"info","message":"Starting application"}
+{"@timestamp":"2024-03-31T14:54:29.601Z","ecs.version":"8.10.0","log.level":"info","message":"Starting application"}
+{"@timestamp":"2024-03-31T14:54:29.767Z","ecs.version":"8.10.0","log.level":"info","message":"Starting application"}
+{"@timestamp":"2024-03-31T14:54:29.929Z","ecs.version":"8.10.0","log.level":"info","message":"Starting application"}
+{"@timestamp":"2024-03-31T14:54:30.110Z","ecs.version":"8.10.0","log.level":"info","message":"Starting application"}
+{"@timestamp":"2024-03-31T14:54:30.369Z","ecs.version":"8.10.0","log.level":"info","message":"Starting application"}
+{"@timestamp":"2024-03-31T14:54:30.550Z","ecs.version":"8.10.0","log.level":"info","message":"Starting application"}
+{"@timestamp":"2024-03-31T14:54:30.711Z","ecs.version":"8.10.0","log.level":"info","message":"Starting application"}
+{"@timestamp":"2024-03-31T14:54:30.873Z","ecs.version":"8.10.0","log.level":"info","message":"Starting application"}
+{"@timestamp":"2024-03-31T14:54:31.032Z","ecs.version":"8.10.0","log.level":"info","message":"Starting application"}
+{"@timestamp":"2024-03-31T14:54:31.196Z","ecs.version":"8.10.0","log.level":"info","message":"Starting application"}
+{"@timestamp":"2024-03-31T14:54:31.381Z","ecs.version":"8.10.0","log.level":"info","message":"Starting application"}
+{"@timestamp":"2024-03-31T14:54:31.543Z","ecs.version":"8.10.0","log.level":"info","message":"Starting application"}
+{"@timestamp":"2024-03-31T14:54:31.712Z","ecs.version":"8.10.0","log.level":"info","message":"Starting application"}
+{"@timestamp":"2024-03-31T14:54:31.905Z","ecs.version":"8.10.0","log.level":"info","message":"Starting application"}
+{"@timestamp":"2024-03-31T14:54:32.082Z","ecs.version":"8.10.0","log.level":"info","message":"Starting application"}
+{"@timestamp":"2024-03-31T14:54:32.294Z","ecs.version":"8.10.0","log.level":"info","message":"Starting application"}
+{"@timestamp":"2024-03-31T14:54:32.483Z","ecs.version":"8.10.0","log.level":"info","message":"Starting application"}
+{"@timestamp":"2024-03-31T14:54:32.679Z","ecs.version":"8.10.0","log.level":"info","message":"Starting application"}
+{"@timestamp":"2024-03-31T14:54:32.868Z","ecs.version":"8.10.0","log.level":"info","message":"Starting application"}
+{"@timestamp":"2024-03-31T14:54:33.046Z","ecs.version":"8.10.0","log.level":"info","message":"Starting application"}
+{"@timestamp":"2024-03-31T14:54:33.237Z","ecs.version":"8.10.0","log.level":"info","message":"Starting application"}
+{"@timestamp":"2024-03-31T14:54:33.464Z","ecs.version":"8.10.0","log.level":"info","message":"Starting application"}
+{"@timestamp":"2024-03-31T14:54:33.647Z","ecs.version":"8.10.0","log.level":"info","message":"Starting application"}
+{"@timestamp":"2024-03-31T14:54:33.816Z","ecs.version":"8.10.0","log.level":"info","message":"Starting application"}
+{"@timestamp":"2024-03-31T14:58:08.385Z","ecs.version":"8.10.0","log.level":"info","message":"Session middleware initialized"}
+{"@timestamp":"2024-03-31T14:58:08.577Z","ecs.version":"8.10.0","log.level":"info","message":"Session middleware initialized"}
+{"@timestamp":"2024-03-31T14:58:08.785Z","ecs.version":"8.10.0","log.level":"info","message":"Session middleware initialized"}
+{"@timestamp":"2024-03-31T14:58:08.950Z","ecs.version":"8.10.0","log.level":"info","message":"Session middleware initialized"}
+{"@timestamp":"2024-03-31T14:58:09.128Z","ecs.version":"8.10.0","log.level":"info","message":"Session middleware initialized"}
+{"@timestamp":"2024-03-31T14:58:09.322Z","ecs.version":"8.10.0","log.level":"info","message":"Session middleware initialized"}
+{"@timestamp":"2024-03-31T14:58:09.487Z","ecs.version":"8.10.0","log.level":"info","message":"Session middleware initialized"}
+{"@timestamp":"2024-03-31T14:58:09.638Z","ecs.version":"8.10.0","log.level":"info","message":"Session middleware initialized"}
+{"@timestamp":"2024-03-31T14:58:09.799Z","ecs.version":"8.10.0","log.level":"info","message":"Session middleware initialized"}
+{"@timestamp":"2024-03-31T14:58:09.977Z","ecs.version":"8.10.0","log.level":"info","message":"Session middleware initialized"}
+{"@timestamp":"2024-03-31T14:58:10.129Z","ecs.version":"8.10.0","log.level":"info","message":"Session middleware initialized"}
+{"@timestamp":"2024-03-31T14:58:10.335Z","ecs.version":"8.10.0","log.level":"info","message":"Session middleware initialized"}
+{"@timestamp":"2024-03-31T14:58:10.500Z","ecs.version":"8.10.0","log.level":"info","message":"Session middleware initialized"}
+{"@timestamp":"2024-03-31T14:58:10.655Z","ecs.version":"8.10.0","log.level":"info","message":"Session middleware initialized"}
+{"@timestamp":"2024-03-31T14:58:10.877Z","ecs.version":"8.10.0","log.level":"info","message":"Session middleware initialized"}
+{"@timestamp":"2024-03-31T14:58:11.065Z","ecs.version":"8.10.0","log.level":"info","message":"Session middleware initialized"}
+{"@timestamp":"2024-03-31T14:58:11.229Z","ecs.version":"8.10.0","log.level":"info","message":"Session middleware initialized"}
+{"@timestamp":"2024-03-31T14:58:11.393Z","ecs.version":"8.10.0","log.level":"info","message":"Session middleware initialized"}
+{"@timestamp":"2024-03-31T14:58:11.561Z","ecs.version":"8.10.0","log.level":"info","message":"Session middleware initialized"}
+{"@timestamp":"2024-03-31T14:58:11.717Z","ecs.version":"8.10.0","log.level":"info","message":"Session middleware initialized"}
+{"@timestamp":"2024-03-31T14:58:11.872Z","ecs.version":"8.10.0","log.level":"info","message":"Session middleware initialized"}
+{"@timestamp":"2024-03-31T14:58:12.036Z","ecs.version":"8.10.0","log.level":"info","message":"Session middleware initialized"}
+{"@timestamp":"2024-03-31T14:58:12.209Z","ecs.version":"8.10.0","log.level":"info","message":"Session middleware initialized"}
+{"@timestamp":"2024-03-31T14:58:12.376Z","ecs.version":"8.10.0","log.level":"info","message":"Session middleware initialized"}
+{"@timestamp":"2024-03-31T14:58:12.529Z","ecs.version":"8.10.0","log.level":"info","message":"Session middleware initialized"}
+{"@timestamp":"2024-03-31T14:58:12.717Z","ecs.version":"8.10.0","log.level":"info","message":"Session middleware initialized"}
+{"@timestamp":"2024-03-31T14:58:12.894Z","ecs.version":"8.10.0","log.level":"info","message":"Session middleware initialized"}
+{"@timestamp":"2024-03-31T14:58:13.074Z","ecs.version":"8.10.0","log.level":"info","message":"Session middleware initialized"}
+{"@timestamp":"2024-03-31T14:58:13.254Z","ecs.version":"8.10.0","log.level":"info","message":"Session middleware initialized"}
+{"@timestamp":"2024-03-31T14:58:13.435Z","ecs.version":"8.10.0","log.level":"info","message":"Session middleware initialized"}
+{"@timestamp":"2024-03-31T14:58:13.618Z","ecs.version":"8.10.0","log.level":"info","message":"Session middleware initialized"}
+{"@timestamp":"2024-03-31T14:58:13.790Z","ecs.version":"8.10.0","log.level":"info","message":"Session middleware initialized"}
+{"@timestamp":"2024-03-31T14:58:13.965Z","ecs.version":"8.10.0","log.level":"info","message":"Session middleware initialized"}
+{"@timestamp":"2024-03-31T14:58:14.118Z","ecs.version":"8.10.0","log.level":"info","message":"Session middleware initialized"}
+{"@timestamp":"2024-03-31T14:58:14.282Z","ecs.version":"8.10.0","log.level":"info","message":"Session middleware initialized"}
+{"@timestamp":"2024-03-31T14:58:14.436Z","ecs.version":"8.10.0","log.level":"info","message":"Session middleware initialized"}
+{"@timestamp":"2024-03-31T14:58:14.615Z","ecs.version":"8.10.0","log.level":"info","message":"Session middleware initialized"}
+{"@timestamp":"2024-03-31T14:58:14.776Z","ecs.version":"8.10.0","log.level":"info","message":"Session middleware initialized"}
+{"@timestamp":"2024-03-31T14:58:14.934Z","ecs.version":"8.10.0","log.level":"info","message":"Session middleware initialized"}
+{"@timestamp":"2024-03-31T14:58:15.098Z","ecs.version":"8.10.0","log.level":"info","message":"Session middleware initialized"}
+{"@timestamp":"2024-03-31T14:58:15.273Z","ecs.version":"8.10.0","log.level":"info","message":"Session middleware initialized"}
+{"@timestamp":"2024-03-31T14:58:15.448Z","ecs.version":"8.10.0","log.level":"info","message":"Session middleware initialized"}
+{"@timestamp":"2024-03-31T14:58:15.629Z","ecs.version":"8.10.0","log.level":"info","message":"Session middleware initialized"}
+{"@timestamp":"2024-03-31T14:58:15.787Z","ecs.version":"8.10.0","log.level":"info","message":"Session middleware initialized"}
+{"@timestamp":"2024-03-31T14:58:15.957Z","ecs.version":"8.10.0","log.level":"info","message":"Session middleware initialized"}
+{"@timestamp":"2024-03-31T14:58:16.105Z","ecs.version":"8.10.0","log.level":"info","message":"Session middleware initialized"}
+{"@timestamp":"2024-03-31T14:58:16.279Z","ecs.version":"8.10.0","log.level":"info","message":"Session middleware initialized"}
+{"@timestamp":"2024-03-31T14:58:16.447Z","ecs.version":"8.10.0","log.level":"info","message":"Session middleware initialized"}
+{"@timestamp":"2024-03-31T14:58:16.616Z","ecs.version":"8.10.0","log.level":"info","message":"Session middleware initialized"}
+{"@timestamp":"2024-03-31T14:58:16.779Z","ecs.version":"8.10.0","log.level":"info","message":"Session middleware initialized"}
+{"@timestamp":"2024-03-31T14:58:16.956Z","ecs.version":"8.10.0","log.level":"info","message":"Session middleware initialized"}
+{"@timestamp":"2024-03-31T14:58:17.135Z","ecs.version":"8.10.0","log.level":"info","message":"Session middleware initialized"}
+{"@timestamp":"2024-03-31T14:58:17.292Z","ecs.version":"8.10.0","log.level":"info","message":"Session middleware initialized"}
+{"@timestamp":"2024-03-31T14:58:17.482Z","ecs.version":"8.10.0","log.level":"info","message":"Session middleware initialized"}
+{"@timestamp":"2024-03-31T14:58:17.633Z","ecs.version":"8.10.0","log.level":"info","message":"Session middleware initialized"}
+{"@timestamp":"2024-03-31T14:58:17.790Z","ecs.version":"8.10.0","log.level":"info","message":"Session middleware initialized"}
+{"@timestamp":"2024-03-31T14:58:17.982Z","ecs.version":"8.10.0","log.level":"info","message":"Session middleware initialized"}
+{"@timestamp":"2024-03-31T14:58:18.137Z","ecs.version":"8.10.0","log.level":"info","message":"Session middleware initialized"}
+{"@timestamp":"2024-03-31T14:58:18.303Z","ecs.version":"8.10.0","log.level":"info","message":"Session middleware initialized"}
+{"@timestamp":"2024-03-31T14:58:18.475Z","ecs.version":"8.10.0","log.level":"info","message":"Session middleware initialized"}
+{"@timestamp":"2024-03-31T14:58:18.651Z","ecs.version":"8.10.0","log.level":"info","message":"Session middleware initialized"}
+{"@timestamp":"2024-03-31T14:58:18.824Z","ecs.version":"8.10.0","log.level":"info","message":"Session middleware initialized"}
+{"@timestamp":"2024-03-31T14:58:18.975Z","ecs.version":"8.10.0","log.level":"info","message":"Session middleware initialized"}
+{"@timestamp":"2024-03-31T14:58:19.142Z","ecs.version":"8.10.0","log.level":"info","message":"Session middleware initialized"}
+{"@timestamp":"2024-03-31T14:58:19.323Z","ecs.version":"8.10.0","log.level":"info","message":"Session middleware initialized"}
+{"@timestamp":"2024-03-31T14:58:19.484Z","ecs.version":"8.10.0","log.level":"info","message":"Session middleware initialized"}
+{"@timestamp":"2024-03-31T14:58:19.661Z","ecs.version":"8.10.0","log.level":"info","message":"Session middleware initialized"}
+{"@timestamp":"2024-03-31T14:58:19.814Z","ecs.version":"8.10.0","log.level":"info","message":"Session middleware initialized"}
+{"@timestamp":"2024-03-31T14:58:19.975Z","ecs.version":"8.10.0","log.level":"info","message":"Session middleware initialized"}
+{"@timestamp":"2024-03-31T14:58:20.137Z","ecs.version":"8.10.0","log.level":"info","message":"Session middleware initialized"}
+{"@timestamp":"2024-03-31T14:58:20.303Z","ecs.version":"8.10.0","log.level":"info","message":"Session middleware initialized"}
+{"@timestamp":"2024-03-31T14:58:20.502Z","ecs.version":"8.10.0","log.level":"info","message":"Session middleware initialized"}
+{"@timestamp":"2024-03-31T14:58:20.670Z","ecs.version":"8.10.0","log.level":"info","message":"Session middleware initialized"}
+{"@timestamp":"2024-03-31T14:58:20.871Z","ecs.version":"8.10.0","log.level":"info","message":"Session middleware initialized"}
+{"@timestamp":"2024-03-31T14:58:21.042Z","ecs.version":"8.10.0","log.level":"info","message":"Session middleware initialized"}
+{"@timestamp":"2024-03-31T14:58:21.202Z","ecs.version":"8.10.0","log.level":"info","message":"Session middleware initialized"}
+{"@timestamp":"2024-03-31T14:58:21.361Z","ecs.version":"8.10.0","log.level":"info","message":"Session middleware initialized"}
+{"@timestamp":"2024-03-31T14:58:21.517Z","ecs.version":"8.10.0","log.level":"info","message":"Session middleware initialized"}
+{"@timestamp":"2024-03-31T14:58:21.674Z","ecs.version":"8.10.0","log.level":"info","message":"Session middleware initialized"}
+{"@timestamp":"2024-03-31T14:58:21.825Z","ecs.version":"8.10.0","log.level":"info","message":"Session middleware initialized"}
+{"@timestamp":"2024-03-31T14:58:21.987Z","ecs.version":"8.10.0","log.level":"info","message":"Session middleware initialized"}
+{"@timestamp":"2024-03-31T14:58:22.147Z","ecs.version":"8.10.0","log.level":"info","message":"Session middleware initialized"}
+{"@timestamp":"2024-03-31T14:58:22.305Z","ecs.version":"8.10.0","log.level":"info","message":"Session middleware initialized"}
+{"@timestamp":"2024-03-31T14:58:22.476Z","ecs.version":"8.10.0","log.level":"info","message":"Session middleware initialized"}
+{"@timestamp":"2024-03-31T14:58:22.644Z","ecs.version":"8.10.0","log.level":"info","message":"Session middleware initialized"}
+{"@timestamp":"2024-03-31T14:58:22.850Z","ecs.version":"8.10.0","log.level":"info","message":"Session middleware initialized"}
+{"@timestamp":"2024-03-31T14:58:23.011Z","ecs.version":"8.10.0","log.level":"info","message":"Session middleware initialized"}
+{"@timestamp":"2024-03-31T14:58:23.171Z","ecs.version":"8.10.0","log.level":"info","message":"Session middleware initialized"}
+{"@timestamp":"2024-03-31T14:58:23.334Z","ecs.version":"8.10.0","log.level":"info","message":"Session middleware initialized"}
+{"@timestamp":"2024-03-31T14:58:23.517Z","ecs.version":"8.10.0","log.level":"info","message":"Session middleware initialized"}
+{"@timestamp":"2024-03-31T14:58:23.695Z","ecs.version":"8.10.0","log.level":"info","message":"Session middleware initialized"}
+{"@timestamp":"2024-03-31T14:58:23.885Z","ecs.version":"8.10.0","log.level":"info","message":"Session middleware initialized"}
+{"@timestamp":"2024-03-31T14:58:24.061Z","ecs.version":"8.10.0","log.level":"info","message":"Session middleware initialized"}
+{"@timestamp":"2024-03-31T14:58:24.226Z","ecs.version":"8.10.0","log.level":"info","message":"Session middleware initialized"}
+{"@timestamp":"2024-03-31T14:58:24.404Z","ecs.version":"8.10.0","log.level":"info","message":"Session middleware initialized"}
+{"@timestamp":"2024-03-31T14:58:24.579Z","ecs.version":"8.10.0","log.level":"info","message":"Session middleware initialized"}
+{"@timestamp":"2024-03-31T14:58:24.745Z","ecs.version":"8.10.0","log.level":"info","message":"Session middleware initialized"}
+{"@timestamp":"2024-03-31T14:58:24.917Z","ecs.version":"8.10.0","log.level":"info","message":"Session middleware initialized"}
+{"@timestamp":"2024-03-31T15:22:10.880Z","ecs.version":"8.10.0","log.level":"http","message":"::ffff:127.0.0.1 GET / 304 - - 197.236 ms\n"}
+{"@timestamp":"2024-03-31T15:22:10.882Z","ecs.version":"8.10.0","log.level":"http","message":"::ffff:127.0.0.1 GET / 304 - - 197.236 ms\n"}
+{"@timestamp":"2024-03-31T15:22:13.534Z","ecs.version":"8.10.0","log.level":"http","message":"::ffff:127.0.0.1 GET / 304 - - 135.552 ms\n"}
+{"@timestamp":"2024-03-31T15:22:13.536Z","ecs.version":"8.10.0","log.level":"http","message":"::ffff:127.0.0.1 GET / 304 - - 135.552 ms\n"}
+{"@timestamp":"2024-03-31T15:22:14.918Z","ecs.version":"8.10.0","log.level":"http","message":"::ffff:127.0.0.1 GET / 304 - - 140.959 ms\n"}
+{"@timestamp":"2024-03-31T15:22:14.921Z","ecs.version":"8.10.0","log.level":"http","message":"::ffff:127.0.0.1 GET / 304 - - 140.959 ms\n"}
+{"@timestamp":"2024-03-31T15:22:16.063Z","ecs.version":"8.10.0","log.level":"http","message":"::ffff:127.0.0.1 GET / 304 - - 127.026 ms\n"}
+{"@timestamp":"2024-03-31T15:22:16.064Z","ecs.version":"8.10.0","log.level":"http","message":"::ffff:127.0.0.1 GET / 304 - - 127.026 ms\n"}
+{"@timestamp":"2024-03-31T15:22:17.219Z","ecs.version":"8.10.0","log.level":"http","message":"::ffff:127.0.0.1 GET / 304 - - 139.588 ms\n"}
+{"@timestamp":"2024-03-31T15:22:17.220Z","ecs.version":"8.10.0","log.level":"http","message":"::ffff:127.0.0.1 GET / 304 - - 139.588 ms\n"}
+{"@timestamp":"2024-03-31T15:23:03.996Z","ecs.version":"8.10.0","log.level":"http","message":"::ffff:127.0.0.1 GET / 304 - - 136.116 ms\n"}
+{"@timestamp":"2024-03-31T15:23:03.997Z","ecs.version":"8.10.0","log.level":"http","message":"::ffff:127.0.0.1 GET / 304 - - 136.116 ms\n"}
+{"@timestamp":"2024-03-31T15:25:08.263Z","ecs.version":"8.10.0","log.level":"http","message":"::ffff:127.0.0.1 GET / 304 - - 130.704 ms\n"}
+{"@timestamp":"2024-03-31T15:25:08.265Z","ecs.version":"8.10.0","log.level":"http","message":"::ffff:127.0.0.1 GET / 304 - - 130.704 ms\n"}
+{"@timestamp":"2024-03-31T15:25:11.448Z","ecs.version":"8.10.0","log.level":"http","message":"::ffff:127.0.0.1 GET / 304 - - 129.130 ms\n"}
+{"@timestamp":"2024-03-31T15:25:11.449Z","ecs.version":"8.10.0","log.level":"http","message":"::ffff:127.0.0.1 GET / 304 - - 129.130 ms\n"}
+{"@timestamp":"2024-03-31T15:25:12.351Z","ecs.version":"8.10.0","log.level":"http","message":"::ffff:127.0.0.1 GET /public 304 - - 136.381 ms\n"}
+{"@timestamp":"2024-03-31T15:25:12.353Z","ecs.version":"8.10.0","log.level":"http","message":"::ffff:127.0.0.1 GET /public 304 - - 136.381 ms\n"}
+{"@timestamp":"2024-03-31T15:25:15.094Z","ecs.version":"8.10.0","log.level":"http","message":"::ffff:127.0.0.1 GET /logout 302 58 - 3.750 ms\n"}
+{"@timestamp":"2024-03-31T15:25:15.098Z","ecs.version":"8.10.0","log.level":"http","message":"::ffff:127.0.0.1 GET /logout 302 58 - 3.750 ms\n"}
+{"@timestamp":"2024-03-31T15:25:16.780Z","ecs.version":"8.10.0","log.level":"http","message":"::ffff:127.0.0.1 GET /public 200 2420 - 129.981 ms\n"}
+{"@timestamp":"2024-03-31T15:25:16.782Z","ecs.version":"8.10.0","log.level":"http","message":"::ffff:127.0.0.1 GET /public 200 2420 - 129.981 ms\n"}
+{"@timestamp":"2024-03-31T15:25:19.743Z","ecs.version":"8.10.0","log.level":"http","message":"::ffff:127.0.0.1 GET /login 200 745 - 78.925 ms\n"}
+{"@timestamp":"2024-03-31T15:25:19.746Z","ecs.version":"8.10.0","log.level":"http","message":"::ffff:127.0.0.1 GET /login 200 745 - 78.925 ms\n"}
+{"@timestamp":"2024-03-31T15:25:21.637Z","ecs.version":"8.10.0","log.level":"http","message":"::ffff:127.0.0.1 POST /login 302 56 - 92.650 ms\n"}
+{"@timestamp":"2024-03-31T15:25:21.640Z","ecs.version":"8.10.0","log.level":"http","message":"::ffff:127.0.0.1 POST /login 302 56 - 92.650 ms\n"}
+{"@timestamp":"2024-03-31T15:25:23.045Z","ecs.version":"8.10.0","log.level":"http","message":"::ffff:127.0.0.1 GET /login 200 770 - 71.810 ms\n"}
+{"@timestamp":"2024-03-31T15:25:23.048Z","ecs.version":"8.10.0","log.level":"http","message":"::ffff:127.0.0.1 GET /login 200 770 - 71.810 ms\n"}
+{"@timestamp":"2024-03-31T15:25:26.171Z","ecs.version":"8.10.0","log.level":"http","message":"::ffff:127.0.0.1 POST /login 302 46 - 89.597 ms\n"}
+{"@timestamp":"2024-03-31T15:25:26.173Z","ecs.version":"8.10.0","log.level":"http","message":"::ffff:127.0.0.1 POST /login 302 46 - 89.597 ms\n"}
+{"@timestamp":"2024-03-31T15:25:27.944Z","ecs.version":"8.10.0","log.level":"http","message":"::ffff:127.0.0.1 GET / 200 947 - 150.604 ms\n"}
+{"@timestamp":"2024-03-31T15:25:27.946Z","ecs.version":"8.10.0","log.level":"http","message":"::ffff:127.0.0.1 GET / 200 947 - 150.604 ms\n"}
+{"@timestamp":"2024-03-31T15:25:31.067Z","ecs.version":"8.10.0","log.level":"http","message":"::ffff:127.0.0.1 GET / 200 920 - 130.738 ms\n"}
+{"@timestamp":"2024-03-31T15:25:31.069Z","ecs.version":"8.10.0","log.level":"http","message":"::ffff:127.0.0.1 GET / 200 920 - 130.738 ms\n"}
+{"@timestamp":"2024-03-31T15:25:32.358Z","ecs.version":"8.10.0","log.level":"http","message":"::ffff:127.0.0.1 GET /public 200 2392 - 136.198 ms\n"}
+{"@timestamp":"2024-03-31T15:25:32.360Z","ecs.version":"8.10.0","log.level":"http","message":"::ffff:127.0.0.1 GET /public 200 2392 - 136.198 ms\n"}
+{"@timestamp":"2024-03-31T15:25:34.681Z","ecs.version":"8.10.0","log.level":"http","message":"::ffff:127.0.0.1 GET /public 200 2392 - 125.328 ms\n"}
+{"@timestamp":"2024-03-31T15:25:34.683Z","ecs.version":"8.10.0","log.level":"http","message":"::ffff:127.0.0.1 GET /public 200 2392 - 125.328 ms\n"}
+{"@timestamp":"2024-03-31T15:25:35.159Z","ecs.version":"8.10.0","log.level":"http","message":"::ffff:127.0.0.1 GET /favicon.ico 500 12 - 50.596 ms\n"}
+{"@timestamp":"2024-03-31T15:25:35.161Z","ecs.version":"8.10.0","log.level":"http","message":"::ffff:127.0.0.1 GET /favicon.ico 500 12 - 50.596 ms\n"}
+{"@timestamp":"2024-03-31T15:25:37.297Z","ecs.version":"8.10.0","log.level":"http","message":"::ffff:127.0.0.1 GET /public 200 2392 - 122.667 ms\n"}
+{"@timestamp":"2024-03-31T15:25:37.300Z","ecs.version":"8.10.0","log.level":"http","message":"::ffff:127.0.0.1 GET /public 200 2392 - 122.667 ms\n"}
+{"@timestamp":"2024-03-31T15:25:37.816Z","ecs.version":"8.10.0","log.level":"http","message":"::ffff:127.0.0.1 GET /favicon.ico 500 12 - 54.705 ms\n"}
+{"@timestamp":"2024-03-31T15:25:37.818Z","ecs.version":"8.10.0","log.level":"http","message":"::ffff:127.0.0.1 GET /favicon.ico 500 12 - 54.705 ms\n"}
+{"@timestamp":"2024-03-31T15:25:38.908Z","ecs.version":"8.10.0","log.level":"http","message":"::ffff:127.0.0.1 GET /public 200 2392 - 127.164 ms\n"}
+{"@timestamp":"2024-03-31T15:25:38.911Z","ecs.version":"8.10.0","log.level":"http","message":"::ffff:127.0.0.1 GET /public 200 2392 - 127.164 ms\n"}
+{"@timestamp":"2024-03-31T15:25:39.365Z","ecs.version":"8.10.0","log.level":"http","message":"::ffff:127.0.0.1 GET /favicon.ico 500 12 - 53.130 ms\n"}
+{"@timestamp":"2024-03-31T15:25:39.367Z","ecs.version":"8.10.0","log.level":"http","message":"::ffff:127.0.0.1 GET /favicon.ico 500 12 - 53.130 ms\n"}
+{"@timestamp":"2024-03-31T15:25:40.304Z","ecs.version":"8.10.0","log.level":"http","message":"::ffff:127.0.0.1 GET /public 200 2392 - 120.258 ms\n"}
+{"@timestamp":"2024-03-31T15:25:40.307Z","ecs.version":"8.10.0","log.level":"http","message":"::ffff:127.0.0.1 GET /public 200 2392 - 120.258 ms\n"}
+{"@timestamp":"2024-03-31T15:25:40.772Z","ecs.version":"8.10.0","log.level":"http","message":"::ffff:127.0.0.1 GET /favicon.ico 500 12 - 46.146 ms\n"}
+{"@timestamp":"2024-03-31T15:25:40.774Z","ecs.version":"8.10.0","log.level":"http","message":"::ffff:127.0.0.1 GET /favicon.ico 500 12 - 46.146 ms\n"}
+{"@timestamp":"2024-03-31T15:25:41.414Z","ecs.version":"8.10.0","log.level":"http","message":"::ffff:127.0.0.1 GET /public 200 2392 - 124.316 ms\n"}
+{"@timestamp":"2024-03-31T15:25:41.417Z","ecs.version":"8.10.0","log.level":"http","message":"::ffff:127.0.0.1 GET /public 200 2392 - 124.316 ms\n"}
+{"@timestamp":"2024-03-31T15:25:41.880Z","ecs.version":"8.10.0","log.level":"http","message":"::ffff:127.0.0.1 GET /favicon.ico 500 12 - 50.218 ms\n"}
+{"@timestamp":"2024-03-31T15:25:41.883Z","ecs.version":"8.10.0","log.level":"http","message":"::ffff:127.0.0.1 GET /favicon.ico 500 12 - 50.218 ms\n"}
+{"@timestamp":"2024-03-31T15:25:44.487Z","ecs.version":"8.10.0","log.level":"http","message":"::ffff:127.0.0.1 GET /public 200 2392 - 124.423 ms\n"}
+{"@timestamp":"2024-03-31T15:25:44.490Z","ecs.version":"8.10.0","log.level":"http","message":"::ffff:127.0.0.1 GET /public 200 2392 - 124.423 ms\n"}
+{"@timestamp":"2024-03-31T15:25:44.964Z","ecs.version":"8.10.0","log.level":"http","message":"::ffff:127.0.0.1 GET /favicon.ico 500 12 - 55.549 ms\n"}
+{"@timestamp":"2024-03-31T15:25:44.967Z","ecs.version":"8.10.0","log.level":"http","message":"::ffff:127.0.0.1 GET /favicon.ico 500 12 - 55.549 ms\n"}
+{"@timestamp":"2024-03-31T15:25:45.997Z","ecs.version":"8.10.0","log.level":"http","message":"::ffff:127.0.0.1 GET /public 200 2392 - 120.662 ms\n"}
+{"@timestamp":"2024-03-31T15:25:45.999Z","ecs.version":"8.10.0","log.level":"http","message":"::ffff:127.0.0.1 GET /public 200 2392 - 120.662 ms\n"}
+{"@timestamp":"2024-03-31T15:25:46.399Z","ecs.version":"8.10.0","log.level":"http","message":"::ffff:127.0.0.1 GET /favicon.ico 500 12 - 51.070 ms\n"}
+{"@timestamp":"2024-03-31T15:25:46.401Z","ecs.version":"8.10.0","log.level":"http","message":"::ffff:127.0.0.1 GET /favicon.ico 500 12 - 51.070 ms\n"}
+{"@timestamp":"2024-03-31T15:25:47.434Z","ecs.version":"8.10.0","log.level":"http","message":"::ffff:127.0.0.1 GET /public 200 2392 - 125.349 ms\n"}
+{"@timestamp":"2024-03-31T15:25:47.437Z","ecs.version":"8.10.0","log.level":"http","message":"::ffff:127.0.0.1 GET /public 200 2392 - 125.349 ms\n"}
+{"@timestamp":"2024-03-31T15:25:47.938Z","ecs.version":"8.10.0","log.level":"http","message":"::ffff:127.0.0.1 GET /favicon.ico 500 12 - 45.863 ms\n"}
+{"@timestamp":"2024-03-31T15:25:47.940Z","ecs.version":"8.10.0","log.level":"http","message":"::ffff:127.0.0.1 GET /favicon.ico 500 12 - 45.863 ms\n"}
+{"@timestamp":"2024-03-31T15:25:48.837Z","ecs.version":"8.10.0","log.level":"http","message":"::ffff:127.0.0.1 GET /public 200 2392 - 128.738 ms\n"}
+{"@timestamp":"2024-03-31T15:25:48.840Z","ecs.version":"8.10.0","log.level":"http","message":"::ffff:127.0.0.1 GET /public 200 2392 - 128.738 ms\n"}
+{"@timestamp":"2024-03-31T15:25:49.330Z","ecs.version":"8.10.0","log.level":"http","message":"::ffff:127.0.0.1 GET /favicon.ico 500 12 - 54.910 ms\n"}
+{"@timestamp":"2024-03-31T15:25:49.332Z","ecs.version":"8.10.0","log.level":"http","message":"::ffff:127.0.0.1 GET /favicon.ico 500 12 - 54.910 ms\n"}
+{"@timestamp":"2024-03-31T15:26:35.995Z","ecs.version":"8.10.0","log.level":"http","message":"::ffff:127.0.0.1 GET / 302 58 - 1.812 ms\n"}
+{"@timestamp":"2024-03-31T15:26:35.997Z","ecs.version":"8.10.0","log.level":"http","message":"::ffff:127.0.0.1 GET / 302 58 - 1.812 ms\n"}
+{"@timestamp":"2024-03-31T15:26:38.528Z","ecs.version":"8.10.0","log.level":"http","message":"::ffff:127.0.0.1 GET /public 200 2392 - 131.726 ms\n"}
+{"@timestamp":"2024-03-31T15:26:38.530Z","ecs.version":"8.10.0","log.level":"http","message":"::ffff:127.0.0.1 GET /public 200 2392 - 131.726 ms\n"}
+{"@timestamp":"2024-03-31T15:26:41.429Z","ecs.version":"8.10.0","log.level":"http","message":"::ffff:127.0.0.1 GET /public 304 - - 124.301 ms\n"}
+{"@timestamp":"2024-03-31T15:26:41.431Z","ecs.version":"8.10.0","log.level":"http","message":"::ffff:127.0.0.1 GET /public 304 - - 124.301 ms\n"}
+{"@timestamp":"2024-03-31T15:26:42.269Z","ecs.version":"8.10.0","log.level":"http","message":"::ffff:127.0.0.1 GET /public 304 - - 121.356 ms\n"}
+{"@timestamp":"2024-03-31T15:26:42.271Z","ecs.version":"8.10.0","log.level":"http","message":"::ffff:127.0.0.1 GET /public 304 - - 121.356 ms\n"}
+{"@timestamp":"2024-03-31T15:26:42.849Z","ecs.version":"8.10.0","log.level":"http","message":"::ffff:127.0.0.1 GET /public 304 - - 122.200 ms\n"}
+{"@timestamp":"2024-03-31T15:26:42.852Z","ecs.version":"8.10.0","log.level":"http","message":"::ffff:127.0.0.1 GET /public 304 - - 122.200 ms\n"}
+{"@timestamp":"2024-03-31T15:26:43.327Z","ecs.version":"8.10.0","log.level":"http","message":"::ffff:127.0.0.1 GET /public 304 - - 122.006 ms\n"}
+{"@timestamp":"2024-03-31T15:26:43.329Z","ecs.version":"8.10.0","log.level":"http","message":"::ffff:127.0.0.1 GET /public 304 - - 122.006 ms\n"}
+{"@timestamp":"2024-03-31T15:26:43.701Z","ecs.version":"8.10.0","log.level":"http","message":"::ffff:127.0.0.1 GET /public 304 - - 123.166 ms\n"}
+{"@timestamp":"2024-03-31T15:26:43.703Z","ecs.version":"8.10.0","log.level":"http","message":"::ffff:127.0.0.1 GET /public 304 - - 123.166 ms\n"}
+{"@timestamp":"2024-03-31T15:26:44.072Z","ecs.version":"8.10.0","log.level":"http","message":"::ffff:127.0.0.1 GET /public 304 - - 134.093 ms\n"}
+{"@timestamp":"2024-03-31T15:26:44.073Z","ecs.version":"8.10.0","log.level":"http","message":"::ffff:127.0.0.1 GET /public 304 - - 134.093 ms\n"}
+{"@timestamp":"2024-03-31T15:26:44.986Z","ecs.version":"8.10.0","log.level":"http","message":"::ffff:127.0.0.1 GET /public 304 - - 131.545 ms\n"}
+{"@timestamp":"2024-03-31T15:26:44.988Z","ecs.version":"8.10.0","log.level":"http","message":"::ffff:127.0.0.1 GET /public 304 - - 131.545 ms\n"}
+{"@timestamp":"2024-03-31T15:26:45.789Z","ecs.version":"8.10.0","log.level":"http","message":"::ffff:127.0.0.1 GET /public 304 - - 130.901 ms\n"}
+{"@timestamp":"2024-03-31T15:26:45.790Z","ecs.version":"8.10.0","log.level":"http","message":"::ffff:127.0.0.1 GET /public 304 - - 130.901 ms\n"}
+{"@timestamp":"2024-03-31T15:26:46.416Z","ecs.version":"8.10.0","log.level":"http","message":"::ffff:127.0.0.1 GET /public 304 - - 137.943 ms\n"}
+{"@timestamp":"2024-03-31T15:26:46.419Z","ecs.version":"8.10.0","log.level":"http","message":"::ffff:127.0.0.1 GET /public 304 - - 137.943 ms\n"}
+{"@timestamp":"2024-03-31T15:26:47.142Z","ecs.version":"8.10.0","log.level":"http","message":"::ffff:127.0.0.1 GET /public 304 - - 150.645 ms\n"}
+{"@timestamp":"2024-03-31T15:26:47.143Z","ecs.version":"8.10.0","log.level":"http","message":"::ffff:127.0.0.1 GET /public 304 - - 150.645 ms\n"}
+{"@timestamp":"2024-03-31T15:26:48.246Z","ecs.version":"8.10.0","log.level":"http","message":"::ffff:127.0.0.1 GET /public 304 - - 135.898 ms\n"}
+{"@timestamp":"2024-03-31T15:26:48.249Z","ecs.version":"8.10.0","log.level":"http","message":"::ffff:127.0.0.1 GET /public 304 - - 135.898 ms\n"}
+{"@timestamp":"2024-03-31T15:26:48.748Z","ecs.version":"8.10.0","log.level":"http","message":"::ffff:127.0.0.1 GET /public 304 - - 132.398 ms\n"}
+{"@timestamp":"2024-03-31T15:26:48.752Z","ecs.version":"8.10.0","log.level":"http","message":"::ffff:127.0.0.1 GET /public 304 - - 132.398 ms\n"}
+{"@timestamp":"2024-03-31T15:26:49.638Z","ecs.version":"8.10.0","log.level":"http","message":"::ffff:127.0.0.1 GET /public 304 - - 135.601 ms\n"}
+{"@timestamp":"2024-03-31T15:26:49.641Z","ecs.version":"8.10.0","log.level":"http","message":"::ffff:127.0.0.1 GET /public 304 - - 135.601 ms\n"}
+{"@timestamp":"2024-03-31T15:26:50.239Z","ecs.version":"8.10.0","log.level":"http","message":"::ffff:127.0.0.1 GET /public 304 - - 142.142 ms\n"}
+{"@timestamp":"2024-03-31T15:26:50.241Z","ecs.version":"8.10.0","log.level":"http","message":"::ffff:127.0.0.1 GET /public 304 - - 142.142 ms\n"}
+{"@timestamp":"2024-03-31T15:26:50.996Z","ecs.version":"8.10.0","log.level":"http","message":"::ffff:127.0.0.1 GET /public 304 - - 129.964 ms\n"}
+{"@timestamp":"2024-03-31T15:26:50.998Z","ecs.version":"8.10.0","log.level":"http","message":"::ffff:127.0.0.1 GET /public 304 - - 129.964 ms\n"}
+{"@timestamp":"2024-03-31T15:26:51.577Z","ecs.version":"8.10.0","log.level":"http","message":"::ffff:127.0.0.1 GET /public 304 - - 125.233 ms\n"}
+{"@timestamp":"2024-03-31T15:26:51.579Z","ecs.version":"8.10.0","log.level":"http","message":"::ffff:127.0.0.1 GET /public 304 - - 125.233 ms\n"}
+{"@timestamp":"2024-03-31T15:26:52.119Z","ecs.version":"8.10.0","log.level":"http","message":"::ffff:127.0.0.1 GET /public 304 - - 130.441 ms\n"}
+{"@timestamp":"2024-03-31T15:26:52.121Z","ecs.version":"8.10.0","log.level":"http","message":"::ffff:127.0.0.1 GET /public 304 - - 130.441 ms\n"}
+{"@timestamp":"2024-03-31T15:26:52.737Z","ecs.version":"8.10.0","log.level":"http","message":"::ffff:127.0.0.1 GET /public 304 - - 118.041 ms\n"}
+{"@timestamp":"2024-03-31T15:26:52.740Z","ecs.version":"8.10.0","log.level":"http","message":"::ffff:127.0.0.1 GET /public 304 - - 118.041 ms\n"}
+{"@timestamp":"2024-03-31T15:26:53.274Z","ecs.version":"8.10.0","log.level":"http","message":"::ffff:127.0.0.1 GET /public 304 - - 120.606 ms\n"}
+{"@timestamp":"2024-03-31T15:26:53.276Z","ecs.version":"8.10.0","log.level":"http","message":"::ffff:127.0.0.1 GET /public 304 - - 120.606 ms\n"}
+{"@timestamp":"2024-03-31T15:26:53.807Z","ecs.version":"8.10.0","log.level":"http","message":"::ffff:127.0.0.1 GET /public 304 - - 120.111 ms\n"}
+{"@timestamp":"2024-03-31T15:26:53.810Z","ecs.version":"8.10.0","log.level":"http","message":"::ffff:127.0.0.1 GET /public 304 - - 120.111 ms\n"}
+{"@timestamp":"2024-03-31T15:26:54.323Z","ecs.version":"8.10.0","log.level":"http","message":"::ffff:127.0.0.1 GET /public 304 - - 122.619 ms\n"}
+{"@timestamp":"2024-03-31T15:26:54.325Z","ecs.version":"8.10.0","log.level":"http","message":"::ffff:127.0.0.1 GET /public 304 - - 122.619 ms\n"}
