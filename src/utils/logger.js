@@ -1,6 +1,14 @@
 const winston = require('winston')
 const appRoot = require('app-root-path')
 const ecsFormat = require('@elastic/ecs-winston-format')
+const logstash = require('winston-logstash-transport')
+
+//adding logstash transport
+const logstashTransport = new logstash.LogstashTransport({
+  host: 'logstash_demo',
+  port: 1514
+})
+
 
 const options = {
   infoFile: {
@@ -39,7 +47,8 @@ const logger = winston.createLogger({
     new winston.transports.File(options.infoFile),
     new winston.transports.File(options.errorFile),
     new winston.transports.File(options.httpFile),
-    new winston.transports.Console(options.console)
+    new winston.transports.Console(options.console),
+    logstashTransport
   ],
   exitOnError: false
 })

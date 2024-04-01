@@ -43,13 +43,12 @@ app.set('view engine', 'pug') // Sets Jade (now Pug) as the template engine for 
 
 // middleware for use in production environment
 
-
 // setup logging
-app.use(morgan('combined', { stream: winston.stream }))
 app.use(express.json()) // Parses incoming requests with JSON payloads, making it easy to handle JSON data
 app.use(express.urlencoded({ extended: false })) // Parses incoming requests with URL-encoded payloads, useful for form submissions
 app.use(cookieParser()) // Parse Cookie header and populate req.cookies with an object keyed by cookie names
 app.use(express.static(path.join(__dirname, 'public'))) // Serve static files (images, CSS, JavaScript) from the 'public' directory
+app.use(morgan('combined', { stream: winston.stream })) // HTTP request logger middleware for morgan, logging to winston
 const { SESSION_SECRET } = process.env
 if (!SESSION_SECRET) {
   throw new Error('SESSION_SECRET is not set')
