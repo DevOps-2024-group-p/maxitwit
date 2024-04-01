@@ -42,6 +42,10 @@ app.set('views', path.join(__dirname, 'views')) // Specifies the directory where
 app.set('view engine', 'pug') // Sets Jade (now Pug) as the template engine for rendering views
 
 // middleware for use in production environment
+
+
+// setup logging
+app.use(morgan('combined', { stream: winston.stream }))
 app.use(express.json()) // Parses incoming requests with JSON payloads, making it easy to handle JSON data
 app.use(express.urlencoded({ extended: false })) // Parses incoming requests with URL-encoded payloads, useful for form submissions
 app.use(cookieParser()) // Parse Cookie header and populate req.cookies with an object keyed by cookie names
@@ -99,9 +103,6 @@ app.use((err, req, res, next) => {
   res.status(err.status || 500)
   res.render('error') // Uses the view engine to render the error page
 })
-
-// setup logging
-app.use(morgan('combined', { stream: winston.stream }))
 
 if (process.env.API) {
   app.use('/', apiRouter) // Use the API router for requests to '/api'
