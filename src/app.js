@@ -29,6 +29,9 @@ const registerRouter = require('./routes/register') // Router for register relat
 const timelineRouter = require('./routes/timeline') // Router for public timeline related paths
 const apiRouter = require('./routes/api') // Router for public timeline related paths
 
+//logging setup
+const morgan = require('morgan')
+var winston = require('./utils/logger')
 
 const { httpErrorsCounter } = require('./services/metrics.js')
 
@@ -48,11 +51,6 @@ if (!SESSION_SECRET) {
   throw new Error('SESSION_SECRET is not set')
 }
 
-//logging setup
-const morganMiddleware = require('./utils/morgan.middleware');
-
-
-app.use(morganMiddleware)
 app.use(session({
   resave: false,
   saveUninitialized: true,
@@ -90,15 +88,6 @@ app.use((req, res, next) => {
   next()
 })
 
-if (process.env.API) {
-  app.use('/', morganMiddleware, apiRouter) // Use the API router for requests to '/api'
-} else {
-  app.use('/login', morganMiddleware, loginRouter) // Use the login router for requests to '/login'
-  app.use('/logout', morganMiddleware, logoutRouter) // Use the logout router for requests to '/login'
-  app.use('/register', morganMiddleware, registerRouter) // Use the register router for requests to '/register'
-  app.use('/', morganMiddleware, timelineRouter) // Use the public timeline router for requests to '/'
-}
-
 // Error handler middleware
 app.use((err, req, res, next) => {
   // Set locals, providing error details only in development environment
@@ -110,6 +99,18 @@ app.use((err, req, res, next) => {
   res.status(err.status || 500)
   res.render('error') // Uses the view engine to render the error page
 })
+
+//setup logging
+app.use(morgan('combined', { stream: winston.stream }))
+
+if (process.env.API) {
+  app.use('/', apiRouter) // Use the API router for requests to '/api'
+} else {
+  app.use('/login', loginRouter) // Use the login router for requests to '/login'
+  app.use('/logout', logoutRouter) // Use the logout router for requests to '/login'
+  app.use('/register', registerRouter) // Use the register router for requests to '/register'
+  app.use('/', timelineRouter) // Use the public timeline router for requests to '/'
+}
 
 // Export the app for use by other modules (like the server starter script)
 module.exports = app

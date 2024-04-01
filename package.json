@@ -20,6 +20,7 @@
   "dependencies": {
     "@elastic/ecs-winston-format": "^1.5.3",
     "@prisma/client": "^5.11.0",
+    "app-root-path": "^3.1.0",
     "bcrypt": "^5.1.1",
     "connect-flash": "^0.1.1",
     "connect-pg-simple": "^9.0.1",

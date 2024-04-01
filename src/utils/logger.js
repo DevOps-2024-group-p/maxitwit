@@ -1,48 +1,53 @@
 const winston = require('winston')
+const appRoot = require('app-root-path');
 const ecsFormat = require('@elastic/ecs-winston-format')
 
-const levels = {
-  error: 0,
-  warn: 1,
-  info: 2,
-  http: 3,
-  debug: 4
-}
+const options = {
+  infoFile: {
+    level: 'info',
+    filename: `${appRoot}/logs/info.json`,
+    handleExceptions: true,
+    maxsize: 5242880, // 5MB
+    maxFiles: 5,
+    format: ecsFormat({ convertReqRes: true }),
+  },
+  errorFile: {
+    level: 'error',
+    filename: `${appRoot}/logs/error.json`,
+    handleExceptions: true,
+    maxsize: 5242880, // 5MB
+    maxFiles: 5,
+    format: ecsFormat({ convertReqRes: true }),
+  },
+  httpFile: {
+    level: 'http',
+    filename: `${appRoot}/logs/http.json`,
+    handleExceptions: true,
+    maxsize: 5242880, // 5MB
+    maxFiles: 5,
+    format: ecsFormat({ convertReqRes: true }),
+  },
+  console: {
+    level: "debug",
+    handleExceptions: true,
+    format: ecsFormat({ convertReqRes: true }),
+  },
+};
 
-const level = () => {
-  const env = process.env.NODE_ENV || 'development'
-  const isDevelopment = env === 'development'
-  return isDevelopment ? 'debug' : 'warn'
-}
-
-const colors = {
-  error: 'red',
-  warn: 'yellow',
-  info: 'green',
-  http: 'magenta',
-  debug: 'white'
-}
-
-winston.addColors(colors)
-
-const transports = [
-  new winston.transports.Console(),
-  new winston.transports.File({
-    filename: 'logs/error.json',
-    level: 'error'
-  }),
-  new winston.transports.File({ filename: 'logs/all.json' })
-]
 const logger = winston.createLogger({
-  level: level(),
-  levels,
-  format: ecsFormat({ convertReqRes: true }),
-  transports
-})
-// In development, log to the console as well
-if (process.env.NODE_ENV !== 'production') {
-  logger.add(new winston.transports.Console({
-    format: winston.format.simple()
-  }))
-}
+  transports: [
+    new winston.transports.File(options.infoFile),
+    new winston.transports.File(options.errorFile),
+    new winston.transports.File(options.httpFile),
+    new winston.transports.Console(options.console),
+  ],
+  exitOnError: false,
+});
+
+logger.stream = {
+  write: function(message, encoding) {
+    logger.info(message);
+  },
+};
+
 module.exports = logger
