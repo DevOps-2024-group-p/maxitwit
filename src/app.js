@@ -29,9 +29,9 @@ const registerRouter = require('./routes/register') // Router for register relat
 const timelineRouter = require('./routes/timeline') // Router for public timeline related paths
 const apiRouter = require('./routes/api') // Router for public timeline related paths
 
-//logging setup
+// logging setup
 const morgan = require('morgan')
-var winston = require('./utils/logger')
+const winston = require('./utils/logger')
 
 const { httpErrorsCounter } = require('./services/metrics.js')
 
@@ -100,7 +100,7 @@ app.use((err, req, res, next) => {
   res.render('error') // Uses the view engine to render the error page
 })
 
-//setup logging
+// setup logging
 app.use(morgan('combined', { stream: winston.stream }))
 
 if (process.env.API) {
