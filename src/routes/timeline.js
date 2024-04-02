@@ -7,8 +7,21 @@ const { publicCounter, followCounter, unfollowCounter } = require('../services/m
 
 const userService = new UserService()
 
+// function getUserCredentialsFromSession (req) {
+//   if (req.session.username) {
+//     return {
+//       user: {
+//         id: req.session.username.id,
+//         username: req.session.username.username
+//       }
+//     }
+//   } return { user: {} }
+// }
+
 function getUserCredentialsFromSession(req) {
+  // Default user object
   const defaultUserObj = { user: {} };
+
   if (req.session && req.session.username) {
     return {
       user: {
@@ -17,7 +30,8 @@ function getUserCredentialsFromSession(req) {
       }
     };
   }
-  return defaultUserObj;
+
+  return defaultUserObj; // Always return an object with a user property
 }
 
 
@@ -69,33 +83,44 @@ router.get('/logout', requireAuth, (req, res) => {
 
 router.get('/', requireAuth, async (req, res, next) => {
   try {
+
+    const page = parseInt(req.query.page) || 1; // Get the page number from query parameters or default to 1
+    const limit = 100; // Set the limit to 100 posts per page
     const g = getUserCredentialsFromSession(req)
-    const messages = await userService.getMessagesFromUserAndFollowedUsers(g.user.id)
+    const userId = req.session.username.id
+    const { messages, pagination } = await userService.getMessagesFromUserAndFollowedUsers(userId, limit, page);
+
+
     res.render('timeline', {
+      g,
       endpoint: 'timeline',
       title: `${g.user.username}'s timeline`,
       messages: formatMessages(messages),
-      g
+      pagination,
+      currentPage: page
     })
   } catch (error) {
     console.error(error.message)
-    res.status(500).send('Server error')
+    console.error("Error stack:", error.stack);
+    res.status(500).send(`Error: ${error.message}`);
+
+    // res.status(500).send('fknoasdServer error')
   }
 })
 
 router.get('/public', async (req, res) => {
   try {
-    const page = parseInt(req.query.page) || 1;
-    const limit = 50;
-    const g = getUserCredentialsFromSession(req);
+    const page = parseInt(req.query.page) || 1; // Get the page number from query parameters or default to 1
+    const limit = 100; // Set the limit to 100 posts per page
+    const g = getUserCredentialsFromSession(req)
     const { messages, pagination } = await userService.getPublicTimelineMessages(limit, page);
 
     res.render('timeline', {
+      g,
       title: 'Public Timeline',
       messages: formatMessages(messages),
       pagination,
-      currentPage: page,
-      g
+      currentPage: page
     });
   } catch (error) {
     console.error(error.message);
