@@ -51,7 +51,7 @@ class UserService {
         orderBy: {
           pub_date: 'desc'
         },
-        take: 50
+        take: 100
       })
       return formatGetMessages(messages)
     } catch (err) {
@@ -81,7 +81,7 @@ class UserService {
         }
       },
       orderBy: { pub_date: 'desc' },
-      take: 50,
+      take: 100,
       select: {
         text: true,
         pub_date: true,
@@ -97,35 +97,47 @@ class UserService {
     return formatGetMessages(messages)
   }
 
-  async getPublicTimelineMessages (limit) {
-    const limitInt = parseInt(limit)
+  async getPublicTimelineMessages(limit, page = 1) {
+    const skip = (page - 1) * limit;
+  
     try {
-      const messages = await prisma.message.findMany({
-        where: {
-          flagged: 0
-        },
-        select: {
-          text: true,
-          pub_date: true,
-          flagged: true,
-          author: {
-            select: {
-              username: true,
-              email: true
+      const [messages, totalCount] = await Promise.all([
+        prisma.message.findMany({
+          where: { flagged: 0 },
+          orderBy: { pub_date: 'desc' },
+          take: limit,
+          skip,
+          select: {
+            text: true,
+            pub_date: true,
+            flagged: true,
+            author: {
+              select: {
+                username: true,
+                email: true
+              }
             }
           }
-        },
-        orderBy: {
-          pub_date: 'desc'
-        },
-        take: limitInt
-      })
-      return formatGetMessages(messages)
+        }),
+        prisma.message.count({ where: { flagged: 0 } })
+      ]);
+  
+      const totalPages = Math.ceil(totalCount / limit);
+  
+      return {
+        messages: formatGetMessages(messages),
+        pagination: {
+          page,
+          totalPages,
+          totalCount
+        }
+      };
     } catch (err) {
-      console.error(err)
-      throw new Error(`Error getting messages from database: ${err.message}`)
+      console.error(err);
+      throw new Error(`Error getting public timeline messages: ${err.message}`);
     }
   }
+  
 
   async getUserIdByUsername (username) {
     try {

@@ -188,3 +188,34 @@ div.error {
   padding: 4px;
   font-size: 13px;
 }
+
+.pagination{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.pagination a{
+  text-decoration: none;
+}
+
+.pagination .pagination-btn:nth-of-type(1){
+  padding-right: 0.5rem;
+}
+
+.pagination .pagination-btn:nth-of-type(1) a:nth-of-type(1){
+  padding-right: 0.75rem;
+}
+
+.pagination .pagination-btn:nth-of-type(3){
+  padding-left: 0.5rem;
+}
+
+.pagination .pagination-btn:nth-of-type(3) a:nth-of-type(2){
+  padding-left: 0.75rem;
+}
+
+.pagination-numbers a, .current{
+  padding-left: 0.15rem;
+  padding-right: 0.15rem;
+}

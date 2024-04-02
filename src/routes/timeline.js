@@ -7,16 +7,19 @@ const { publicCounter, followCounter, unfollowCounter } = require('../services/m
 
 const userService = new UserService()
 
-function getUserCredentialsFromSession (req) {
-  if (req.session.username) {
+function getUserCredentialsFromSession(req) {
+  const defaultUserObj = { user: {} };
+  if (req.session && req.session.username) {
     return {
       user: {
         id: req.session.username.id,
         username: req.session.username.username
       }
-    }
-  } return { user: {} }
+    };
+  }
+  return defaultUserObj;
 }
+
 
 const requireAuth = (req, res, next) => {
   if (req.session.username) {
@@ -80,21 +83,26 @@ router.get('/', requireAuth, async (req, res, next) => {
   }
 })
 
-router.get('/public', async (req, res, next) => {
+router.get('/public', async (req, res) => {
   try {
-    const g = getUserCredentialsFromSession(req)
-    const messages = await userService.getPublicTimelineMessages(50)
-    publicCounter.inc()
+    const page = parseInt(req.query.page) || 1;
+    const limit = 50;
+    const g = getUserCredentialsFromSession(req);
+    const { messages, pagination } = await userService.getPublicTimelineMessages(limit, page);
+
     res.render('timeline', {
       title: 'Public Timeline',
       messages: formatMessages(messages),
+      pagination,
+      currentPage: page,
       g
-    })
+    });
   } catch (error) {
-    console.error(error.message)
-    res.status(500).send('Server error')
+    console.error(error.message);
+    res.status(500).send('Server error');
   }
-})
+});
+
 
 router.get('/:username', async (req, res, next) => {
   try {
