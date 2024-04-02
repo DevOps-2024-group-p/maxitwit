@@ -4,22 +4,9 @@ const router = express.Router()
 const crypto = require('crypto')
 const UserService = require('../services/userService')
 const { publicCounter, followCounter, unfollowCounter } = require('../services/metrics')
-
 const userService = new UserService()
 
-// function getUserCredentialsFromSession (req) {
-//   if (req.session.username) {
-//     return {
-//       user: {
-//         id: req.session.username.id,
-//         username: req.session.username.username
-//       }
-//     }
-//   } return { user: {} }
-// }
-
 function getUserCredentialsFromSession(req) {
-  // Default user object
   const defaultUserObj = { user: {} };
 
   if (req.session && req.session.username) {
@@ -31,7 +18,7 @@ function getUserCredentialsFromSession(req) {
     };
   }
 
-  return defaultUserObj; // Always return an object with a user property
+  return defaultUserObj;
 }
 
 
@@ -62,7 +49,7 @@ function formatMessages (messages) {
   return messages
 }
 
-router.post('/add_message', requireAuth, async (req, res, next) => {
+router.post('/add_message', requireAuth, async (req, res) => {
   try {
     const userId = req.session.username.id
     const messageContent = req.body.text
@@ -81,15 +68,13 @@ router.get('/logout', requireAuth, (req, res) => {
   res.redirect('/public')
 })
 
-router.get('/', requireAuth, async (req, res, next) => {
+router.get('/', requireAuth, async (req, res) => {
   try {
-
-    const page = parseInt(req.query.page) || 1; // Get the page number from query parameters or default to 1
-    const limit = 100; // Set the limit to 100 posts per page
+    const page = parseInt(req.query.page) || 1;
+    const limit = 50;
     const g = getUserCredentialsFromSession(req)
     const userId = req.session.username.id
     const { messages, pagination } = await userService.getMessagesFromUserAndFollowedUsers(userId, limit, page);
-
 
     res.render('timeline', {
       g,
@@ -99,19 +84,18 @@ router.get('/', requireAuth, async (req, res, next) => {
       pagination,
       currentPage: page
     })
+
   } catch (error) {
     console.error(error.message)
     console.error("Error stack:", error.stack);
     res.status(500).send(`Error: ${error.message}`);
-
-    // res.status(500).send('fknoasdServer error')
   }
 })
 
 router.get('/public', async (req, res) => {
   try {
-    const page = parseInt(req.query.page) || 1; // Get the page number from query parameters or default to 1
-    const limit = 100; // Set the limit to 100 posts per page
+    const page = parseInt(req.query.page) || 1;
+    const limit = 50;
     const g = getUserCredentialsFromSession(req)
     const { messages, pagination } = await userService.getPublicTimelineMessages(limit, page);
 
@@ -122,6 +106,7 @@ router.get('/public', async (req, res) => {
       pagination,
       currentPage: page
     });
+
   } catch (error) {
     console.error(error.message);
     res.status(500).send('Server error');
@@ -129,45 +114,44 @@ router.get('/public', async (req, res) => {
 });
 
 
-router.get('/:username', async (req, res, next) => {
+router.get('/:username', async (req, res) => {
   try {
-    const g = getUserCredentialsFromSession(req)
+    const page = parseInt(req.query.page) || 1;
+    const limit = 50;
+    const g = getUserCredentialsFromSession(req);
+    const username = req.params.username;
+    const user = await userService.getUserIdByUsername(username);
 
+    if (!user) {
+      return res.status(404).send("User not found");
+    }
+
+    const { messages, pagination } = await userService.getMessagesFromUserAndFollowedUsers(user.id, limit, page);
     const whomUsername = req.params.username
     const whomId = await userService.getUserIdByUsername(whomUsername)
-    const profileUser = {
-      user: {
-        id: whomId.user_id,
-        username: whomUsername
-      }
-    }
+    const followed = g.user ? await userService.isFollowing(g.user.id, whomId.user_id) : false;
 
-    let followed = false
-    if (g) {
-      followed = await userService.isFollowing(g.user.id, whomId.user_id)
-    }
-
-    const messages = await userService.getMessagesByUserId(whomId.user_id)
-    formatMessages(messages)
-    publicCounter.inc()
     res.render('timeline', {
       endpoint: 'user',
-      title: `${whomUsername}'s Timeline`,
-      messages,
+      title: `${username}'s Timeline`,
+      messages: formatMessages(messages),
+      pagination,
+      currentPage: page,
       g,
-      profile_user: profileUser,
+      profile_user: { user: { id: user.id, username: username } },
       followed
-    })
+    });
+
   } catch (error) {
-    console.error(error.message)
-    res.status(500).send('Server error')
+    console.error(error.message);
+    console.error("Error stack:", error.stack);
+    res.status(500).send(`Error: ${error.message}`);
   }
-})
+});
 
 router.get('/:username/follow', requireAuth, async (req, res, next) => {
   try {
     const g = getUserCredentialsFromSession(req)
-
     const whomUsername = req.params.username
     const whomId = await userService.getUserIdByUsername(whomUsername)
 
@@ -175,6 +159,7 @@ router.get('/:username/follow', requireAuth, async (req, res, next) => {
     followCounter.inc()
     req.flash('success', `You are now following "${whomUsername}"`)
     res.redirect(`/${whomUsername}`)
+
   } catch (error) {
     console.error(error.message)
     res.status(500).send('Server error')
@@ -184,7 +169,6 @@ router.get('/:username/follow', requireAuth, async (req, res, next) => {
 router.get('/:username/unfollow', requireAuth, async (req, res, next) => {
   try {
     const g = getUserCredentialsFromSession(req)
-
     const whomUsername = req.params.username
     const whomId = await userService.getUserIdByUsername(whomUsername)
 
@@ -193,6 +177,7 @@ router.get('/:username/unfollow', requireAuth, async (req, res, next) => {
 
     req.flash('success', `You are no longer following "${whomUsername}"`)
     res.redirect(`/${whomUsername}`)
+    
   } catch (error) {
     console.error(error.message)
     res.status(500).send('Server error')

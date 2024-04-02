@@ -101,15 +101,11 @@ if (process.env.API) {
 
 // Error handler middleware
 app.use((err, req, res, next) => {
-  // Set locals, providing error details only in development environment
   res.locals.message = err.message
   res.locals.error = req.app.get('env') === 'development' ? err : {}
   console.log(process.env.NODE_ENV)
-
-  // Render the error page, setting the status code
   res.status(err.status || 500)
-  res.render('error') // Uses the view engine to render the error page
+  res.render('error')
 })
 
-// Export the app for use by other modules (like the server starter script)
 module.exports = app

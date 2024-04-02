@@ -61,111 +61,78 @@ class UserService {
   }
 
   async getMessagesFromUserAndFollowedUsers(userId, limit, page = 1) {
-    const skip = (page - 1) * limit; // Calculate how many posts to skip
-  
-    // First, get the IDs of the users that the current user is following
+    const skip = (page - 1) * limit;
+
     const followedUsers = await prisma.follower.findMany({
       where: { who_id: userId },
       select: { whom_id: true }
     });
-  
+
     const followedUserIds = followedUsers.map(user => user.whom_id);
+    const uniqueFollowedUserIds = followedUserIds.filter(id => id !== userId);
+
+    const messages = await prisma.message.findMany({
+      where: {
+        flagged: 0,
+        OR: [
+          { author_id: userId },
+          { author_id: { in: uniqueFollowedUserIds } }
+        ]
+      },
+      orderBy: { pub_date: 'desc' },
+      take: limit,
+      skip,
+      select: {
+        text: true,
+        pub_date: true,
+        flagged: true,
+        author: {
+          select: {
+            username: true,
+            email: true
+          }
+        }
+      }
+    });
+
+    const totalCount = await this.totalMessageCount(userId, uniqueFollowedUserIds);
+    const totalPages = Math.ceil(totalCount / limit);
   
-    try {
-      // Adjust the query to incorporate pagination and calculate total count
-      const query = {
+    return {
+      messages: formatGetMessages(messages),
+      pagination: {
+        page,
+        totalPages,
+        totalCount
+      }
+    };
+}
+
+async totalMessageCount(userId, followedUserIds) {
+  let total = 0;
+  const chunkSize = 32000;
+  const uniqueUserIds = Array.from(new Set([userId, ...followedUserIds])).filter(id => id !== undefined);
+
+  for (let i = 0; i < uniqueUserIds.length; i += chunkSize) {
+    const chunk = uniqueUserIds.slice(i, i + chunkSize);
+    if (chunk.length && !chunk.includes(undefined)) {
+      const count = await prisma.message.count({
         where: {
           flagged: 0,
           OR: [
-            { author_id: userId },
-            { author_id: { in: followedUserIds } }
+            { author_id: { in: chunk } }
           ]
-        },
-        orderBy: { pub_date: 'desc' },
-        take: limit,
-        skip,
-        select: {
-          text: true,
-          pub_date: true,
-          flagged: true,
-          author: {
-            select: {
-              username: true,
-              email: true
-            }
-          }
         }
-      };
-  
-      const [messages, totalCount] = await Promise.all([
-        prisma.message.findMany(query),
-        // Corrected count query
-        prisma.message.count({
-          where: query.where // Use the where clause from your query object
-        })
-      ]);
-  
-      const totalPages = Math.ceil(totalCount / limit); // Calculate total pages
-  
-      return {
-        messages: formatGetMessages(messages),
-        pagination: {
-          page,
-          totalPages,
-          totalCount
-        }
-      };
-    } catch (err) {
-      console.error(err);
-      throw new Error(`Error getting messages from user and followed users: ${err.message}`);
+      });
+      total += count;
     }
   }
-  
-
-  // async getPublicTimelineMessages(limit, page = 1) {
-  //   const skip = (page - 1) * limit;
-  
-  //   try {
-  //     const [messages, totalCount] = await Promise.all([
-  //       prisma.message.findMany({
-  //         where: { flagged: 0 },
-  //         orderBy: { pub_date: 'desc' },
-  //         take: limit,
-  //         skip,
-  //         select: {
-  //           text: true,
-  //           pub_date: true,
-  //           flagged: true,
-  //           author: {
-  //             select: {
-  //               username: true,
-  //               email: true
-  //             }
-  //           }
-  //         }
-  //       }),
-  //       prisma.message.count({ where: { flagged: 0 } })
-  //     ]);
-  
-  //     const totalPages = Math.ceil(totalCount / limit);
-  
-  //     return {
-  //       messages: formatGetMessages(messages),
-  //       pagination: {
-  //         page,
-  //         totalPages,
-  //         totalCount
-  //       }
-  //     };
-  //   } catch (err) {
-  //     console.error(err);
-  //     throw new Error(`Error getting public timeline messages: ${err.message}`);
-  //   }
-  // }
+  return total;
+}
 
 
   async getPublicTimelineMessages(limit, page = 1) {
-    const skip = (page - 1) * limit; // Calculate how many posts to skip
+    const skip = (page - 1) * limit;
   
     try {
       const [messages, totalCount] = await Promise.all([
@@ -186,10 +153,10 @@ class UserService {
             }
           }
         }),
-        prisma.message.count({ where: { flagged: 0 } }) // Get total count for pagination
+        prisma.message.count({ where: { flagged: 0 } })
       ]);
   
-      const totalPages = Math.ceil(totalCount / limit); // Calculate total pages
+      const totalPages = Math.ceil(totalCount / limit);
   
       return {
         messages: formatGetMessages(messages),
@@ -204,7 +171,6 @@ class UserService {
       throw new Error(`Error getting public timeline messages: ${err.message}`);
     }
   }
-  
   
   async getUserIdByUsername (username) {
     try {
