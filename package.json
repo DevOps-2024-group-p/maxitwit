@@ -9,6 +9,7 @@
     "start": "node src/bin/www",
     "start:migrate": "npx prisma migrate deploy && npm run start",
     "devstart": "npx prisma migrate deploy && nodemon src/bin/www",
+    "seed": "node prisma/seed.js",
     "lint:fix": "eslint --fix .",
     "lint": "eslint .",
     "cz": "cz",
