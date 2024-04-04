@@ -2,6 +2,7 @@ services:
 
   server:
     image: ${DOCKER_USERNAME}/maxitwitserver
+    container_name: maxitwitserver
     ports:
       - 3000:3000
     networks:
@@ -14,6 +15,7 @@ services:
 
   api:
     image: ${DOCKER_USERNAME}/maxitwitapi
+    container_name: maxitwitapi
     ports:
       - 3001:3001
     networks:
