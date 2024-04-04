@@ -40,12 +40,15 @@ const options = {
     format: ecsFormat({ convertReqRes: true })
   }
 }
-
-const logger = winston.createLogger({
-  transports: [
+/*
+readd these for logs to appear in /logs-folder
     new winston.transports.File(options.infoFile),
     new winston.transports.File(options.errorFile),
     new winston.transports.File(options.httpFile),
+*/
+const logger = winston.createLogger({
+  transports: [
+
     new winston.transports.Console(options.console),
     logstashTransport
   ],
