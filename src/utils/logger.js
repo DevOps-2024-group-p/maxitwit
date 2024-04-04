@@ -3,12 +3,11 @@ const appRoot = require('app-root-path')
 const ecsFormat = require('@elastic/ecs-winston-format')
 const logstash = require('winston-logstash-transport')
 
-//adding logstash transport
+// adding logstash transport
 const logstashTransport = new logstash.LogstashTransport({
   host: 'logstash_demo',
   port: 1514
 })
-
 
 const options = {
   infoFile: {
