@@ -1,0 +1,12 @@
+.vscode
+__pycache__
+.pytest_cache
+out/
+.venv/
+venv/
+node_modules/
+.idea
+.DS_STORE
+.vagrant
+latest.txt
+**/*.db

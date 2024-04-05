@@ -1,22 +1,22 @@
 body {
-  background: #CAECE9;
+  background: #caece9;
   font-family: 'Trebuchet MS', sans-serif;
   font-size: 14px;
 }
 
 a {
-  color: #26776F;
+  color: #26776f;
 }
 
 a:hover {
   color: #333;
 }
 
-input[type="text"],
-input[type="password"],
-input[type="email"] {
+input[type='text'],
+input[type='password'],
+input[type='email'] {
   background: white;
-  border: 1px solid #BFE6E2;
+  border: 1px solid #bfe6e2;
   padding: 2px;
   font-family: 'Trebuchet MS', sans-serif;
   font-size: 14px;
@@ -25,9 +25,9 @@ input[type="email"] {
   color: #105751;
 }
 
-input[type="submit"] {
+input[type='submit'] {
   background: #105751;
-  border: 1px solid #073B36;
+  border: 1px solid #073b36;
   padding: 1px 3px;
   font-family: 'Trebuchet MS', sans-serif;
   font-size: 14px;
@@ -39,23 +39,23 @@ input[type="submit"] {
 
 div.page {
   background: white;
-  border: 1px solid #6ECCC4;
+  border: 1px solid #6eccc4;
   width: 700px;
   margin: 30px auto;
 }
 
 div.page h1 {
-  background: #6ECCC4;
+  background: #6eccc4;
   margin: 0;
   padding: 10px 14px;
   color: white;
   letter-spacing: 1px;
-  text-shadow: 0 0 3px #24776F;
+  text-shadow: 0 0 3px #24776f;
   font-weight: normal;
 }
 
 div.page div.navigation {
-  background: #DEE9E8;
+  background: #dee9e8;
   padding: 4px 10px;
   border-top: 1px solid #ccc;
   border-bottom: 1px solid #eee;
@@ -88,7 +88,7 @@ div.page div.footer {
 
 div.page div.followstatus {
   border: 1px solid #ccc;
-  background: #E3EBEA;
+  background: #e3ebea;
   -moz-border-radius: 2px;
   -webkit-border-radius: 2px;
   padding: 3px;
@@ -104,8 +104,8 @@ div.page ul.messages {
 div.page ul.messages li {
   margin: 10px 0;
   padding: 5px;
-  background: #F0FAF9;
-  border: 1px solid #DBF3F1;
+  background: #f0faf9;
+  border: 1px solid #dbf3f1;
   -moz-border-radius: 5px;
   -webkit-border-radius: 5px;
   min-height: 48px;
@@ -135,12 +135,11 @@ ul.messages small {
   align-items: start;
 }
 
-
 div.page div.twitbox {
   margin: 10px 0;
   padding: 5px;
-  background: #F0FAF9;
-  border: 1px solid #94E2DA;
+  background: #f0faf9;
+  border: 1px solid #94e2da;
   -moz-border-radius: 5px;
   -webkit-border-radius: 5px;
 }
@@ -148,18 +147,18 @@ div.page div.twitbox {
 div.page div.twitbox h3 {
   margin: 0;
   font-size: 1em;
-  color: #2C7E76;
+  color: #2c7e76;
 }
 
 div.page div.twitbox p {
   margin: 0;
 }
 
-div.page div.twitbox input[type="text"] {
+div.page div.twitbox input[type='text'] {
   width: 585px;
 }
 
-div.page div.twitbox input[type="submit"] {
+div.page div.twitbox input[type='submit'] {
   width: 70px;
   margin-left: 5px;
 }
@@ -171,8 +170,8 @@ ul.flashes {
 }
 
 ul.flashes li {
-  background: #B9F3ED;
-  border: 1px solid #81CEC6;
+  background: #b9f3ed;
+  border: 1px solid #81cec6;
   -moz-border-radius: 2px;
   -webkit-border-radius: 2px;
   padding: 4px;
@@ -181,8 +180,8 @@ ul.flashes li {
 
 div.error {
   margin: 10px 0;
-  background: #FAE4E4;
-  border: 1px solid #DD6F6F;
+  background: #fae4e4;
+  border: 1px solid #dd6f6f;
   -moz-border-radius: 2px;
   -webkit-border-radius: 2px;
   padding: 4px;
