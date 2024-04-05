@@ -22,7 +22,7 @@ collectDefaultMetrics({ register })
 const promBundle = require('express-prom-bundle')
 const metricsMiddleware = promBundle({ includeMethod: true, includePath: true })
 
-//logging setup
+// logging setup
 const morgan = require('morgan')
 const logger = require('./services/logger.js')
 
@@ -40,7 +40,6 @@ const app = express()
 
 app.set('views', path.join(__dirname, 'views')) // Specifies the directory where the Jade template files are located
 app.set('view engine', 'pug') // Sets Jade (now Pug) as the template engine for rendering views
-
 
 // middleware for use in production environment
 app.use(express.json()) // Parses incoming requests with JSON payloads, making it easy to handle JSON data
