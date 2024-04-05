@@ -51,7 +51,7 @@ class UserService {
         orderBy: {
           pub_date: 'desc'
         },
-        take: 50
+        take: 100
       })
       return formatGetMessages(messages)
     } catch (err) {
@@ -60,28 +60,28 @@ class UserService {
     }
   }
 
-  async getMessagesFromUserAndFollowedUsers (userId) {
-    // First, get the IDs of the users that the current user is following
+  async getMessagesFromUserAndFollowedUsers(userId, limit, page = 1) {
+    const skip = (page - 1) * limit;
+
     const followedUsers = await prisma.follower.findMany({
       where: { who_id: userId },
       select: { whom_id: true }
-    })
+    });
 
-    const followedUserIds = followedUsers.map(user => user.whom_id)
+    const followedUserIds = followedUsers.map(user => user.whom_id);
+    const uniqueFollowedUserIds = followedUserIds.filter(id => id !== userId);
 
-    // Then, get the messages from the current user and the users they are following
     const messages = await prisma.message.findMany({
       where: {
         flagged: 0,
-        author: {
-          OR: [
-            { user_id: userId },
-            { user_id: { in: followedUserIds } }
-          ]
-        }
+        OR: [
+          { author_id: userId },
+          { author_id: { in: uniqueFollowedUserIds } }
+        ]
       },
       orderBy: { pub_date: 'desc' },
-      take: 50,
+      take: limit,
+      skip,
       select: {
         text: true,
         pub_date: true,
@@ -93,40 +93,85 @@ class UserService {
           }
         }
       }
-    })
-    return formatGetMessages(messages)
-  }
+    });
 
-  async getPublicTimelineMessages (limit) {
-    const limitInt = parseInt(limit)
-    try {
-      const messages = await prisma.message.findMany({
+    const totalCount = await this.totalMessageCount(userId, uniqueFollowedUserIds);
+    const totalPages = Math.ceil(totalCount / limit);
+  
+    return {
+      messages: formatGetMessages(messages),
+      pagination: {
+        page,
+        totalPages,
+        totalCount
+      }
+    };
+}
+
+async totalMessageCount(userId, followedUserIds) {
+  let total = 0;
+  const chunkSize = 32000;
+  const uniqueUserIds = Array.from(new Set([userId, ...followedUserIds])).filter(id => id !== undefined);
+
+  for (let i = 0; i < uniqueUserIds.length; i += chunkSize) {
+    const chunk = uniqueUserIds.slice(i, i + chunkSize);
+    if (chunk.length && !chunk.includes(undefined)) {
+      const count = await prisma.message.count({
         where: {
-          flagged: 0
-        },
-        select: {
-          text: true,
-          pub_date: true,
-          flagged: true,
-          author: {
-            select: {
-              username: true,
-              email: true
-            }
-          }
-        },
-        orderBy: {
-          pub_date: 'desc'
-        },
-        take: limitInt
-      })
-      return formatGetMessages(messages)
-    } catch (err) {
-      console.error(err)
-      throw new Error(`Error getting messages from database: ${err.message}`)
+          flagged: 0,
+          OR: [
+            { author_id: { in: chunk } }
+          ]
+        }
+      });
+      total += count;
     }
   }
+  return total;
+}
 
+
+  async getPublicTimelineMessages(limit, page = 1) {
+    const skip = (page - 1) * limit;
+  
+    try {
+      const [messages, totalCount] = await Promise.all([
+        prisma.message.findMany({
+          where: { flagged: 0 },
+          orderBy: { pub_date: 'desc' },
+          take: limit,
+          skip,
+          select: {
+            text: true,
+            pub_date: true,
+            flagged: true,
+            author: {
+              select: {
+                username: true,
+                email: true
+              }
+            }
+          }
+        }),
+        prisma.message.count({ where: { flagged: 0 } })
+      ]);
+  
+      const totalPages = Math.ceil(totalCount / limit);
+  
+      return {
+        messages: formatGetMessages(messages),
+        pagination: {
+          page,
+          totalPages,
+          totalCount
+        }
+      };
+    } catch (err) {
+      console.error(err);
+      throw new Error(`Error getting public timeline messages: ${err.message}`);
+    }
+  }
+  
   async getUserIdByUsername (username) {
     try {
       const user = await prisma.user.findFirst({

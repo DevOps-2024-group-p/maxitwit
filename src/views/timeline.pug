@@ -36,3 +36,38 @@ block content
     else
       li
         em There's no message so far.
+
+  if pagination.totalPages > 1
+  .pagination
+    .pagination-btn
+      // first page link
+      if pagination.page > 1
+        a(href="?page=1") <<
+        if pagination.page > 1
+          span
+      // prev page link
+      if pagination.page > 1
+        a(href=`?page=${pagination.page - 1}`) <
+
+      - var startPage = Math.max(1, pagination.page - 4)
+      - var endPage = Math.min(pagination.totalPages, pagination.page + 4)
+      
+    .pagination-numbers
+      // page number links
+      - var i = startPage;
+      while i <= endPage
+        if i === pagination.page
+          span.current= i
+        else
+          a(href=`?page=${i}`)= i
+        - i++;
+    .pagination-btn
+      // next page link
+      if pagination.page < pagination.totalPages
+        a(href=`?page=${pagination.page + 1}`) >
+
+      // last page link
+      if pagination.page < pagination.totalPages - 4
+        if pagination.page < pagination.totalPages - 5
+          span
+        a(href=`?page=${pagination.totalPages}`) >>
