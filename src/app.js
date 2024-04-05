@@ -22,6 +22,10 @@ collectDefaultMetrics({ register })
 const promBundle = require('express-prom-bundle')
 const metricsMiddleware = promBundle({ includeMethod: true, includePath: true })
 
+// logging setup
+const morgan = require('morgan')
+const logger = require('./services/logger.js')
+
 // Import routers for different paths
 const loginRouter = require('./routes/login') // Router for login related paths
 const logoutRouter = require('./routes/logout') // Router for logout related paths
@@ -29,7 +33,7 @@ const registerRouter = require('./routes/register') // Router for register relat
 const timelineRouter = require('./routes/timeline') // Router for public timeline related paths
 const apiRouter = require('./routes/api') // Router for public timeline related paths
 
-const { httpErrorsCounter } = require('./services/metrics.js')
+const { httpErrorsCounter, httpRequestsCounter } = require('./services/metrics.js')
 
 // Initialize the Express application
 const app = express()
@@ -37,12 +41,6 @@ const app = express()
 app.set('views', path.join(__dirname, 'views')) // Specifies the directory where the Jade template files are located
 app.set('view engine', 'pug') // Sets Jade (now Pug) as the template engine for rendering views
 
-// Middleware setup
-// middleware only used during development
-if (process.env.NODE_ENV === 'development') {
-  const logger = require('morgan') // http request logger middleware for node.js
-  app.use(logger('dev')) // Use Morgan to log requests to the console in 'dev' format, which includes method, url, status, response time
-}
 // middleware for use in production environment
 app.use(express.json()) // Parses incoming requests with JSON payloads, making it easy to handle JSON data
 app.use(express.urlencoded({ extended: false })) // Parses incoming requests with URL-encoded payloads, useful for form submissions
@@ -78,10 +76,13 @@ app.get('/metrics', (req, res) => {
   res.end(metricsMiddleware.metrics())
 })
 
+app.use(morgan('combined', { stream: logger.stream }))
+
 app.use((req, res, next) => {
   const send = res.send
   res.send = function (string) {
     const body = string instanceof Buffer ? string.toString() : string
+    httpRequestsCounter.inc({ method: req.method, path: req.path })
     if (res.statusCode >= 400) {
       httpErrorsCounter.inc({ status: res.statusCode, method: req.method, path: req.path })
     }
