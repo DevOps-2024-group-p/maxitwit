@@ -56,4 +56,10 @@ logger.add(new Syslog({
   path: '/dev/log'
 }))
 
+logger.stream = {
+    write: function (message, encoding) {
+      logger.info(message)
+    }
+  }
+  
 module.exports = logger
