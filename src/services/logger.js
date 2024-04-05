@@ -39,8 +39,7 @@ const logger = winston.createLogger({
     new winston.transports.File({
       filename: 'logs/error.log',
       level: 'error'
-    }),
-    new winston.transports.File({ filename: 'logs/all.log' })
+    })
   ]
 })
 
@@ -52,14 +51,14 @@ logger.add(new Syslog({
   port: 514,
   protocol: 'udp4',
   facility: 'local0',
-  localhost: 'your-server-name', // Replace with your server name
+  localhost: 'localhost', // Replace with your server name
   path: '/dev/log'
 }))
 
 logger.stream = {
-    write: function (message, encoding) {
-      logger.info(message)
-    }
+  write: function (message, encoding) {
+    logger.info(message)
   }
-  
+}
+
 module.exports = logger
