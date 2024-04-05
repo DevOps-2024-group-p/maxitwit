@@ -1,29 +1,29 @@
-const { exec } = require('child_process');
-const { PrismaClient } = require('@prisma/client');
+const { exec } = require('child_process')
+const { PrismaClient } = require('@prisma/client')
 
-const prisma = new PrismaClient();
+const prisma = new PrismaClient()
 
 class Database {
-  constructor() {
+  constructor () {
     if (!Database.instance) {
-      Database.instance = this;
+      Database.instance = this
     }
-    return Database.instance;
+    return Database.instance
   }
 
-  getDb() {
-    return prisma;
+  getDb () {
+    return prisma
   }
 
-  async initSchema() {
+  async initSchema () {
     exec('npx prisma migrate reset --force', (error) => {
       if (error) {
-        console.log(`error: ${error.message}`);
+        console.log(`error: ${error.message}`)
       }
-    });
+    })
 
-    await prisma.$connect();
+    await prisma.$connect()
   }
 }
 
-module.exports = new Database();
+module.exports = new Database()
