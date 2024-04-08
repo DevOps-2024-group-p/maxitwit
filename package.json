@@ -8,14 +8,16 @@
   "scripts": {
     "start": "node src/bin/www",
     "start:migrate": "npx prisma migrate deploy && npm run start",
-    "devstart": "nodemon src/bin/www",
+    "devstart": "npx prisma migrate deploy && nodemon src/bin/www",
+    "seed": "node prisma/seed.js",
     "lint:fix": "eslint --fix .",
     "lint": "eslint .",
     "cz": "cz",
     "docker": "docker-compose up --build",
     "prepare": "husky",
-    "test": "pytest -s tests/maxitwit_test.py",
     "format": "prettier --write ."
+    "test": "./test.sh -d",
+    "simulator": "python3 src/api/minitwit_simulator.py http://localhost:3000"
   },
   "dependencies": {
     "@prisma/client": "^5.11.0",
@@ -31,7 +33,9 @@
     "express-validator": "^7.0.1",
     "http-errors": "~1.6.3",
     "pug": "^3.0.2",
-    "sqlite3": "^5.1.7"
+    "sqlite3": "^5.1.7",
+    "winston": "^3.13.0",
+    "winston-syslog": "^2.7.0"
   },
   "devDependencies": {
     "@commitlint/cli": "18.6.1",

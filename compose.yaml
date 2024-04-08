@@ -14,6 +14,10 @@ services:
     environment:
       - HUSKY=0
     env_file: .env
+    depends_on:
+      - postgres
+    restart: always
+    
 
   api:
     container_name: maxitwitapi
@@ -30,6 +34,9 @@ services:
     environment:
       - HUSKY=0
     env_file: .env
+    depends_on:
+      - postgres
+    restart: always
 
   prometheus:
     image: prom/prometheus
@@ -47,6 +54,18 @@ services:
       - '3002:3000'
     volumes:
       - grafana_data:/var/lib/grafana
+    networks:
+      - maxitwit-network
+
+  postgres:
+    image: postgres:latest
+    container_name: postgres
+    environment:
+      POSTGRES_USER: pguser
+      POSTGRES_PASSWORD: pgpassword
+      POSTGRES_DB: testdb
+    ports:
+      - 5432:5432
     networks:
       - maxitwit-network
 

@@ -103,8 +103,8 @@ def setup(request):
     if request.config.getoption("--container"):
         global APP_URL
         global API_URL
-        APP_URL = "http://maxitwitserver"
-        API_URL = "http://maxitwitapi"
+        APP_URL = "http://test_server"
+        API_URL = "http://test_api"
 
 
 # ---- API TESTS ----

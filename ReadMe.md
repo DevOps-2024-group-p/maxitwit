@@ -29,8 +29,20 @@ Then chose if you want to build locally or in a container and pic
 
 ### Docker Setup
 
+Use the following connection string for containerized development:
+
 ```
-docker compose up --build
+DATABASE_URL="postgresql://pguser:pgpassword@postgres:5432/testdb"
+```
+
+
+```
+docker compose up --build -d
+```
+
+Seed server in container:
+```
+docker exec maxitwitserver npm run seed
 ```
 
 Once you are done, use the following command to remove the established containers from your system:
@@ -51,28 +63,14 @@ npm run devstart
 ### Testing
 
 #### Containerized testing
-Testing on the the test containers does not interact with the local or the production database, so they should be used always.
-```
-docker compose -f tests_compose.yaml up --build
-```
-```
-docker build -t test -f Dockerfile.test .
-```
-```
-docker run --rm --network=maxitwit-test test
-```
+Runs test.sh
+Builds test containers, runs pytest against them.
 
-
-#### Local testing
-WARNING! Local testing requires to reset the local DB! Proceed with caution!
-
-To run tests locally:
-```
-docker compose up --build
-```
 ```
 npm run test
 ```
+
+
 
 ### Helpful docs
 =======
