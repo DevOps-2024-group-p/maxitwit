@@ -3,7 +3,11 @@ const express = require('express')
 const router = express.Router()
 const crypto = require('crypto')
 const UserService = require('../services/userService')
-const { publicCounter, followCounter, unfollowCounter } = require('../services/metrics')
+const {
+  publicCounter,
+  followCounter,
+  unfollowCounter
+} = require('../services/metrics')
 
 const userService = new UserService()
 
@@ -15,7 +19,8 @@ function getUserCredentialsFromSession (req) {
         username: req.session.username.username
       }
     }
-  } return { user: {} }
+  }
+  return { user: {} }
 }
 
 const requireAuth = (req, res, next) => {
@@ -27,7 +32,10 @@ const requireAuth = (req, res, next) => {
 }
 
 function gravatarUrl (email, size = 80) {
-  const hash = crypto.createHash('md5').update(email.trim().toLowerCase()).digest('hex')
+  const hash = crypto
+    .createHash('md5')
+    .update(email.trim().toLowerCase())
+    .digest('hex')
   return `http://www.gravatar.com/avatar/${hash}?d=identicon&s=${size}`
 }
 
@@ -35,10 +43,10 @@ function formatMessages (messages) {
   messages.forEach((message) => {
     const date = new Date(message.pub_date * 1000)
     const year = date.getUTCFullYear()
-    const month = (`0${date.getUTCMonth() + 1}`).slice(-2)
-    const day = (`0${date.getUTCDate()}`).slice(-2)
-    const hours = (`0${date.getUTCHours()}`).slice(-2)
-    const minutes = (`0${date.getUTCMinutes()}`).slice(-2)
+    const month = `0${date.getUTCMonth() + 1}`.slice(-2)
+    const day = `0${date.getUTCDate()}`.slice(-2)
+    const hours = `0${date.getUTCHours()}`.slice(-2)
+    const minutes = `0${date.getUTCMinutes()}`.slice(-2)
     message.pub_date = `${year}-${month}-${day} @ ${hours}:${minutes}`
     message.gravatar = gravatarUrl(message.email, 48)
   })
@@ -67,7 +75,9 @@ router.get('/logout', requireAuth, (req, res) => {
 router.get('/', requireAuth, async (req, res, next) => {
   try {
     const g = getUserCredentialsFromSession(req)
-    const messages = await userService.getMessagesFromUserAndFollowedUsers(g.user.id)
+    const messages = await userService.getMessagesFromUserAndFollowedUsers(
+      g.user.id
+    )
     res.render('timeline', {
       endpoint: 'timeline',
       title: `${g.user.username}'s timeline`,
