@@ -15,3 +15,5 @@ latest.txt
 .notes
 .htpasswd
 .env
+*.md
+coverage/
