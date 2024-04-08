@@ -24,10 +24,11 @@ const logIncomingRequests = (req, res, next) => {
 function formatMessagesAsJSON (messages) {
   const formattedMessages = []
   messages.forEach((msg) => {
-    const formatted = {}
-    formatted.content = msg.text
-    formatted.pub_date = msg.pub_date
-    formatted.user = msg.username
+    const formatted = {
+      content: msg.text,
+      pub_date: msg.pub_date,
+      user: msg.username
+    }
     formattedMessages.push(formatted)
   })
   return formattedMessages
@@ -52,7 +53,9 @@ function getLatest () {
   return parseInt(last)
 }
 
-router.get('/', logIncomingRequests, requireRequestFromSimulator, (req, res) => res.status(404).send())
+router.get('/', logIncomingRequests, requireRequestFromSimulator, (req, res) =>
+  res.status(404).send()
+)
 
 router.get('/latest', requireRequestFromSimulator, (req, res) => {
   try {
@@ -64,125 +67,151 @@ router.get('/latest', requireRequestFromSimulator, (req, res) => {
   }
 })
 
-router.post('/register', logIncomingRequests, requireRequestFromSimulator, async (req, res) => {
-  try {
-    const { username, email, pwd } = req.body
-    updateLatest(req)
+router.post(
+  '/register',
+  logIncomingRequests,
+  requireRequestFromSimulator,
+  async (req, res) => {
+    try {
+      const { username, email, pwd } = req.body
+      updateLatest(req)
 
-    const validEmail = validateEmail(email)
-    let error = null
+      const validEmail = validateEmail(email)
+      let error = null
 
-    await userService.getUserIdByUsername(username).then((user) => {
-      if (user) {
-        error = 'The username is already taken'
+      await userService.getUserIdByUsername(username).then((user) => {
+        if (user) {
+          error = 'The username is already taken'
+        }
+      })
+
+      if (!username) {
+        error = 'You have to enter a username'
       }
-    })
 
-    if (!username) {
-      error = 'You have to enter a username'
-    }
-
-    if (!validEmail) {
-      error = 'You have to enter a valid email address'
-    }
-
-    if (!pwd) {
-      error = 'You have to enter a password'
-    }
-
-    if (!validEmail) {
-      error = 'Please enter a valid email address'
-    }
-
-    if (!error) {
-      userService.registerUser(username, email, pwd)
-        .then(() => res.status(204))
-        .catch((err) => res.json({ message: err.message }))
-    }
-
-    if (error) {
-      return res.status(400).json({ status: 400, error_msg: error })
-    }
-    return res.status(204).send()
-  } catch (err) {
-    console.error(err)
-    res.status(500).send()
-  }
-})
-
-router.post('/msgs/:username', logIncomingRequests, requireRequestFromSimulator, async (req, res) => {
-  try {
-    updateLatest(req)
-    const { username } = req.params
-    const { content } = req.body
-    const id = await userService.getUserIdByUsername(username)
-    const currentDate = Math.floor(new Date().getTime() / 1000)
-    await userService.addMessage(id.user_id, content, currentDate)
-    return res.status(204).send()
-  } catch (err) {
-    console.error(err)
-    res.status(500).send()
-  }
-})
-
-router.get('/msgs', logIncomingRequests, requireRequestFromSimulator, async (req, res) => {
-  try {
-    updateLatest(req)
-    const { no } = req.query
-    const messages = await userService.getPublicTimelineMessages(no)
-    return res.json(formatMessagesAsJSON(messages))
-  } catch (err) {
-    console.error(err)
-    res.status(500).send()
-  }
-})
-
-router.get('/msgs/:username', logIncomingRequests, requireRequestFromSimulator, async (req, res, next) => {
-  try {
-    updateLatest(req)
-    const { username } = req.params
-    const id = await userService.getUserIdByUsername(username)
-    if (!id) {
-      return res.status(404).send()
-    }
-    const messages = await userService.getMessagesByUserId(id.user_id)
-    return res.json(formatMessagesAsJSON(messages))
-  } catch (err) {
-    console.error(err)
-    res.status(500).send()
-  }
-})
-
-router.all('/fllws/:username', logIncomingRequests, requireRequestFromSimulator, async (req, res, next) => {
-  try {
-    updateLatest(req)
-    const { username } = req.params
-    const action = req.body
-    const whoId = await userService.getUserIdByUsername(username)
-    if (!whoId) {
-      return res.status(404).send()
-    }
-    if (action.follow) {
-      const whomId = await userService.getUserIdByUsername(action.follow)
-      if (!whomId) {
-        res.status(404).send()
+      if (!validEmail) {
+        error = 'You have to enter a valid email address'
       }
-      await userService.followUser(whoId.user_id, whomId.user_id)
+
+      if (!pwd) {
+        error = 'You have to enter a password'
+      }
+
+      if (!validEmail) {
+        error = 'Please enter a valid email address'
+      }
+
+      if (!error) {
+        userService
+          .registerUser(username, email, pwd)
+          .then(() => res.status(204))
+          .catch((err) => res.json({ message: err.message }))
+      }
+
+      if (error) {
+        return res.status(400).json({ status: 400, error_msg: error })
+      }
       return res.status(204).send()
+    } catch (err) {
+      console.error(err)
+      res.status(500).send()
     }
-    if (action.unfollow) {
-      const whomId = await userService.getUserIdByUsername(action.unfollow)
-      if (!whomId) {
-        res.status(404).send()
-      }
-      await userService.unfollowUser(whoId.user_id, whomId.user_id)
-      return res.status(204).send()
-    }
-    const followed = await userService.getAllFollowedUsers(whoId.user_id)
-    return res.json({ follows: JSON.stringify(followed) })
-  } catch (err) {
-    console.error(err)
-    res.status(500).send()
   }
-})
+)
+
+router.post(
+  '/msgs/:username',
+  logIncomingRequests,
+  requireRequestFromSimulator,
+  async (req, res) => {
+    try {
+      updateLatest(req)
+      const { username } = req.params
+      const { content } = req.body
+      const id = await userService.getUserIdByUsername(username)
+      const currentDate = Math.floor(new Date().getTime() / 1000)
+      await userService.addMessage(id.user_id, content, currentDate)
+      return res.status(204).send()
+    } catch (err) {
+      console.error(err)
+      res.status(500).send()
+    }
+  }
+)
+
+router.get(
+  '/msgs',
+  logIncomingRequests,
+  requireRequestFromSimulator,
+  async (req, res) => {
+    try {
+      updateLatest(req)
+      const { no } = req.query
+      const messages = await userService.getPublicTimelineMessages(no)
+      return res.json(formatMessagesAsJSON(messages))
+    } catch (err) {
+      console.error(err)
+      res.status(500).send()
+    }
+  }
+)
+
+router.get(
+  '/msgs/:username',
+  logIncomingRequests,
+  requireRequestFromSimulator,
+  async (req, res, next) => {
+    try {
+      updateLatest(req)
+      const { username } = req.params
+      const id = await userService.getUserIdByUsername(username)
+      if (!id) {
+        return res.status(404).send()
+      }
+      const messages = await userService.getMessagesByUserId(id.user_id)
+      return res.json(formatMessagesAsJSON(messages))
+    } catch (err) {
+      console.error(err)
+      res.status(500).send()
+    }
+  }
+)
+
+router.all(
+  '/fllws/:username',
+  logIncomingRequests,
+  requireRequestFromSimulator,
+  async (req, res, next) => {
+    try {
+      updateLatest(req)
+      const { username } = req.params
+      const action = req.body
+      const whoId = await userService.getUserIdByUsername(username)
+      if (!whoId) {
+        return res.status(404).send()
+      }
+      if (action.follow) {
+        const whomId = await userService.getUserIdByUsername(action.follow)
+        if (!whomId) {
+          res.status(404).send()
+        }
+        await userService.followUser(whoId.user_id, whomId.user_id)
+        return res.status(204).send()
+      }
+      if (action.unfollow) {
+        const whomId = await userService.getUserIdByUsername(action.unfollow)
+        if (!whomId) {
+          res.status(404).send()
+        }
+        await userService.unfollowUser(whoId.user_id, whomId.user_id)
+        return res.status(204).send()
+      }
+      const followed = await userService.getAllFollowedUsers(whoId.user_id)
+      return res.json({ follows: JSON.stringify(followed) })
+    } catch (err) {
+      console.error(err)
+      res.status(500).send()
+    }
+  }
+)
 module.exports = router
