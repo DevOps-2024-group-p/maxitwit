@@ -75,7 +75,7 @@ async function main () {
       email: 'bran.stark@got.com',
       message: {
         create: {
-          text: 'Chaos isn\'t a pit. Chaos is a ladder.',
+          text: "Chaos isn't a pit. Chaos is a ladder.",
           flagged: 0
         }
       },

@@ -16,7 +16,8 @@ function getUserCredentialsFromSession (req) {
         username: req.session.username.username
       }
     }
-  } return { user: {} }
+  }
+  return { user: {} }
 }
 
 /* GET login page. */

@@ -20,7 +20,10 @@ const register = new Registry()
 collectDefaultMetrics({ register })
 
 const promBundle = require('express-prom-bundle')
-const metricsMiddleware = promBundle({ includeMethod: true, includePath: true })
+const metricsMiddleware = promBundle({
+  includeMethod: true,
+  includePath: true
+})
 
 // Import routers for different paths
 const loginRouter = require('./routes/login') // Router for login related paths
@@ -53,16 +56,18 @@ if (!SESSION_SECRET) {
   throw new Error('SESSION_SECRET is not set')
 }
 
-app.use(session({
-  resave: false,
-  saveUninitialized: true,
-  store: new SQLiteStore({
-    dir: './db',
-    db: 'sessions.db'
-  }),
-  secret: SESSION_SECRET,
-  cookie: { maxAge: 7 * 24 * 60 * 60 * 1000 } // 1 week
-}))
+app.use(
+  session({
+    resave: false,
+    saveUninitialized: true,
+    store: new SQLiteStore({
+      dir: './db',
+      db: 'sessions.db'
+    }),
+    secret: SESSION_SECRET,
+    cookie: { maxAge: 7 * 24 * 60 * 60 * 1000 } // 1 week
+  })
+)
 
 app.use(flash())
 

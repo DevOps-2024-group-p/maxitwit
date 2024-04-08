@@ -14,7 +14,8 @@
     "cz": "cz",
     "docker": "docker-compose up --build",
     "prepare": "husky",
-    "test": "pytest -s tests/maxitwit_test.py"
+    "test": "pytest -s tests/maxitwit_test.py",
+    "format": "prettier --write ."
   },
   "dependencies": {
     "@prisma/client": "^5.11.0",
@@ -49,6 +50,7 @@
     "morgan": "~1.9.1",
     "nodemon": "^3.0.3",
     "npx": "^3.0.0",
+    "prettier": "^3.2.5",
     "prisma": "^5.11.0",
     "standard-version": "^9.5.0",
     "superagent": "^8.1.2"
