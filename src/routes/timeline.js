@@ -4,6 +4,7 @@ const router = express.Router()
 const crypto = require('crypto')
 const UserService = require('../services/userService')
 const { publicCounter, followCounter, unfollowCounter } = require('../services/metrics')
+const SERVER_ERR_MESSAGE = 'Server error'
 
 const userService = new UserService()
 
@@ -55,7 +56,7 @@ router.post('/add_message', requireAuth, async (req, res, next) => {
     res.redirect('/')
   } catch (error) {
     console.log(error)
-    res.status(500).send('Server error')
+    res.status(500).send(SERVER_ERR_MESSAGE)
   }
 })
 
@@ -76,7 +77,7 @@ router.get('/', requireAuth, async (req, res, next) => {
     })
   } catch (error) {
     console.error(error.message)
-    res.status(500).send('Server error')
+    res.status(500).send(SERVER_ERR_MESSAGE)
   }
 })
 
@@ -92,7 +93,7 @@ router.get('/public', async (req, res, next) => {
     })
   } catch (error) {
     console.error(error.message)
-    res.status(500).send('Server error')
+    res.status(500).send(SERVER_ERR_MESSAGE)
   }
 })
 
@@ -127,7 +128,7 @@ router.get('/:username', async (req, res, next) => {
     })
   } catch (error) {
     console.error(error.message)
-    res.status(500).send('Server error')
+    res.status(500).send(SERVER_ERR_MESSAGE)
   }
 })
 
@@ -144,7 +145,7 @@ router.get('/:username/follow', requireAuth, async (req, res, next) => {
     res.redirect(`/${whomUsername}`)
   } catch (error) {
     console.error(error.message)
-    res.status(500).send('Server error')
+    res.status(500).send(SERVER_ERR_MESSAGE)
   }
 })
 
@@ -162,7 +163,7 @@ router.get('/:username/unfollow', requireAuth, async (req, res, next) => {
     res.redirect(`/${whomUsername}`)
   } catch (error) {
     console.error(error.message)
-    res.status(500).send('Server error')
+    res.status(500).send(SERVER_ERR_MESSAGE)
   }
 })
 

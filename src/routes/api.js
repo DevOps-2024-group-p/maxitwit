@@ -24,10 +24,11 @@ const logIncomingRequests = (req, res, next) => {
 function formatMessagesAsJSON (messages) {
   const formattedMessages = []
   messages.forEach((msg) => {
-    const formatted = {}
-    formatted.content = msg.text
-    formatted.pub_date = msg.pub_date
-    formatted.user = msg.username
+    const formatted = {
+      content: msg.text,
+      pub_date: msg.pub_date,
+      user: msg.username
+    }
     formattedMessages.push(formatted)
   })
   return formattedMessages

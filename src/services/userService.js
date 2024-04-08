@@ -2,20 +2,19 @@ const { PrismaClient } = require('@prisma/client')
 const prisma = new PrismaClient()
 
 function formatGetMessages (messages) {
-  const FormattedMessages = messages.map((message) => ({
+  return messages.map((message) => ({
     text: message.text,
     pub_date: message.pub_date,
     flagged: message.flagged,
     username: message.author.username,
     email: message.author.email
   }))
-  return FormattedMessages
 }
 
 class UserService {
   async addMessage (userId, messageContent, currentDate) {
     try {
-      const message = await prisma.message.create({
+      return await prisma.message.create({
         data: {
           author_id: userId,
           text: messageContent,
@@ -23,7 +22,6 @@ class UserService {
           flagged: 0
         }
       })
-      return message
     } catch (err) {
       console.log(err)
       throw new Error(`Error adding message to database: ${err.messsage}`)
@@ -129,12 +127,11 @@ class UserService {
 
   async getUserIdByUsername (username) {
     try {
-      const user = await prisma.user.findFirst({
+      return await prisma.user.findFirst({
         where: {
           username
         }
       })
-      return user
     } catch (err) {
       console.error(err)
       throw new Error(`Error getting user by username from database: ${err.message}`)
@@ -143,12 +140,11 @@ class UserService {
 
   async getUserIdByEmail (email) {
     try {
-      const user = await prisma.user.findFirst({
+      return await prisma.user.findFirst({
         where: {
           email
         }
       })
-      return user
     } catch (err) {
       console.error(err)
       throw new Error(`Error getting user by email from database: ${err.message}`)
@@ -157,17 +153,12 @@ class UserService {
 
   async isFollowing (whoId, whomId) {
     try {
-      const follower = await prisma.follower.findFirst({
+      return await prisma.follower.findFirst({
         where: {
           who_id: whoId,
           whom_id: whomId
         }
       })
-      if (follower) {
-        return true
-      } else {
-        return false
-      }
     } catch (err) {
       console.error(err)
       throw new Error(`Error checking if user is following another user: ${err.message}`)
@@ -177,13 +168,12 @@ class UserService {
   async followUser (userId, followedId) {
     console.log(userId, followedId)
     try {
-      const follower = await prisma.follower.create({
+      return await prisma.follower.create({
         data: {
           who_id: userId,
           whom_id: followedId
         }
       })
-      return follower
     } catch (err) {
       console.error(err)
       throw new Error(`Error adding follower to database: ${err.message}`)
@@ -192,7 +182,7 @@ class UserService {
 
   async unfollowUser (userId, followedId) {
     try {
-      const follower = await prisma.follower.delete({
+      return await prisma.follower.delete({
         where: {
           who_id_whom_id: {
             who_id: userId,
@@ -200,7 +190,6 @@ class UserService {
           }
         }
       })
-      return follower
     } catch (err) {
       console.error(err)
       throw new Error(`Error removing follower from database: ${err.message}`)
@@ -209,14 +198,13 @@ class UserService {
 
   async registerUser (username, email, hash) {
     try {
-      const user = await prisma.user.create({
+      return await prisma.user.create({
         data: {
           username,
           email,
           pw_hash: hash
         }
       })
-      return user
     } catch (err) {
       console.error(err)
       throw new Error(`Error adding user to database: ${err.messsage}`)
@@ -225,7 +213,7 @@ class UserService {
 
   async getAllFollowedUsers (userId) {
     try {
-      const followed = await prisma.follower.findMany({
+      return await prisma.follower.findMany({
         where: {
           who_id: userId
         },
@@ -233,7 +221,6 @@ class UserService {
           whom: true
         }
       })
-      return followed
     } catch (err) {
       console.error(err)
       throw new Error(`Error getting followed users from database: ${err.message}`)

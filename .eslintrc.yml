@@ -5,14 +5,8 @@ env:
   jest: true
 extends: 
   - standard
+  - plugin:sonarjs/recommended
 parserOptions:
   ecmaVersion: latest
 plugins: 
   - sonarjs
-rules:
-  sonarjs/no-all-duplicated-branches: "error"
-  sonarjs/no-element-overwrite: "error"
-  sonarjs/no-extra-arguments: "error"
-  sonarjs/no-identical-conditions: "error"
-  sonarjs/no-one-iteration-loop: "error"
-  sonarjs/no-use-of-empty-return-value: "error"
