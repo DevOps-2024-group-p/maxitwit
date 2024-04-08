@@ -6,7 +6,6 @@ const UserService = require('../services/userService')
 const { publicCounter, followCounter, unfollowCounter } = require('../services/metrics')
 const SERVER_ERR_MESSAGE = 'Server error'
 
-
 const userService = new UserService()
 
 function getUserCredentialsFromSession (req) {
