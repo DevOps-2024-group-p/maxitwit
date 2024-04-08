@@ -15,7 +15,8 @@ function getUserCredentialsFromSession (req) {
         username: req.session.username.username
       }
     }
-  } return { user: {} }
+  }
+  return { user: {} }
 }
 
 /* GET register page. */
@@ -31,16 +32,15 @@ router.use((req, res, next) => {
   next()
 })
 
-const validateEmail = (email) => String(email)
-  .toLowerCase()
-  .match(
-    /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-  )
+const validateEmail = (email) =>
+  String(email)
+    .toLowerCase()
+    .match(
+      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+    )
 
 router.post('/', async (req, res, next) => {
-  const {
-    username, email, password, password2
-  } = req.body
+  const { username, email, password, password2 } = req.body
 
   const validEmail = validateEmail(email)
 

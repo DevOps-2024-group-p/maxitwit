@@ -10,31 +10,26 @@ const HTTP_COUNTER_HELP = 'Counter for HTTP requests'
 const loginCounter = new client.Counter({
   name: 'login_endpoint_counter',
   help: PUBLIC_COUNTER_HELP
-
 })
 
 const publicCounter = new client.Counter({
   name: 'public_endpoint_counter',
   help: PUBLIC_COUNTER_HELP
-
 })
 
 const followCounter = new client.Counter({
   name: 'follow_endpoint_counter',
   help: PUBLIC_COUNTER_HELP
-
 })
 
 const unfollowCounter = new client.Counter({
   name: 'unfollow_endpoint_counter',
   help: PUBLIC_COUNTER_HELP
-
 })
 
 const registerCounter = new client.Counter({
   name: 'register_endpoint_counter',
   help: PUBLIC_COUNTER_HELP
-
 })
 
 const httpRequestsCounter = new client.Counter({

@@ -39,19 +39,19 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: .
-          target: "production"
+          target: 'production'
           file: ./Dockerfile.app
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/maxitwitserver:latest
           cache-from: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/maxitwitserver:serverbuildcache
           cache-to: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/maxitwitserver:serverbuildcache,mode=max
-      
+
       - name: Build and push minitwit api
         uses: docker/build-push-action@v2
         with:
           context: .
           file: ./Dockerfile.api
-          target: "production"
+          target: 'production'
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/maxitwitapi:latest
           cache-from: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/maxitwitapi:apibuildcache
@@ -87,7 +87,7 @@ jobs:
         env:
           SSH_KEY: ${{ secrets.SSH_KEY }}
           SESSION_SECRET: ${{ secrets.SESSION_SECRET }}
-      
+
       - name: Deploy to server
         run: >
           ssh $SSH_USER@$SSH_HOST

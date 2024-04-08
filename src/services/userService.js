@@ -65,17 +65,14 @@ class UserService {
       select: { whom_id: true }
     })
 
-    const followedUserIds = followedUsers.map(user => user.whom_id)
+    const followedUserIds = followedUsers.map((user) => user.whom_id)
 
     // Then, get the messages from the current user and the users they are following
     const messages = await prisma.message.findMany({
       where: {
         flagged: 0,
         author: {
-          OR: [
-            { user_id: userId },
-            { user_id: { in: followedUserIds } }
-          ]
+          OR: [{ user_id: userId }, { user_id: { in: followedUserIds } }]
         }
       },
       orderBy: { pub_date: 'desc' },
@@ -134,7 +131,9 @@ class UserService {
       })
     } catch (err) {
       console.error(err)
-      throw new Error(`Error getting user by username from database: ${err.message}`)
+      throw new Error(
+        `Error getting user by username from database: ${err.message}`
+      )
     }
   }
 
@@ -147,7 +146,9 @@ class UserService {
       })
     } catch (err) {
       console.error(err)
-      throw new Error(`Error getting user by email from database: ${err.message}`)
+      throw new Error(
+        `Error getting user by email from database: ${err.message}`
+      )
     }
   }
 
@@ -161,7 +162,9 @@ class UserService {
       })
     } catch (err) {
       console.error(err)
-      throw new Error(`Error checking if user is following another user: ${err.message}`)
+      throw new Error(
+        `Error checking if user is following another user: ${err.message}`
+      )
     }
   }
 
@@ -223,7 +226,9 @@ class UserService {
       })
     } catch (err) {
       console.error(err)
-      throw new Error(`Error getting followed users from database: ${err.message}`)
+      throw new Error(
+        `Error getting followed users from database: ${err.message}`
+      )
     }
   }
 }

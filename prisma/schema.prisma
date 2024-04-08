@@ -24,6 +24,8 @@ model Message {
   flagged    Int?
 
   @@index([author_id, pub_date(sort: Desc)])
+  @@index([author_id])
+  @@index([pub_date])
 }
 
 model User {
@@ -34,5 +36,6 @@ model User {
   message       Message[]
   follows_users Follower[] @relation("Follows")
 
-  @@index([user_id])
+  @@index([username])
+  @@index([email])
 }

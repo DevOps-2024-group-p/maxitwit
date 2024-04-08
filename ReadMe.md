@@ -40,6 +40,11 @@ DATABASE_URL="postgresql://pguser:pgpassword@postgres:5432/testdb"
 docker compose up --build -d
 ```
 
+Seed server in container:
+```
+docker exec maxitwitserver npm run seed
+```
+
 Once you are done, use the following command to remove the established containers from your system:
 
 ```
