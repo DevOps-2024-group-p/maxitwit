@@ -9,8 +9,8 @@ require('dotenv').config() // Load environment variables from a .env file into p
 const express = require('express') // The main Express framework
 const path = require('path') // Core Node.js module to handle and transform file paths
 const cookieParser = require('cookie-parser') // Middleware to parse and set cookies in request objects
-const session = require('express-session')
-const SQLiteStore = require('connect-sqlite3')(session)
+const expressSession = require('express-session')
+const PgSession = require('connect-pg-simple')(expressSession)
 const flash = require('connect-flash')
 
 const client = require('prom-client')
@@ -54,18 +54,19 @@ if (!SESSION_SECRET) {
   throw new Error('SESSION_SECRET is not set')
 }
 
-app.use(
-  session({
-    resave: false,
-    saveUninitialized: true,
-    store: new SQLiteStore({
-      dir: './db',
-      db: 'sessions.db'
-    }),
-    secret: SESSION_SECRET,
-    cookie: { maxAge: 7 * 24 * 60 * 60 * 1000 } // 1 week
-  })
-)
+console.log(process.env)
+
+app.use(expressSession({
+  store: new PgSession({
+    conString: process.env.DATABASE_URL,
+    createTableIfMissing: true
+    // Insert connect-pg-simple options here
+  }),
+  secret: SESSION_SECRET,
+  resave: false,
+  cookie: { maxAge: 30 * 24 * 60 * 60 * 1000 } // 30 days
+  // Insert express-session options here
+}))
 
 app.use(flash())
 
