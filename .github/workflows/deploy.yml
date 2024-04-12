@@ -88,6 +88,34 @@ jobs:
           SSH_KEY: ${{ secrets.SSH_KEY }}
           SESSION_SECRET: ${{ secrets.SESSION_SECRET }}
 
+      - name: Provision enviroment variables to worker1 node
+        run: >
+          ssh $SSH_USER@$SSH_HOST_WORKER1
+          -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no
+          "export DOCKER_USERNAME=$DOCKER_USERNAME;
+          export SESSION_SECRET=$SESSION_SECRET;
+          export DATABASE_URL=$DATABASE_URL;"
+        env:
+          SSH_USER: ${{ secrets.SSH_USER }}
+          SSH_HOST_WORKER1: ${{ secrets.SSH_HOST_WORKER1 }}
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          SESSION_SECRET: ${{ secrets.SESSION_SECRET }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+
+      - name: Provision enviroment variables to worker2 node
+        run: >
+          ssh $SSH_USER@$SSH_HOST_WORKER2
+          -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no
+          "export DOCKER_USERNAME=$DOCKER_USERNAME;
+          export SESSION_SECRET=$SESSION_SECRET;
+          export DATABASE_URL=$DATABASE_URL;"
+        env:
+          SSH_USER: ${{ secrets.SSH_USER }}
+          SSH_HOST_WORKER2: ${{ secrets.SSH_HOST_WORKER2 }}
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          SESSION_SECRET: ${{ secrets.SESSION_SECRET }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+
       - name: Deploy to server
         run: >
           ssh $SSH_USER@$SSH_HOST
