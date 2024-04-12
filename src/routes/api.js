@@ -3,6 +3,7 @@ const express = require('express')
 const router = express.Router()
 const UserService = require('../services/userService')
 const userService = new UserService()
+const bcrypt = require('bcrypt')
 const fs = require('fs')
 
 const validateEmail = (email) => String(email).includes('@')
@@ -102,8 +103,9 @@ router.post(
       }
 
       if (!error) {
+        const hashedPassword = await bcrypt.hash(pwd, 10)
         userService
-          .registerUser(username, email, pwd)
+          .registerUser(username, email, hashedPassword)
           .then(() => res.status(204))
           .catch((err) => res.json({ message: err.message }))
       }
