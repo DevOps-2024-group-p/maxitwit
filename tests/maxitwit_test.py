@@ -1,14 +1,15 @@
 # -*- coding: utf-8 -*-
 """
-    MiniTwit Tests
-    ~~~~~~~~~~~~~~
+MiniTwit Tests
+~~~~~~~~~~~~~~
 
-    Tests a MiniTwit application.
+Tests a MiniTwit application.
 
-    :refactored: (c) 2024 by HelgeCPH from Armin Ronacher's original unittest version
-    :copyright: (c) 2010 by Armin Ronacher.
-    :license: BSD, see LICENSE for more details.
+:refactored: (c) 2024 by HelgeCPH from Armin Ronacher's original unittest version
+:copyright: (c) 2010 by Armin Ronacher.
+:license: BSD, see LICENSE for more details.
 """
+
 import requests
 import json
 import base64
@@ -274,7 +275,8 @@ def test_api_a_unfollows_b():
     query = {"no": 20, "latest": 11}
     response = requests.get(url, params=query, headers=HEADERS)
     assert response.ok
-    assert "b" not in response.json()["follows"]
+    assert "b@b.b" not in response.json()["follows"]
+    assert "c@c.c" in response.json()["follows"]
 
     # verify that latest was updated
     response = requests.get(f"{API_URL}:{API_PORT}/latest", headers=HEADERS)
