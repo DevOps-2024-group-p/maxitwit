@@ -44,7 +44,7 @@ Node + express + prisma + vagrant + docker
 
 Use the following connection string for containerized development in the `.env` file you created:
 ```bash
-DATABASE_URL="postgresql://pguser:pgpassword@postgres:5432/testdb"
+DATABASE_URL="postgresql://pguser:pgpassword@postgres:9998/localdb"
 ```
 
 Build and start containers:
