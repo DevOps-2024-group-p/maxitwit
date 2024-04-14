@@ -63,9 +63,10 @@ services:
     environment:
       POSTGRES_USER: pguser
       POSTGRES_PASSWORD: pgpassword
-      POSTGRES_DB: testdb
+      POSTGRES_DB: localdb
+      PGPORT: 9998
     ports:
-      - 5432:5432
+      - 9998:9998
     networks:
       - maxitwit-network
 
