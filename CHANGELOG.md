@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.6](https://github.com/DevOps-2024-group-p/maxitwit/compare/v1.4.5...v1.4.6) (2024-04-14)
+
+
+### Bug Fixes
+
+* **maxitwit_test.py:** make tests great again! ([22474c0](https://github.com/DevOps-2024-group-p/maxitwit/commit/22474c080542bb5123d860257b54f43576e12a96))
+
 ## [1.4.1](https://github.com/DevOps-2024-group-p/maxitwit/compare/v1.4.0...v1.4.1) (2024-03-27)
 
 
