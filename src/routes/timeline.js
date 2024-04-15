@@ -3,7 +3,6 @@ const express = require('express')
 const router = express.Router()
 const crypto = require('crypto')
 const UserService = require('../services/userService')
-const { publicCounter, followCounter, unfollowCounter } = require('../services/metrics')
 const SERVER_ERR_MESSAGE = 'Server error'
 
 const userService = new UserService()
@@ -91,7 +90,6 @@ router.get('/public', async (req, res, next) => {
   try {
     const g = getUserCredentialsFromSession(req)
     const messages = await userService.getPublicTimelineMessages(50)
-    publicCounter.inc()
     res.render('timeline', {
       title: 'Public Timeline',
       messages: formatMessages(messages),
@@ -123,7 +121,6 @@ router.get('/:username', async (req, res, next) => {
 
     const messages = await userService.getMessagesByUserId(whomId.user_id)
     formatMessages(messages)
-    publicCounter.inc()
     res.render('timeline', {
       endpoint: 'user',
       title: `${whomUsername}'s Timeline`,
@@ -146,7 +143,6 @@ router.get('/:username/follow', requireAuth, async (req, res, next) => {
     const whomId = await userService.getUserIdByUsername(whomUsername)
 
     await userService.followUser(g.user.id, whomId.user_id)
-    followCounter.inc()
     req.flash('success', `You are now following "${whomUsername}"`)
     res.redirect(`/${whomUsername}`)
   } catch (error) {
@@ -163,7 +159,6 @@ router.get('/:username/unfollow', requireAuth, async (req, res, next) => {
     const whomId = await userService.getUserIdByUsername(whomUsername)
 
     await userService.unfollowUser(g.user.id, whomId.user_id)
-    unfollowCounter.inc()
 
     req.flash('success', `You are no longer following "${whomUsername}"`)
     res.redirect(`/${whomUsername}`)

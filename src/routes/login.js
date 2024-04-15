@@ -4,7 +4,6 @@ const router = express.Router()
 const bcrypt = require('bcrypt')
 const UserService = require('../services/userService')
 const userService = new UserService()
-const { loginCounter } = require('../services/metrics')
 
 // If user is logged in, return id and username from session, otherwise empty user
 // Use the returned value to populate views
@@ -23,7 +22,6 @@ function getUserCredentialsFromSession (req) {
 /* GET login page. */
 router.get('/', (req, res) => {
   const g = getUserCredentialsFromSession(req)
-  loginCounter.inc()
   res.render('login', { title: 'Login', g })
 })
 
