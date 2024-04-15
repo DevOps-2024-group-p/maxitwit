@@ -7,7 +7,7 @@ const SERVER_ERR_MESSAGE = 'Server error'
 
 const userService = new UserService()
 
-function getUserCredentialsFromSession(req) {
+function getUserCredentialsFromSession (req) {
   if (req.session.username) {
     return {
       user: {
@@ -27,7 +27,7 @@ const requireAuth = (req, res, next) => {
   }
 }
 
-function gravatarUrl(email, size = 80) {
+function gravatarUrl (email, size = 80) {
   const hash = crypto
     .createHash('md5')
     .update(email.trim().toLowerCase())
@@ -35,7 +35,7 @@ function gravatarUrl(email, size = 80) {
   return `http://www.gravatar.com/avatar/${hash}?d=identicon&s=${size}`
 }
 
-function formatMessages(messages) {
+function formatMessages (messages) {
   messages.forEach((message) => {
     const date = new Date(message.pub_date * 1000)
     const year = date.getUTCFullYear()

@@ -64,17 +64,17 @@ app.use((req, res, next) => {
 })
 
 app.get('/metrics', async (req, res) => {
-  res.set('Content-Type', register.contentType);
-  res.end(await register.metrics());
-});
+  res.set('Content-Type', register.contentType)
+  res.end(await register.metrics())
+})
 
 app.use(morgan('combined', { stream: logger.stream }))
 
 app.use((req, res, next) => {
-  const start = Date.now();
+  const start = Date.now()
   const send = res.send
   res.send = function (string) {
-    const duration = Date.now() - start;
+    const duration = Date.now() - start
     httpRequestDurationMilliseconds.observe(duration)
     const body = string instanceof Buffer ? string.toString() : string
     httpRequestsCounter.inc()
