@@ -1,55 +1,28 @@
-const client = require('prom-client')
-const collectDefaultMetrics = client.collectDefaultMetrics
-const Registry = client.Registry
-const register = new Registry()
-
-collectDefaultMetrics({ register })
-
-const PUBLIC_COUNTER_HELP = 'Counter for public endpoint'
-const HTTP_COUNTER_HELP = 'Counter for HTTP requests'
-const loginCounter = new client.Counter({
-  name: 'login_endpoint_counter',
-  help: PUBLIC_COUNTER_HELP
-})
-
-const publicCounter = new client.Counter({
-  name: 'public_endpoint_counter',
-  help: PUBLIC_COUNTER_HELP
-})
-
-const followCounter = new client.Counter({
-  name: 'follow_endpoint_counter',
-  help: PUBLIC_COUNTER_HELP
-})
-
-const unfollowCounter = new client.Counter({
-  name: 'unfollow_endpoint_counter',
-  help: PUBLIC_COUNTER_HELP
-})
-
-const registerCounter = new client.Counter({
-  name: 'register_endpoint_counter',
-  help: PUBLIC_COUNTER_HELP
-})
-
-const httpRequestsCounter = new client.Counter({
-  name: 'http_requests_counter',
-  help: HTTP_COUNTER_HELP,
-  labelNames: ['method', 'path']
-})
+const client = require('prom-client');
+const register = new client.Registry();
 
 const httpErrorsCounter = new client.Counter({
-  name: 'http_errors_counter',
-  help: HTTP_COUNTER_HELP,
-  labelNames: ['status', 'method', 'path']
-})
+  name: 'http_errors_total',
+  help: 'Total HTTP errors',
+});
+register.registerMetric(httpErrorsCounter);
+
+const httpRequestsCounter = new client.Counter({
+  name: 'http_requests_total',
+  help: 'Total HTTP requests',
+});
+register.registerMetric(httpRequestsCounter);
+
+const httpRequestDurationMilliseconds = new client.Histogram({
+  name: 'http_request_duration_ms',
+  help: 'Duration of HTTP requests in ms',
+  buckets: [0.1, 5, 15, 50, 100, 200, 300, 400, 500]  // buckets for response time from 0.1ms to 500ms
+});
+register.registerMetric(httpRequestDurationMilliseconds);
 
 module.exports = {
-  registerCounter,
-  loginCounter,
-  publicCounter,
-  followCounter,
-  unfollowCounter,
   httpErrorsCounter,
-  httpRequestsCounter
+  httpRequestsCounter,
+  httpRequestDurationMilliseconds,
+  register
 }

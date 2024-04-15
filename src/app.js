@@ -13,18 +13,6 @@ const session = require('express-session')
 const SQLiteStore = require('connect-sqlite3')(session)
 const flash = require('connect-flash')
 
-const client = require('prom-client')
-const collectDefaultMetrics = client.collectDefaultMetrics
-const Registry = client.Registry
-const register = new Registry()
-collectDefaultMetrics({ register })
-
-const promBundle = require('express-prom-bundle')
-const metricsMiddleware = promBundle({
-  includeMethod: true,
-  includePath: true
-})
-
 // logging setup
 const morgan = require('morgan')
 const logger = require('./services/logger.js')
@@ -36,7 +24,7 @@ const registerRouter = require('./routes/register') // Router for register relat
 const timelineRouter = require('./routes/timeline') // Router for public timeline related paths
 const apiRouter = require('./routes/api') // Router for public timeline related paths
 
-const { httpErrorsCounter, httpRequestsCounter } = require('./services/metrics.js')
+const { httpErrorsCounter, httpRequestsCounter, httpRequestDurationMilliseconds, register } = require('./services/metrics.js')
 
 // Initialize the Express application
 const app = express()
@@ -75,21 +63,23 @@ app.use((req, res, next) => {
   next()
 })
 
-app.use(metricsMiddleware)
-app.get('/metrics', (req, res) => {
-  res.set('Content-Type', metricsMiddleware.contentType)
-  res.end(metricsMiddleware.metrics())
-})
+app.get('/metrics', async (req, res) => {
+  res.set('Content-Type', register.contentType);
+  res.end(await register.metrics());
+});
 
 app.use(morgan('combined', { stream: logger.stream }))
 
 app.use((req, res, next) => {
+  const start = Date.now();
   const send = res.send
   res.send = function (string) {
+    const duration = Date.now() - start;
+    httpRequestDurationMilliseconds.observe(duration)
     const body = string instanceof Buffer ? string.toString() : string
-    httpRequestsCounter.inc({ method: req.method, path: req.path })
+    httpRequestsCounter.inc()
     if (res.statusCode >= 400) {
-      httpErrorsCounter.inc({ status: res.statusCode, method: req.method, path: req.path })
+      httpErrorsCounter.inc()
     }
     send.call(this, body)
   }
