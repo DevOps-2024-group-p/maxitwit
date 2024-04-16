@@ -68,7 +68,7 @@ app.get('/metrics', async (req, res) => {
   res.end(await register.metrics())
 })
 
-app.use(morgan('combined', { stream: logger.stream }))
+app.use(morgan('combined', { stream: { write: message => logger.info(message) } }))
 
 app.use((req, res, next) => {
   const start = Date.now()
