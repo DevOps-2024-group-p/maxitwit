@@ -1,64 +1,22 @@
 const winston = require('winston')
+const { createLogger, format } = winston
+const FluentTransport = require('fluent-logger').support.winstonTransport()
 
-const levels = {
-  error: 0,
-  warn: 1,
-  info: 2,
-  http: 3,
-  debug: 4
-}
-
-const colors = {
-  error: 'red',
-  warn: 'yellow',
-  info: 'green',
-  http: 'magenta',
-  debug: 'white'
-}
-
-const level = () => {
-  const env = process.env.NODE_ENV || 'development'
-  const isDevelopment = env === 'development'
-  return isDevelopment ? 'debug' : 'warn'
-}
-
-winston.addColors(colors)
-
-const logger = winston.createLogger({
-  level: level(),
-  levels,
-  format: winston.format.combine(
-    winston.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss:ms' }),
-    winston.format.colorize({ all: true }),
-    winston.format.printf(
-      (info) => `${info.timestamp} ${info.level}: ${info.message}`
-    )
+// Create a Winston logger
+const logger = createLogger({
+  format: format.combine(
+    format.timestamp(),
+    format.json()
   ),
   transports: [
-    new winston.transports.Console(),
-    new winston.transports.File({
-      filename: 'logs/error.log',
-      level: 'error'
-    })
+    new FluentTransport('info', {
+      host: 'fluentd-host',
+      port: 24224,
+      timeout: 3.0,
+      reconnectInterval: 600000 // 10 minutes
+    }),
+    new winston.transports.Console()
   ]
 })
-
-const { Syslog } = require('winston-syslog')
-
-// Add Syslog transport
-logger.add(new Syslog({
-  host: 'localhost',
-  port: 514,
-  protocol: 'udp4',
-  facility: 'local0',
-  localhost: 'localhost', // Replace with your server name
-  path: '/dev/log'
-}))
-
-logger.stream = {
-  write: function (message, encoding) {
-    logger.info(message)
-  }
-}
 
 module.exports = logger
