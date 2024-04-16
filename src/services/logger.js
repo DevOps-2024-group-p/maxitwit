@@ -14,8 +14,7 @@ const logger = createLogger({
       port: 24224,
       timeout: 3.0,
       reconnectInterval: 600000 // 10 minutes
-    }),
-    new winston.transports.Console()
+    })
   ]
 })
 
