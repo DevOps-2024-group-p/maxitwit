@@ -14,6 +14,7 @@ services:
       options:
         fluentd-address: fluentd:24224
         tag: frontend.access
+
     restart: always
     deploy:
       mode: replicated
@@ -45,6 +46,7 @@ services:
       options:
         fluentd-address: fluentd:24224
         tag: api.access
+
     restart: always
     deploy:
       mode: replicated
@@ -78,7 +80,9 @@ services:
       placement:
         constraints: [ node.role == manager ]
 
+
 volumes:
   grafana_data:
 networks:
   maxitwit-network:
+

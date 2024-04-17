@@ -49,6 +49,7 @@ services:
         fluentd-address: localhost:24224
         tag: api.access
         fluentd-async: "true"
+
     env_file: .env
     depends_on:
       - postgres
@@ -98,6 +99,7 @@ services:
     ports:
       - 24224:24224
       - 24224:24224/udp
+
     networks:
       - maxitwit-network
 
