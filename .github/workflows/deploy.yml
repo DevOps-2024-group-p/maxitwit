@@ -66,6 +66,16 @@ jobs:
           tags: ${{ secrets.DOCKER_USERNAME }}/maxitwittest:latest
           cache-from: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/maxitwittest:testbuildcache
           cache-to: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/maxitwittest:testbuildcache,mode=max
+      
+      - name: Build and push fluentd image
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          file: ./Dockerfile.fluentd
+          push: true
+          tags: ${{ secrets.DOCKER_USERNAME }}/fluentd:latest
+          cache-from: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/fluentd:testbuildcache
+          cache-to: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/fluentd:testbuildcache,mode=max
 
       - name: Test maxitwit
         run: |
