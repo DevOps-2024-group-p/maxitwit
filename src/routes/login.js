@@ -1,12 +1,12 @@
 // Imports
 const express = require('express')
-const router = express.Router()
+const router = express.Router() // Initialize router instance
 const bcrypt = require('bcrypt') // Import bcrypt for password hashing
 const UserService = require('../services/userService') // Import UserService class to interact with user data
 const userService = new UserService() // Create new UserService instance
 
 // Helper function to retrieve user credentials from session
-function getUserCredentialsFromSession(req) {
+function getUserCredentialsFromSession (req) {
   // If user is logged in, return id and username from session
   if (req.session.username) {
     return {
@@ -22,12 +22,11 @@ function getUserCredentialsFromSession(req) {
 // Get route to serve login page via get request
 router.get('/', (req, res) => {
   const g = getUserCredentialsFromSession(req)
-  res.render('login', { title: 'Login', g })  // Render login.pug with title and user credentials
+  res.render('login', { title: 'Login', g }) // Render login.pug with title and user credentials
 })
 
 // Post route for handling login submissions
 router.post('/', async (req, res, next) => {
-
   const { username, password } = req.body // Get username and password from request body
 
   // Variable validation, if false creates error message and redirects to the login page
@@ -46,7 +45,6 @@ router.post('/', async (req, res, next) => {
 
   // Compare entered password with hashed user password in the database
   bcrypt.compare(password, user.pw_hash, (err, result) => {
-
     // If entered password is incorrect, log error and return a server error
     if (err) {
       console.error(err.message)
