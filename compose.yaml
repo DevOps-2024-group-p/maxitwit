@@ -19,12 +19,13 @@ services:
       driver: "fluentd"
       options:
         fluentd-address: localhost:24224
-        tag: httpd.access
+        tag: frontend.access
+        fluentd-async: "true"
     env_file: .env
     depends_on:
       - postgres
+      - fluentd
     restart: always
-    
 
   api:
     container_name: maxitwitapi
@@ -46,10 +47,13 @@ services:
       driver: "fluentd"
       options:
         fluentd-address: localhost:24224
-        tag: httpd.access
+        tag: api.access
+        fluentd-async: "true"
+
     env_file: .env
     depends_on:
       - postgres
+      - fluentd
     restart: always
 
   prometheus:
@@ -93,8 +97,9 @@ services:
     logging:
       driver: "local"
     ports:
-      - "24224:24224"
-      - "24224:24224/udp"
+      - 24224:24224
+      - 24224:24224/udp
+
     networks:
       - maxitwit-network
 
