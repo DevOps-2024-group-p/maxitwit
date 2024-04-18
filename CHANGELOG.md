@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.4.7](https://github.com/DevOps-2024-group-p/maxitwit/compare/v1.4.6...v1.4.7) (2024-04-18)
+
+
+### Bug Fixes
+
+* fixed up prometheus ([9f330f4](https://github.com/DevOps-2024-group-p/maxitwit/commit/9f330f4a1ee0b3f809bf16626991fd03feeb2052))
+* fixing prometheus ([1b053fb](https://github.com/DevOps-2024-group-p/maxitwit/commit/1b053fb7d74a0f3b8b6078ad96395d92103cd679))
+
 ## [1.4.6](https://github.com/DevOps-2024-group-p/maxitwit/compare/v1.4.5...v1.4.6) (2024-04-14)
 
 
