@@ -81,8 +81,29 @@ services:
         constraints: [ node.role == manager ]
 
 
+  fluentd:
+    user: root
+    image: ${DOCKER_USERNAME}/fluentd
+    volumes:
+      - /logs:/fluentd/log
+    logging:
+      driver: "local"
+    ports:
+      - 24224:24224
+      - 24224:24224/udp
+    networks:
+      - maxitwit-network
+    deploy:
+      mode: global
+      placement:
+        constraints: [ node.role == manager ]
+
 volumes:
   grafana_data:
+
+
 networks:
   maxitwit-network:
+
+
 
