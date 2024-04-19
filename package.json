@@ -1,6 +1,6 @@
 {
   "name": "maxitwit",
-  "version": "1.4.4",
+  "version": "1.4.7",
   "private": true,
   "prisma": {
     "seed": "node prisma/seed.js"
