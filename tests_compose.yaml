@@ -46,6 +46,24 @@ services:
       - SESSION_SECRET=secret
     restart: always
 
+  test_UI:
+    container_name: test_UI
+    build:
+      dockerfile: Dockerfile.api
+      context: .
+      target: test
+    ports:
+      - 3002:3002
+    networks:
+      - main
+    depends_on:
+      - test_db
+    environment:
+      - HUSKY=0
+      - DATABASE_URL=postgresql://postgres:postgres@test_db:5432/testdb
+      - SESSION_SECRET=secret
+    restart: always
+
 networks:
   main:
     name: maxitwit-test

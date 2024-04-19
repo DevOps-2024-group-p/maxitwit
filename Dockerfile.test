@@ -8,6 +8,9 @@ COPY /tests/conftest.py /maxitwit-tests/
 COPY /tests/maxitwit_test.py /maxitwit-tests/
 COPY /tests/test_requirements.txt /maxitwit-tests/
 
+COPY /tests/test_itu_minitwit_ui.py /maxitwit-tests/
+
+
 WORKDIR /maxitwit-tests
 
 RUN pip install -r test_requirements.txt
