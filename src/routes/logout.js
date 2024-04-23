@@ -3,7 +3,7 @@ const router = express.Router() // Initialize router instance
 
 // Middleware function to check if the user is authenticated
 const requireAuth = (req, res, next) => {
-  // If user is logged in, proceed to the next middleware/route handler else redirect to /public
+  // If user is logged in, proceed to the next middleware/route else redirect to /public
   if (req.session.username) {
     next()
   } else {

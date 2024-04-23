@@ -34,13 +34,12 @@ router.use((req, res, next) => {
 })
 
 // Utility function to validate email address using regex
-const validateEmail = (email) => 
+const validateEmail = (email) =>
   String(email)
     .toLowerCase()
     .match(
       /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
     )
-
 
 // Post route to handle registration form submission
 router.post('/', async (req, res, next) => {
