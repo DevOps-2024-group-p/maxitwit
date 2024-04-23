@@ -10,7 +10,7 @@ const logger = createLogger({
   ),
   transports: [
     new FluentTransport('info', {
-      host: 'fluentd-host',
+      host: 'fluentd',
       port: 24224,
       timeout: 3.0,
       reconnectInterval: 600000 // 10 minutes
