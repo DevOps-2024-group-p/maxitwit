@@ -9,8 +9,6 @@ services:
       - ./src:/usr/src/app/src
     ports:
       - 3000:3000
-    networks:
-      - maxitwit-network
     environment:
       - HUSKY=0
     links:
@@ -37,8 +35,6 @@ services:
       - ./src:/usr/src/app/src
     ports:
       - 3001:3001
-    networks:
-      - maxitwit-network
     environment:
       - HUSKY=0
     links:
@@ -63,8 +59,6 @@ services:
       - ./prometheus.yml:/etc/prometheus/prometheus.yml
     ports:
       - '9090:9090'
-    networks:
-      - maxitwit-network
 
   grafana:
     image: grafana/grafana:10.2.4
@@ -72,8 +66,6 @@ services:
       - '3002:3000'
     volumes:
       - grafana_data:/var/lib/grafana
-    networks:
-      - maxitwit-network
 
   postgres:
     image: postgres:latest
@@ -85,8 +77,6 @@ services:
       PGPORT: 9998
     ports:
       - 9998:9998
-    networks:
-      - maxitwit-network
 
   fluentd:
     container_name: fluentd
@@ -99,13 +89,6 @@ services:
     ports:
       - 24224:24224
       - 24224:24224/udp
-
-    networks:
-      - maxitwit-network
-
-networks:
-  maxitwit-network:
-    name: maxitwit-network
 
 volumes:
   grafana_data:
