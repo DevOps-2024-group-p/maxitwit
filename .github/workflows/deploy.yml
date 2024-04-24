@@ -125,6 +125,11 @@ jobs:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           SESSION_SECRET: ${{ secrets.SESSION_SECRET }}
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      
+      - name: Provision /remote_files to manager node
+        run: >
+          scp ./remote_files/* $SSH_USER@$SSH_HOST:/vagrant/remote_files
+          -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no
 
       - name: Deploy to server
         run: >
