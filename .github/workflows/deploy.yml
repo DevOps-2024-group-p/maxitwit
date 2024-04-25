@@ -77,6 +77,11 @@ jobs:
           cache-from: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/fluentd:testbuildcache
           cache-to: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/fluentd:testbuildcache,mode=max
 
+      - name: Run Snyk to check Docker image for vulnerabilities
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        run: snyk container test my-image || echo "Snyk found vulnerabilities in Docker image!"
+
       - name: Test maxitwit
         run: |
           docker build -t $DOCKER_USERNAME/maxitwittest -f Dockerfile.test .

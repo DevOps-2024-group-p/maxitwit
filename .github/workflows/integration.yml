@@ -37,7 +37,14 @@ jobs:
           tags: ${{ secrets.DOCKER_USERNAME }}/maxitwittest:latest
           cache-from: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/maxitwittest:testbuildcache
           cache-to: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/maxitwittest:testbuildcache,mode=max
+      - name: Install Snyk
+        run: npm install -g snyk
 
+      - name: Run Snyk to check for vulnerabilities
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        run: snyk test --all-projects || echo "Snyk found vulnerabilities!"
+        
       - name: Test maxitwit
         run: |
           docker build -t $DOCKER_USERNAME/maxitwittest -f Dockerfile.test .
