@@ -1,11 +1,11 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
-
+#
 Vagrant.configure("2") do |config|
   config.vm.box = 'digital_ocean'
   config.vm.box_url = "https://github.com/devopsgroup-io/vagrant-digitalocean/raw/master/box/digital_ocean.box"
   config.ssh.private_key_path = '~/.ssh/id_rsa'
-
+ 
   config.vm.synced_folder '.', '/maxitwit', type: "rsync"
 
   config.vm.define "webserver", primary: true do |server|
@@ -18,7 +18,7 @@ Vagrant.configure("2") do |config|
       provider.size = 's-1vcpu-1gb'
       provider.privatenetworking = true
     end
-
+    # server.vm.network "forwarded_port", guest: 3000, host: 3000
     server.vm.hostname = "webserver"
 
     server.vm.provision "shell", inline: 'echo "export DOCKER_USERNAME=' + "'" + ENV["DOCKER_USERNAME"] + "'" + '" >> ~/.bash_profile'
@@ -41,12 +41,12 @@ Vagrant.configure("2") do |config|
     echo -e "\nVerifying that docker works ...\n"
     docker run --rm hello-world
     docker rmi hello-world
-
+    # docker-compose --version
     echo -e "\nOpening port for minitwit ...\n"
     ufw allow 3000 && \
     ufw allow 3001 && \
     ufw allow 22/tcp
-
+    # ufw allow 80/tcp
     echo ". $HOME/.bashrc" >> $HOME/.bash_profile
 
     echo -e "\nConfiguring credentials as environment variables...\n"
