@@ -7,9 +7,6 @@ on:
       - main
       # Run workflow every time a pull request is opened or reopened
     types: [opened, reopened, ready_for_review, edited]
-  # allow manual triggers for now too
-  workflow_dispatch:
-    manual: true
 
 jobs:
   build:
