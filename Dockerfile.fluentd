@@ -1,8 +1,4 @@
 FROM fluent/fluentd:v1.11-debian
 
-# Install nano to check logs
-RUN apt-get update 
-RUN apt-get install -y nano && apt-get clean
-
 RUN rm /fluentd/etc/fluent.conf
-COPY ./conf/fluentd.conf /fluentd/etc
+COPY ./fluent.conf /fluentd/etc
