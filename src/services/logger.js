@@ -9,13 +9,13 @@ const logger = createLogger({
     format.json()
   ),
   transports: [
-    new FluentTransport('info', {
-      host: 'fluentd-host',
+    new FluentTransport(process.env.API ? 'api.access' : 'frontend.access', {
+      host: 'fluentd',
       port: 24224,
       timeout: 3.0,
       reconnectInterval: 600000 // 10 minutes
     })
   ]
 })
-
+// Create a Winston logger
 module.exports = logger

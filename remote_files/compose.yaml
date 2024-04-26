@@ -28,8 +28,6 @@ services:
         parallelism: 1
         delay: 10s
         monitor: 10s
-    network:
-      - maxitwit-network
 
   api:
     image: ${DOCKER_USERNAME}/maxitwitapi
@@ -60,8 +58,6 @@ services:
         parallelism: 2
         delay: 10s
         monitor: 10s
-    network:
-      - maxitwit-network
 
   fluentd:
     user: root
@@ -73,14 +69,10 @@ services:
     ports:
       - 24224:24224
       - 24224:24224/udp
-    networks:
-      - maxitwit-network
     deploy:
       mode: global
       placement:
         constraints: [ node.role == manager ]
-
-
   fluentd:
     user: root
     image: ${DOCKER_USERNAME}/fluentd
@@ -91,8 +83,6 @@ services:
     ports:
       - 24224:24224
       - 24224:24224/udp
-    networks:
-      - maxitwit-network
     deploy:
       mode: global
       placement:
@@ -101,9 +91,6 @@ services:
 volumes:
   grafana_data:
 
-
-networks:
-  maxitwit-network:
 
 
 
