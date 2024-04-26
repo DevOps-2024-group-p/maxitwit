@@ -16,7 +16,7 @@
     "docker": "docker-compose up --build",
     "prepare": "husky",
     "format": "prettier --write .",
-    "test": "./test.sh -d",
+    "test": "./scripts/test.sh -d",
     "simulator": "python3 src/api/minitwit_simulator.py http://localhost:3001"
   },
   "dependencies": {
