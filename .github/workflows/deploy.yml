@@ -133,8 +133,7 @@ jobs:
       
       - name: Provision /remote_files to manager node
         run: >
-          scp ./remote_files/* $SSH_USER@$SSH_HOST:/vagrant/remote_files
-          -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no
+          scp -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no ./remote_files/* $SSH_USER@$SSH_HOST:/vagrant/remote_files
 
       - name: Deploy to server
         run: >
