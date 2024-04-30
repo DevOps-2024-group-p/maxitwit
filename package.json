@@ -31,6 +31,7 @@
     "express-session": "^1.18.0",
     "fluent-logger": "^3.4.1",
     "morgan": "^1.10.0",
+    "npx": "^10.2.2",
     "pug": "^3.0.2",
     "winston": "^3.13.0",
     "winston-syslog": "^2.7.0"
@@ -48,7 +49,6 @@
     "eslint-plugin-promise": "^6.1.1",
     "eslint-plugin-sonarjs": "^0.25.1",
     "nodemon": "^3.0.3",
-    "npx": "^3.0.0",
     "prettier": "^3.2.5",
     "prisma": "^5.11.0"
   },
