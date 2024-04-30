@@ -1,45 +1,57 @@
-# syntax=docker/dockerfile:1
-
-
+# Use the specified Node.js version
 ARG NODE_VERSION=21.6.2
-
 FROM node:${NODE_VERSION}-alpine as base
 
-# Expose the port that the application listens on.
+# Expose the port that the application listens on
 EXPOSE 3001
 
-WORKDIR /usr/src/app
+# Set the working directory
+WORKDIR /usr/app
 
-COPY package.json /
-COPY package-lock.json /
+# Copy src
+COPY package.json package.json
+COPY package-lock.json package-lock.json
+COPY ./src /usr/app/src
+COPY ./db /usr/app/db
+COPY ./prisma /usr/app/prisma
+
+# Switch to root user for permissions setup
 USER root
-COPY ./src /src
-COPY ./db /db
-COPY ./prisma /
 
+# Set up non-root user and permissions
+RUN addgroup -S nonroot \
+    && adduser -S nonroot -G nonroot \
+    && chown -R nonroot /usr/app/ \
+    && chmod -R 755 /usr/app/
+
+# Development stage
 FROM base as development
 ENV NODE_ENV development
 ENV API true
 ENV HUSKY=0
 RUN npm ci --include=dev
 RUN npx prisma generate
+USER nonroot
 CMD npm run devstart
 
+# Production stage
 FROM base as production
 ENV NODE_ENV production
 ENV API true
 ENV HUSKY=0
 RUN npm ci --omit=dev
 RUN npx prisma generate
+USER nonroot
 CMD npm run start:migrate
 
+# Test stage
 FROM base as test
 ENV NODE_ENV test
 ENV API true
 ENV HUSKY=0
+COPY ./tests /usr/app/test
 RUN npm ci --include=dev
-COPY ./tests /
-
+USER nonroot
 CMD npx prisma generate && \
     npx prisma migrate reset --skip-seed --force && \
     npm run devstart
