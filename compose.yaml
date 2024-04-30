@@ -6,7 +6,7 @@ services:
       context: .
       target: ${TARGET}
     volumes:
-      - ./src:/usr/src/app/src
+      - ./src:/usr/app/src
     ports:
       - 3000:3000
     environment:
@@ -32,7 +32,7 @@ services:
       context: .
       target: ${TARGET}
     volumes:
-      - ./src:/usr/src/app/src
+      - ./src:/usr/app/src
     ports:
       - 3001:3001
     environment:
