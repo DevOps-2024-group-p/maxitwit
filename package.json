@@ -17,7 +17,9 @@
     "prepare": "husky",
     "format": "prettier --write .",
     "test": "./scripts/test.sh -d",
-    "simulator": "python3 src/api/minitwit_simulator.py http://localhost:3001"
+    "simulator": "python3 src/api/minitwit_simulator.py http://localhost:3001",
+    "release": "semantic-release",
+    "release:dry-run": "semantic-release --dry-run"
   },
   "dependencies": {
     "@prisma/client": "^5.11.0",
@@ -35,6 +37,9 @@
     "winston": "^3.13.0",
     "winston-syslog": "^2.7.0"
   },
+  "release": {
+    "branches": ["main", "next", "beta"]
+  },
   "devDependencies": {
     "@commitlint/cli": "^19.2.1",
     "@commitlint/config-conventional": "^19.1.0",
@@ -50,7 +55,9 @@
     "nodemon": "^3.0.3",
     "npx": "^3.0.0",
     "prettier": "^3.2.5",
-    "prisma": "^5.11.0"
+    "prisma": "^5.11.0",
+    "semantic-release": "^23.0.8",
+    "standard-version": "^9.5.0"
   },
   "config": {
     "commitizen": {
