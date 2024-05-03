@@ -1,0 +1,59 @@
+Indetify assets
+Proxy
+165.22.68.19
+
+available 
+Not shown: 997 filtered ports
+PORT    STATE  SERVICE
+22/tcp  open   ssh
+80/tcp  open   http
+113/tcp closed ident
+
+IP address: 209.38.188.177
+
+PORT     STATE  SERVICE
+22/tcp   open   ssh
+113/tcp  closed ident
+3000/tcp open   ppp
+3001/tcp open   nessus
+
+
+IP address: 169.92.138.182
+
+PORT    STATE  SERVICE
+113/tcp closed ident
+
+
+IP address: 46.101.112.64
+
+PORT     STATE SERVICE
+22/tcp   open  ssh
+3000/tcp open  ppp
+3001/tcp open  nessus
+
+IP address: 144.126.246.214
+
+Not shown: 998 closed ports
+PORT     STATE SERVICE
+22/tcp   open  ssh
+9090/tcp open  zeus-admin
+
+
+
+Identify threat sources (SQL injection)
+- do the pen. tests to find out whether a user can access another user’s data (privilege escalation)
+- to eliminate a root access
+
+
+
+1.A01:2021-Broken Access Control moves up from the fifth position; 94% of applications were tested for some form of broken access control. The 34 Common Weakness Enumerations (CWEs) mapped to Broken Access Control had more occurrences in applications than any other category.
+A02:2021-Cryptographic Failures shifts up one position to #2, previously known as Sensitive Data Exposure, which was broad symptom rather than a root cause. The renewed focus here is on failures related to cryptography which often leads to sensitive data exposure or system compromise.
+1.A04:2021-Insecure Design is a new category for 2021, with a focus on risks related to design flaws. If we genuinely want to “move left” as an industry, it calls for more use of threat modeling, secure design patterns and principles, and reference architectures.
+2.A06:2021-Vulnerable and Outdated Components was previously titled Using Components with Known Vulnerabilities and is #2 in the Top 10 community survey, but also had enough data to make the Top 10 via data analysis. This category moves up from #9 in 2017 and is a known issue that we struggle to test and assess risk. It is the only category not to have any Common Vulnerability and Exposures (CVEs) mapped to the included CWEs, so a default exploit and impact weights of 5.0 are factored into their scores.
+A07:2021-Identification and Authentication Failures was previously Broken Authentication and is sliding down from the second position, and now includes CWEs that are more related to identification failures. This category is still an integral part of the Top 10, but the increased availability of standardized frameworks seems to be helping.
+3.A08:2021-Software and Data Integrity Failures is a new category for 2021, focusing on making assumptions related to software updates, critical data, and CI/CD pipelines without verifying integrity. One of the highest weighted impacts from Common Vulnerability and Exposures/Common Vulnerability Scoring System (CVE/CVSS) data mapped to the 10 CWEs in this category. Insecure Deserialization from 2017 is now a part of this larger category.
+1.A09:2021-Security Logging and Monitoring Failures was previously Insufficient Logging & Monitoring and is added from the industry survey (#3), moving up from #10 previously. This category is expanded to include more types of failures, is challenging to test for, and isn’t well represented in the CVE/CVSS data. However, failures in this category can directly impact visibility, incident alerting, and forensics.
+A10:2021-Server-Side Request Forgery is added from the Top 10 community survey (#1). The data shows a relatively low incidence rate with above average testing coverage, along with above-average ratings for Exploit and Impact potential. This category represents the scenario where the security community members are telling us this is important, even though it’s not illustrated in the data at this time.
+
+
+https://owasp.org/www-project-top-ten/ 
