@@ -1,16 +1,24 @@
-name: Build documentation
+name: Convert Markdown to PDF
 
 on:
-    push:
-        branches:
-            - feature/report
-    
+  push:
+    branches:
+      - feature/report
 
 jobs:
-  convert_via_pandoc:
-    runs-on: ubuntu-22.04
+  build:
+    runs-on: ubuntu-latest
+
     steps:
-        - run: cd 
-        - uses: docker://pandoc/core:2.9
-        with:
-          args: "--help" # gets appended to pandoc command
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Install Pandoc
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y pandoc
+
+    - name: Convert Markdown to PDF
+      run: |
+        cd report && pandoc report.md -o ./build/report.pdf
+      working-directory: ${{ github.workspace }}
