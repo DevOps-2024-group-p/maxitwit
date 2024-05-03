@@ -18,6 +18,8 @@
 
 #### Module Viewpoint
 
+The module viewpoint can be described as a mapping of functional requriements to static code blocks [SRC]. To effectively capture this, the following class diagram presents the components of the web-app mapped to their respective dependencies.
+
 ```mermaid
 classDiagram
     direction RL
