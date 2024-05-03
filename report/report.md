@@ -1,6 +1,6 @@
 # DevOps, Software Evolution & Software Maintenance
 
-## Group P - 2024
+## Group P, 2024
 
 ## Authors
 
@@ -12,29 +12,11 @@
 | Michel Moritz Thies | <mithi@itu.dk> |
 | Róbert Sluka | <rslu@itu.dk> |
 
-## System's Perspective
+## System Perspective
 
+### Viewpoints
 
-### Sequence diagram, simulator
-
-```mermaid
-sequenceDiagram
-    participant Simulator
-    participant API
-    participant Database
-    Alice->>John: Hello John, how are you?
-    loop HealthCheck
-        John->>John: Fight against hypochondria
-    end
-    Note right of John: Rational thoughts <br/>prevail!
-    John-->>Alice: Great!
-    John->>Bob: How about you?
-    Bob-->>John: Jolly good!
-```
-
-
-
-### Module Viewpoint
+#### Module Viewpoint
 
 ```mermaid
 classDiagram
@@ -79,9 +61,10 @@ classDiagram
 
 ```
 
-### Components Viewpoint
+#### Components Viewpoint
 
-### Deplyoment Viewpoint
+#### Deplyoment Viewpoint
+
 ```mermaid
 flowchart LR
 
@@ -100,10 +83,7 @@ flowchart LR
 
 ```
 
-
-
-
-## Process' Perspective
+### Important interactions
 
 ```mermaid
 ---
@@ -117,11 +97,18 @@ sequenceDiagram
     participant Postgres DB
     Simulator->>+API: Sends automated HTTP requests<br>Register, Follow, Unfollow, Tweet
     API->>-Prisma Client: Processes and sends data
+    activate Prisma Client
     Prisma Client->>+Postgres DB: Saves into DB based on schema 
+    deactivate Prisma Client
     Postgres DB->>Postgres DB: Stores data <br>Generates unique ID
     Postgres DB-->>-Prisma Client: Sends response
+    activate Prisma Client
     Prisma Client-->>+API: Sends response
+    deactivate Prisma Client
+
     API-->>-Simulator: Sends HTTP response 
 ```
+
+## Process Perspective
 
 ## Lessons Learned
