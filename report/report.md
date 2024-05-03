@@ -85,6 +85,13 @@ flowchart LR
 
 ### Important interactions
 
+The system can be interaceted with in two ways:
+
+* [User Interface](https://maxitwit.tech)
+* [API for the simulator](https://api.maxitwit.tech)
+
+A user (or the simulator) can register, follow/unfollow other users and send tweets.
+
 ```mermaid
 ---
 title: Sequence Diagram - Simulator Interaction
@@ -110,5 +117,7 @@ sequenceDiagram
 ```
 
 ## Process Perspective
+
+Why: ExpressJS, Prisma, Postgres
 
 ## Lessons Learned
