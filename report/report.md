@@ -84,12 +84,14 @@ classDiagram
 ### Deplyoment Viewpoint
 ```mermaid
 flowchart LR
+
     subgraph "Digital Ocean"
-        PROXY["Proxy"] --- SM["Swarm Manager"]
-        SM --- SW1["Swarm Worker_1"]
-        id1[("Database")] ---|Prisma| SW1
+    
+        PROXY["Proxy"] --- SM["Swarm-Manager"]
+        SM --- SW1["Worker1"]
+        id1[("Postgres DB")] ---|Prisma| SW1
         id1 ---|Prisma| SW2
-        SM --- SW2["Swarm Worker_2"]
+        SM --- SW2["Worker2"]
         SW1 --- |Prometheus|Monitoring
         SW2 --- |Prometheus|Monitoring
 
