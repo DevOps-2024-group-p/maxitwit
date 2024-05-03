@@ -7,12 +7,63 @@
 | Name | Email |
 |------|-------|
 | Andreas Andrä-Fredsted | <aandr@itu.dk> |
+| Bence Luzsinszky | <bluz@itu.dk> |
 | Christian Emil Nielsen | <cemn@itu.dk> |
 | Michel Moritz Thies | <mithi@itu.dk> |
 | Róbert Sluka | <rslu@itu.dk> |
-| Bence Luzsinszky | <bluz@itu.dk> |
 
 ## System's Perspective
+
+## Module/Package abstraction diagram
+
+```mermaid
+erDiagram
+    Maxitwit-GUI
+    Maxitwit-API
+
+    Domain-Model }|..|{ Maxitwit-GUI : recieves_request
+    Domain-Model }|..|{ Maxitwit-API : recieves_request
+    Domain-Model }|..|{ Logging-Service : sends_logs
+    Domain-Model }|..|{ Monitoring-Service : makes_available
+    Domain-Model }|..|{ Database-Service : sends_request
+    Database-Service }|..|{ Domain-Model : answers_request
+
+
+```
+
+### Sequence diagram, simulator
+
+```mermaid
+sequenceDiagram
+    participant Simulator
+    participant API
+    participant Database
+    Alice->>John: Hello John, how are you?
+    loop HealthCheck
+        John->>John: Fight against hypochondria
+    end
+    Note right of John: Rational thoughts <br/>prevail!
+    John-->>Alice: Great!
+    John->>Bob: How about you?
+    Bob-->>John: Jolly good!
+```
+
+### Sequence diagram, application
+
+```mermaid
+sequenceDiagram
+    participant Simulator
+    participant API
+    participant Database
+    Alice->>John: Hello John, how are you?
+    loop HealthCheck
+        John->>John: Fight against hypochondria
+    end
+    Note right of John: Rational thoughts <br/>prevail!
+    John-->>Alice: Great!
+    John->>Bob: How about you?
+    Bob-->>John: Jolly good!
+```
 
 ### Module Viewpoint
 
