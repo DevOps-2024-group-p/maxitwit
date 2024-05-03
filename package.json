@@ -18,8 +18,7 @@
     "format": "prettier --write .",
     "test": "./scripts/test.sh -d",
     "simulator": "python3 src/api/minitwit_simulator.py http://localhost:3001",
-    "release": "semantic-release",
-    "release:dry-run": "semantic-release --dry-run"
+    "release": "semantic-release"
   },
   "dependencies": {
     "@prisma/client": "^5.11.0",
