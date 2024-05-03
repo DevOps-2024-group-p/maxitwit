@@ -14,43 +14,31 @@
 
 ## System's Perspective
 
-### Sequence diagram, simulator
-
-```mermaid
-sequenceDiagram
-    actor Simulator
-    participant API
-    participant Postgres DB
-    Simulator-)API: Autmated tweets
-    activate API
-    API-)Postgres DB: Prisma ORM 
-    activate Postgres DB
-    Postgres DB->>Postgres DB:  
-    activate Postgres DB
-    Postgres DB-->>API: Flash messages
-    activate Postgres DB
-    API-->>Simulator: HTTP Response
-```
-
 ### Module Viewpoint
-
-```mermaid
-classDiagram
-
-    class API {
-    }
-    class Server {
-    }
-    class PostgreSQL {
-    }
-    API --> Server : sends request
-    Server --> PostgreSQL : queries database
-```
 
 ### Components Viewpoint
 
 ### Deplyoment Viewpoint
 
 ## Process' Perspective
+
+```mermaid
+---
+title: Sequence Diagram - Simulator Interaction
+---
+sequenceDiagram
+    autonumber
+    actor Simulator
+    participant API
+    participant Prisma Client
+    participant Postgres DB
+    Simulator->>+API: Sends automated HTTP requests<br>Register, Follow, Unfollow, Tweet
+    API->>-Prisma Client: Processes and sends data
+    Prisma Client->>+Postgres DB: Saves into DB based on schema 
+    Postgres DB->>Postgres DB: Stores data <br>Generates unique ID
+    Postgres DB-->>-Prisma Client: Sends response
+    Prisma Client-->>+API: Sends response
+    API-->>-Simulator: Sends HTTP response 
+```
 
 ## Lessons Learned
