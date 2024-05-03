@@ -19,14 +19,16 @@
 
 ```mermaid
 erDiagram
-          CUSTOMER }|..|{ DELIVERY-ADDRESS : has
-          CUSTOMER ||--o{ ORDER : places
-          CUSTOMER ||--o{ INVOICE : "liable for"
-          DELIVERY-ADDRESS ||--o{ ORDER : receives
-          INVOICE ||--|{ ORDER : covers
-          ORDER ||--|{ ORDER-ITEM : includes
-          PRODUCT-CATEGORY ||--|{ PRODUCT : contains
-          PRODUCT ||--o{ ORDER-ITEM : "ordered in"
+    Maxitwit-GUI
+    Maxitwit-API
+
+    Domain-Model }|..|{ Maxitwit-GUI : recieves_request
+    Domain-Model }|..|{ Maxitwit-API : recieves_request
+    Domain-Model }|..|{ Logging-Service : sends_logs
+    Domain-Model }|..|{ Monitoring-Service : makes_available
+    Domain-Model }|..|{ Database-Service : sends_request
+    Database-Service }|..|{ Domain-Model : answers_request
+
 
 ```
 
