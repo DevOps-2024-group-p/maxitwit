@@ -19,16 +19,44 @@
 ## Module/Package abstraction diagram
 
 ```mermaid
-erDiagram
-    Maxitwit-GUI
-    Maxitwit-API
+classDiagram
+    direction RL
 
-    Domain-Model }|..|{ Maxitwit-GUI : recieves_request
-    Domain-Model }|..|{ Maxitwit-API : recieves_request
-    Domain-Model }|..|{ Logging-Service : sends_logs
-    Domain-Model }|..|{ Monitoring-Service : makes_available
-    Domain-Model }|..|{ Database-Service : sends_request
-    Database-Service }|..|{ Domain-Model : answers_request
+    class Monitoring
+    class Logging-System
+    class Database-System
+
+
+    class Domain-Model {
+        ExpressJS[
+            +views
+            +routes
+            +prisma
+            +services
+        ]
+    }
+    
+    class API-endpoint
+    class GUI-endpoint
+
+    Monitoring "1"--"*" Domain-Model : makes accessible
+    Logging-System "*"--"1" Domain-Model : sends data
+    Database-System "1"--"*" Domain-Model : updates
+
+    Domain-Model --* API-endpoint : provides
+    Domain-Model --* GUI-endpoint : provides
+  
+
+    API-endpoint : recieves HTTP requests 
+    GUI-endpoint : recieves HTTP requests 
+
+    Logging-System : Fluentd
+    Logging-System : Syslogs
+
+    Monitoring : Prometheus
+    Monitoring : Grafana
+
+    Database-System : PostgreSQL
 
 
 ```
