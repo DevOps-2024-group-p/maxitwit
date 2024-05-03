@@ -22,5 +22,5 @@ jobs:
 
     - name: Convert Markdown to PDF
       run: |
-        cd report && pandoc report.md -o ./build/report.pdf --pdf-engine=pdflatex
+        cd report && pandoc report.md -o ./build/report.pdf --pdf-engine=xelatex
       working-directory: ${{ github.workspace }}
