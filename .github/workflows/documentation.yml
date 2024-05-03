@@ -1,9 +1,10 @@
-name: Convert Markdown to PDF
+name: Build report
 
 on:
   push:
     branches:
       - feature/report
+      - main
 
 jobs:
   build:
@@ -17,8 +18,9 @@ jobs:
       run: |
         sudo apt-get update
         sudo apt-get install -y pandoc
+        sudo apt-get install texlive-latex-base
 
     - name: Convert Markdown to PDF
       run: |
-        cd report && pandoc report.md -o ./build/report.pdf
+        cd report && pandoc report.md -o ./build/report.pdf --pdf-engine=pdflatex
       working-directory: ${{ github.workspace }}
