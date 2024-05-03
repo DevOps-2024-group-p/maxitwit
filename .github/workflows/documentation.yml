@@ -1,26 +1,11 @@
-name: Build report
+name: Build docs
 
-on:
-  push:
-    branches:
-      - feature/report
-      - main
+on: push
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-
+  convert_via_pandoc:
+    runs-on: ubuntu-22.04
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
-
-    - name: Install Pandoc
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y pandoc
-        sudo apt-get install texlive-latex-base
-
-    - name: Convert Markdown to PDF
-      run: |
-        cd report && pandoc report.md -o ./build/report.pdf --pdf-engine=xelatex
-      working-directory: ${{ github.workspace }}
+      - uses: docker://pandoc/core:2.9
+        with:
+          args: "./report/report.md -o ./report/build/report.pdf --pdf-engine=xelatex" # gets appended to pandoc command
