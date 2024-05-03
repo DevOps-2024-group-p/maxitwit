@@ -53,3 +53,4 @@ jobs:
           TARGET: production
           SESSION_SECRET: ${{ secrets.SESSION_SECRET }}
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          CICD_DB_PASSWORD: ${{ secrets.CICD_DB_PASSWORD }}
