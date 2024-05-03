@@ -18,34 +18,18 @@
 
 ```mermaid
 sequenceDiagram
-    participant Simulator
+    actor Simulator
     participant API
-    participant Database
-    Alice->>John: Hello John, how are you?
-    loop HealthCheck
-        John->>John: Fight against hypochondria
-    end
-    Note right of John: Rational thoughts <br/>prevail!
-    John-->>Alice: Great!
-    John->>Bob: How about you?
-    Bob-->>John: Jolly good!
-```
-
-### Sequence diagram, application
-
-```mermaid
-sequenceDiagram
-    participant Simulator
-    participant API
-    participant Database
-    Alice->>John: Hello John, how are you?
-    loop HealthCheck
-        John->>John: Fight against hypochondria
-    end
-    Note right of John: Rational thoughts <br/>prevail!
-    John-->>Alice: Great!
-    John->>Bob: How about you?
-    Bob-->>John: Jolly good!
+    participant Postgres DB
+    Simulator-)API: Autmated tweets
+    activate API
+    API-)Postgres DB: Prisma ORM 
+    activate Postgres DB
+    Postgres DB->>Postgres DB:  
+    activate Postgres DB
+    Postgres DB-->>API: Flash messages
+    activate Postgres DB
+    API-->>Simulator: HTTP Response
 ```
 
 ### Module Viewpoint
