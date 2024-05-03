@@ -14,6 +14,10 @@
 
 ## System Perspective
 
+### Architecture
+
+### Dependencies
+
 ### Viewpoints
 
 #### Module Viewpoint
@@ -116,9 +120,19 @@ sequenceDiagram
     API-->>-Simulator: Sends HTTP response 
 ```
 
+### Current State
+
 ## Process Perspective
 
 Why: ExpressJS, Prisma, Postgres
+
+### CI/CD pipline
+
+### Monitoring
+
+### Security Assesment
+
+### Scaling strategy
 
 ## Lessons Learned
 
