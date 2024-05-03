@@ -7,12 +7,13 @@
 | Name | Email |
 |------|-------|
 | Andreas Andrä-Fredsted | <aandr@itu.dk> |
+| Bence Luzsinszky | <bluz@itu.dk> |
 | Christian Emil Nielsen | <cemn@itu.dk> |
 | Michel Moritz Thies | <mithi@itu.dk> |
 | Róbert Sluka | <rslu@itu.dk> |
-| Bence Luzsinszky | <bluz@itu.dk> |
 
 ## System's Perspective
+
 
 ### Sequence diagram, simulator
 
@@ -37,15 +38,45 @@ sequenceDiagram
 
 ```mermaid
 classDiagram
+    direction RL
 
-    class API {
+    class Monitoring
+    class Logging-System
+    class Database-System
+
+
+    class Domain-Model {
+        ExpressJS[
+            +views
+            +routes
+            +prisma
+            +services
+        ]
     }
-    class Server {
-    }
-    class PostgreSQL {
-    }
-    API --> Server : sends request
-    Server --> PostgreSQL : queries database
+    
+    class API-endpoint
+    class GUI-endpoint
+
+    Monitoring "1"--"*" Domain-Model : makes accessible
+    Logging-System "*"--"1" Domain-Model : sends data
+    Database-System "1"--"*" Domain-Model : updates
+
+    Domain-Model --* API-endpoint : provides
+    Domain-Model --* GUI-endpoint : provides
+  
+
+    API-endpoint : recieves HTTP requests 
+    GUI-endpoint : recieves HTTP requests 
+
+    Logging-System : Fluentd
+    Logging-System : Syslogs
+
+    Monitoring : Prometheus
+    Monitoring : Grafana
+
+    Database-System : PostgreSQL
+
+
 ```
 
 ### Components Viewpoint
@@ -71,5 +102,24 @@ flowchart LR
 
 
 ## Process' Perspective
+
+```mermaid
+---
+title: Sequence Diagram - Simulator Interaction
+---
+sequenceDiagram
+    autonumber
+    actor Simulator
+    participant API
+    participant Prisma Client
+    participant Postgres DB
+    Simulator->>+API: Sends automated HTTP requests<br>Register, Follow, Unfollow, Tweet
+    API->>-Prisma Client: Processes and sends data
+    Prisma Client->>+Postgres DB: Saves into DB based on schema 
+    Postgres DB->>Postgres DB: Stores data <br>Generates unique ID
+    Postgres DB-->>-Prisma Client: Sends response
+    Prisma Client-->>+API: Sends response
+    API-->>-Simulator: Sends HTTP response 
+```
 
 ## Lessons Learned
