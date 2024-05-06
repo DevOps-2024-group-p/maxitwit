@@ -46,7 +46,7 @@ classDiagram
     class GUI-endpoint
 
     Monitoring "1"--"*" Domain-Model : makes accessible
-    Logging-System "*"--"1" Domain-Model : sends data
+    Logging-System "1"--"1" Domain-Model : sends data
     Database-System "1"--"*" Domain-Model : updates
 
     Domain-Model --* API-endpoint : provides
@@ -66,7 +66,10 @@ classDiagram
 
 
 ```
-
+The above module viewpoint highlights how the expressjs application interacts with numerous systems with some being 
+dependencies required for the running of the application, such as the postgres database, while others are tools meant for
+tasks such as monitoring and logging. What is not covered in this illustration is the framework in which the application is run and managed, 
+which is covered in the following viewpoints.
 #### Components Viewpoint
 
 #### Deployment Viewpoint
