@@ -69,7 +69,7 @@ classDiagram
 
 #### Components Viewpoint
 
-#### Deplyoment Viewpoint
+#### Deployment Viewpoint
 
 ```mermaid
 flowchart LR
@@ -175,10 +175,10 @@ Our CI/CD pipleine is based on **Github Actions**. We have a [deploy.yml](https:
 title: CI/CD Pipeline
 ---
 flowchart LR
-        id0("Prepare")--"✓"-->id1("Build and Push")
-        id1--"✓"-->id2("Test")
-        id2--"✓"-->id3("Set up VM")
-        id3--"✓"-->id4("Deploy")
+        id0("Prepare")-->id1("Build and Push")
+        id1-->id2("Test")
+        id2-->id3("Set up VM")
+        id3-->id4("Deploy")
 
         style id0 fill:#FFDB5C
         style id1 fill:#5AB2FF
@@ -254,21 +254,6 @@ We used Docker Swarm for horizontal scaling. The strategy is defined in [compose
 One manager node is responsible for the load balancing and the health checks of two worker nodes.
 Worker nodes we have 6 replicas of the service running.
 We update our system with rolling upgrades. The replicas are updated 2 at a time, with 10s interval between the updates. The health of the service is monitored every 10s. If the service fails, it will be restarted with a maximum of 2 attempts.
-
-```yaml
-    deploy:
-      mode: replicated
-      replicas: 6
-      restart_policy:
-        condition: on-failure
-        delay: 5s
-        max_attempts: 2
-        window: 120s
-      update_config:
-        parallelism: 2
-        delay: 10s
-        monitor: 10s
-```
 
 ## Lessons Learned
 
