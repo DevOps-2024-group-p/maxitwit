@@ -156,6 +156,7 @@ title: Git branching strategy
        checkout feature
        merge main
 ```
+
 The chosen branching strategy loosely follows the [Gitflow](https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow) workflow. We chose to omit hotfix branches and merge the concept of a main/develop branch for simplicity. CI pipeline is triggered on open pull-requests from feature to main. CD pipeline is triggered on new commits on release. Release tag is bumped according to the contents of the release, using the [semantic versioning](https://semver.org/) protocol.
 
 ### Commit hooks
@@ -236,9 +237,29 @@ Finally we SSH onto the Swarm Manager and run the [deploy.sh](https://github.com
 
 ### Security Assesment
 
-- TODO sentence about our pipelines using root users which violates [PloP](https://www.paloaltonetworks.com/cyberpedia/what-is-the-principle-of-least-privilege)
+* TODO sentence about our pipelines using root users which violates [PloP](https://www.paloaltonetworks.com/cyberpedia/what-is-the-principle-of-least-privilege)
 
 ### Scaling strategy
+
+We used Docker Swarm for horizontal scaling. The strategy is defined in [compose.yml](https://github.com/DevOps-2024-group-p/maxitwit/blob/main/remote_files/compose.yaml).
+One manager node is responsible for the load balancing and the health checks of two worker nodes.
+Worker nodes we have 6 replicas of the service running.
+We update our system with rolling upgrades. The replicas are updated 2 at a time, with 10s interval between the updates. The health of the service is monitored every 10s. If the service fails, it will be restarted with a maximum of 2 attempts.
+
+```yaml
+    deploy:
+      mode: replicated
+      replicas: 6
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 2
+        window: 120s
+      update_config:
+        parallelism: 2
+        delay: 10s
+        monitor: 10s
+```
 
 ## Lessons Learned
 
