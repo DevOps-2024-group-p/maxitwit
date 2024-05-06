@@ -10,8 +10,7 @@ updates:
     directory: "/"
     schedule:
       interval: "daily"
-  # Vagrant setup updates
-  - package-ecosystem: "vagrant"
+  - package-ecosystem: "pip"
     directory: "/"
     schedule:
       interval: "daily"
