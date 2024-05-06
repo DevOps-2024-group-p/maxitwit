@@ -128,6 +128,40 @@ sequenceDiagram
 
 Why: ExpressJS, Prisma, Postgres
 
+## Branching strategy
+
+```mermaid
+---
+title: Git branching strategy
+---
+%%{init: { 'logLevel': 'debug', 'theme': 'base', 'gitGraph': {'showBranches': true, 'showCommitLabel':true,'mainBranchName': 'release'}} }%% 
+    gitGraph
+       commit
+       commit tag: "v1.4.0"
+       branch main
+       checkout main
+       commit
+       checkout release
+       checkout main
+       branch feature
+       checkout feature
+       commit id: "fix: increment counter"
+       checkout release
+       checkout main
+       commit
+       checkout release
+       merge main id: "release" tag: "v1.4.1" type: REVERSE
+       checkout feature
+       checkout release
+       checkout feature
+       merge main
+```
+The chosen branching strategy loosely follows the [Gitflow](https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow) workflow. We chose to omit hotfix branches and merge the concept of a main/develop branch for simplicity. CI pipeline is triggered on open pull-requests from feature to main. CD pipeline is triggered on new commits on release. Release tag is bumped according to the contents of the release, using the [semantic versioning](https://semver.org/) protocol.
+
+### Commit hooks
+
+A pre-commit hook was added in [d40fcba](https://github.com/DevOps-2024-group-p/maxitwit/commit/d40fcba312eb082bda44bd220887f3d7574a7a40) to lint and enforce commit messages and to follow the [semantic versioning](https://semver.org/) protocol. A [CLI-tool](https://github.com/commitizen/cz-cli) was also [added](https://github.com/DevOps-2024-group-p/maxitwit/commit/44eec0ba28e7cad2000d6f1bcbf9db3c667b3862) to aid developers write commit messages that follows the chosen protocol. Effectively standardizing a common development process, improving our process quality and readability of the git log.
+
 ### CI/CD pipline
 
 Our CI/CD pipleine is based on **Github Actions**. We have a [deploy.yml](https://github.com/DevOps-2024-group-p/maxitwit/blob/main/.github/workflows/deploy.yml) file that is automatically triggered when new data is pushed to the **release branch**.
