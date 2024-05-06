@@ -148,6 +148,8 @@ flowchart LR
         style id3 fill:#FFBB70
 ```
 
+We prepare the workflow by checking out to our release branch, logging in to Docker Hub and setting up Docker Buildx so it can build the images.
+
 ```mermaid
 flowchart TB
     subgraph P["Prepare the workflow"]
@@ -157,6 +159,8 @@ flowchart TB
     
     style P fill:#FFDB5C
 ```
+
+Th workflow builds our images and pushes them to Docker Hub.
 
 ```mermaid
 flowchart TB
@@ -169,6 +173,8 @@ flowchart TB
     style B fill:#5AB2FF
 ```
 
+The workflow runs snyk to check for vulerabilities, then builds our images and runs our tests suite against them.
+
 ```mermaid
 flowchart TB
     subgraph T["Test"]
@@ -177,6 +183,8 @@ flowchart TB
 
     style T fill:#7ABA78
 ```
+
+The environment variables stored in GitHub Actions Secrets are given to the workers and the most recent [/remote_files](https://github.com/DevOps-2024-group-p/maxitwit/tree/main/remote_files) are SCPd to the Swarm Manager.
 
 ```mermaid
 flowchart TB
@@ -187,6 +195,8 @@ flowchart TB
 
     style S fill:#FFBB70
 ```
+
+Finally we SSH onto the Swarm Manager and run the [deploy.sh](https://github.com/DevOps-2024-group-p/maxitwit/blob/main/remote_files/deploy.sh) script to pull and build the new images.
 
 ### Monitoring
 
