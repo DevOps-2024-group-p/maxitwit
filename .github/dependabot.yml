@@ -1,0 +1,17 @@
+version: 2
+updates:
+  # npm dependencies
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "daily"
+  # Docker image updates
+  - package-ecosystem: "docker"
+    directory: "/"
+    schedule:
+      interval: "daily"
+  # Vagrant setup updates
+  - package-ecosystem: "vagrant"
+    directory: "/"
+    schedule:
+      interval: "daily"
