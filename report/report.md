@@ -72,6 +72,21 @@ tasks such as monitoring and logging. What is not covered in this illustration i
 which is covered in the following viewpoints.
 #### Components Viewpoint
 
+```mermaid
+graph LR;
+    id1[Browser]
+    id2[Simulator]
+    id3[Expressjs]
+    id4[Services]
+    id5[Prisma]
+    id6[Postgres]
+
+    id1-->id3
+    id2-->id3
+    id3-->id4
+    id4-->id5
+    id5-->id6
+```
 #### Deployment Viewpoint
 
 ```mermaid
