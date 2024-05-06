@@ -130,6 +130,64 @@ Why: ExpressJS, Prisma, Postgres
 
 ### CI/CD pipline
 
+Our CI/CD pipleine is based on **Github Actions**. We have a [deploy.yml](https://github.com/DevOps-2024-group-p/maxitwit/blob/main/.github/workflows/deploy.yml) file that is automatically triggered when new data is pushed to the **release branch**.
+
+```mermaid
+---
+title: CI/CD Pipeline
+---
+flowchart LR
+        id0("Prepare")--"✓"-->id1("Build and Push")
+        id1--"✓"-->id2("Test")
+        id2--"✓"-->id3("Set up VM")
+        id3--"✓"-->id4("Deploy")
+
+        style id0 fill:#FFDB5C
+        style id1 fill:#5AB2FF
+        style id2 fill:#7ABA78
+        style id3 fill:#FFBB70
+```
+
+```mermaid
+flowchart TB
+    subgraph P["Prepare the workflow"]
+        id0("Checkout")-->id1("Login to Docker Hub")
+        id1-->id2("Set up Docker Buildx") 
+    end
+    
+    style P fill:#FFDB5C
+```
+
+```mermaid
+flowchart TB
+    subgraph B["Build and Push to Docker Hub"]
+        id0("Maxitwit server")-->id1("Maxitwit api")
+        id1-->id2("Maxitwit test")
+        id2-->id3("Fluentd image") 
+    end
+
+    style B fill:#5AB2FF
+```
+
+```mermaid
+flowchart TB
+    subgraph T["Test"]
+        id0("Run Snyk")-->id1("Test maxitwit")
+    end
+
+    style T fill:#7ABA78
+```
+
+```mermaid
+flowchart TB
+    subgraph S["Set up VMs"]
+        id0("Configure SSH")-->id1("Provision env vars to Workers")
+        id1-->id2("Provision /remote_files to Swarm Manager")
+    end
+
+    style S fill:#FFBB70
+```
+
 ### Monitoring
 
 ### Security Assesment
