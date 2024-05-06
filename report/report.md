@@ -236,6 +236,8 @@ Finally we SSH onto the Swarm Manager and run the [deploy.sh](https://github.com
 
 ### Security Assesment
 
+- TODO sentence about our pipelines using root users which violates [PloP](https://www.paloaltonetworks.com/cyberpedia/what-is-the-principle-of-least-privilege)
+
 ### Scaling strategy
 
 ## Lessons Learned
