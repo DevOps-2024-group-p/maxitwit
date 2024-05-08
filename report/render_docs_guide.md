@@ -1,6 +1,6 @@
-## how to render docs
+# How to render docs
 
-### dependencies
+## Install dependencies
 
 ```bash
 sudo apt install pandoc
@@ -16,11 +16,16 @@ sudo apt-get install texlive-fonts-extra
 sudo apt-get install texlive-latex-extra
 ```
 
-- pandoc
-- some pdf latex engine
-- [mermaid filter](https://github.com/raghur/mermaid-filter)
+## Create .pdf
 
 ```bash
 cd report
-andoc -s -o report.pdf --pdf-engine=pdflatex --filter mermaid-filter ./report.md
+
+pandoc -s -N -o report.pdf \
+-V colorlinks=true \
+-V linkcolor=blue \
+--pdf-engine=pdflatex \
+-V urlcolor=blue \
+--filter mermaid-filter \
+./report.md
 ```

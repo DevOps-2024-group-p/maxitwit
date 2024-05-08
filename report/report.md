@@ -1,26 +1,31 @@
-# DevOps, Software Evolution & Software Maintenance
+---
+title: DevOps, Software Evolution & Software Maintenance
+subtitle: Group P - Maxitwit
+author: |
+    | Andreas Andrä-Fredsted - aandr@itu.dk
+    | Bence Luzsinszky - bluz@itu.dk
+    | Christian Emil Nielsen - cemn@itu.dk
+    | Michel Moritz Thies - mithi@itu.dk
+    | Róbert Sluka - rslu@itu.dk 
+date: 2024
+toc: true
+toc-depth: 3
+include-before: |
+    \maketitle
+    \newpage
+---
 
-## Group P, 2024
+\newpage
 
-## Authors
+# System Perspective
 
-| Name | Email |
-|------|-------|
-| Andreas Andrä-Fredsted | <aandr@itu.dk> |
-| Bence Luzsinszky | <bluz@itu.dk> |
-| Christian Emil Nielsen | <cemn@itu.dk> |
-| Michel Moritz Thies | <mithi@itu.dk> |
-| Róbert Sluka | <rslu@itu.dk> |
+## Architecture
 
-## System Perspective
+## Dependencies
 
-### Architecture
+## Viewpoints
 
-### Dependencies
-
-### Viewpoints
-
-#### Module Viewpoint
+### Module Viewpoint
 
 To effectively capture this, the following class diagram presents the components of the web-app mapped to their respective dependencies.
 
@@ -70,7 +75,7 @@ dependencies required for the running of the application, such as the postgres d
 tasks such as monitoring and logging. What is not covered in this illustration is the framework in which the application is run and managed,
 which is covered in the following viewpoints.
 
-#### Components Viewpoint
+### Components Viewpoint
 
 ```mermaid
 graph LR;
@@ -88,7 +93,7 @@ graph LR;
     id5-->id6
 ```
 
-#### Deployment Viewpoint
+### Deployment Viewpoint
 
 ```mermaid
 flowchart LR
@@ -108,7 +113,7 @@ flowchart LR
 
 ```
 
-### Important interactions
+## Important interactions
 
 The system can be interaceted with in two ways:
 
@@ -141,12 +146,12 @@ sequenceDiagram
     API-->>-Simulator: Sends HTTP response 
 ```
 
-### Current State
+## Current State
 
 ![Sonarcloud screenshot](./images/sonarcloud.png)
 The application is practically fully functional, apart from a single outstanding [bug](https://github.com/DevOps-2024-group-p/maxitwit/issues/42). While the application has [minimal technical debt](https://sonarcloud.io/summary/overall?id=fridge7809_maxitwit), it relies on legacy code and dependencies to test the application (test suite and simulator).
 
-## Process Perspective
+# Process Perspective
 
 Why: ExpressJS, Prisma, Postgres
 
@@ -185,11 +190,11 @@ Opening a pull request from a feature branch to main triggers the CI pipline.
 
 Succesfully merging a pull request to the release branch triggers the CD pipeline. Release tag is bumped according to the contents of the release, using the [semantic versioning](https://semver.org/) protocol.
 
-### Commit hooks
+## Commit hooks
 
 A pre-commit hook was added in [d40fcba](https://github.com/DevOps-2024-group-p/maxitwit/commit/d40fcba312eb082bda44bd220887f3d7574a7a40) to lint and enforce commit messages and to follow the [semantic versioning](https://semver.org/) protocol. A [CLI-tool](https://github.com/commitizen/cz-cli) was also [added](https://github.com/DevOps-2024-group-p/maxitwit/commit/44eec0ba28e7cad2000d6f1bcbf9db3c667b3862) to aid developers write commit messages that follows the chosen protocol. Effectively standardizing a common development process, improving our process quality and readability of the git log.
 
-### CI/CD pipline
+## CI/CD pipline
 
 Our CI/CD pipleine is based on **Github Actions**. We have a [deploy.yml](https://github.com/DevOps-2024-group-p/maxitwit/blob/main/.github/workflows/deploy.yml) file that is automatically triggered when new data is pushed to the **release branch**.
 
@@ -259,7 +264,7 @@ flowchart TB
 
 Finally we SSH onto the Swarm Manager and run the [deploy.sh](https://github.com/DevOps-2024-group-p/maxitwit/blob/main/remote_files/deploy.sh) script to pull and build the new images.
 
-### Monitoring
+## Monitoring
 
 We use Prometheus and Grafana for [monitoring](http://144.126.246.214:3002/d/c8583637-71f4-4803-a0ed-f63485c5c3e6/group-p-public-dashboard?orgId=1&from=1715001375446&to=1715004975446).
 There are multiple metrics set up in our backend, that are sent to /metrics enpoint on our both our [GUI](https://maxitwit.tech/metrics) and the [API](http://api.maxitwit.tech/metrics).
@@ -267,35 +272,35 @@ Prometheus scrapes these endpoints and Grafana visualizes the data.
 
 We set up a separate Droplet on DigitalOcean for monitoring, because we had issues with its resource consumption. The monitoring droplet runs Prometheus and Grafana, and scrapes the metrics from the Worker nodes of the Docker swarm.
 
-### Security Assesment
+## Security Assesment
 
 * TODO sentence about our pipelines using root users which violates [PloP](https://www.paloaltonetworks.com/cyberpedia/what-is-the-principle-of-least-privilege)
 
 According to the documentation that can be found [Restricitons to ssh](https://superuser.com/questions/1751932/what-are-the-restrictions-to-ssh-stricthostkeychecking-no), we are aware that setting the flag for StrictHostKeyChecking to "no", might result in malicious parties being able to access the super user console of our system. Setting it to yes would prevent third parties from enterying our system and only known hosts would be able to.
 
-### Scaling strategy
+## Scaling strategy
 
 We used Docker Swarm for horizontal scaling. The strategy is defined in [compose.yml](https://github.com/DevOps-2024-group-p/maxitwit/blob/main/remote_files/compose.yaml).
 One manager node is responsible for the load balancing and the health checks of two worker nodes.
 Worker nodes we have 6 replicas of the service running.
 We update our system with rolling upgrades. The replicas are updated 2 at a time, with 10s interval between the updates. The health of the service is monitored every 10s. If the service fails, it will be restarted with a maximum of 2 attempts.
 
-## Lessons Learned
+# Lessons Learned
 
-### Evolution and refactoring
+## Evolution and refactoring
 
-#### Implementation of Logging
+### Implementation of Logging
 
 The evolution to the docker swarm architecture made the reconfiguration of subsystems a necessity. Specifically the reimplementation of logs proved difficult, as we had to sync logs across workers. To achieve this, it was attempted to have fluentd containers in each worker gather logs and send them to a seperate digital ocean droplet with elasticsearch and kibana running. This however proved infeasable within the constraints of this class, as elasticsearch kept crashing due to the limited resources provided to it on the droplet. Thus, we defaulted to store logs in a /logs folder on the droplet also containing the load balancer. Overall, this proved a learning experience for how a change to the tech-stack can make other segments obsolete, thus increasing the amount of refactoring required for a change to be feasible. In this specific case, a migration to the EFK-stack before the implementation of the docker swarm would have allowed for a more seemless and robust evolution of the application.
 
-### Operation
+## Operation
 
-### Maintenance
+## Maintenance
 
-#### Issues with monitoring
+### Issues with monitoring
 
 Our inbuilt metrics for prometheus turned out to be [very resource demanding](https://github.com/DevOps-2024-group-p/maxitwit/issues/83). So much that building the Prometheus container instantly started using 100% CPU and RAM of our droplet. This was solved by reducing the unnecesarry metrics and moving the Monitoring to its own droplet.
 
-#### Maintaining a performant DB
+### Maintaining a performant DB
 
 We noticed the performance of the public timeline endpoint getting slower as the database grew. To remedy this, we [wrote a shell script](https://github.com/DevOps-2024-group-p/maxitwit/blob/fd72ed600e3e7d8e6e8a5d96885e52b495a0b85e/sql/grab_perf_stats.sql) to query the performance table of our production database to [identify which relations needed indices](https://github.com/DevOps-2024-group-p/maxitwit/pull/79).
