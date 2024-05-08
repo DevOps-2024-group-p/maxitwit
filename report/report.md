@@ -87,6 +87,7 @@ graph LR;
     id4-->id5
     id5-->id6
 ```
+
 #### Deployment Viewpoint
 
 ```mermaid
@@ -157,28 +158,32 @@ title: Git branching strategy
 ---
 %%{init: { 'logLevel': 'debug', 'theme': 'base', 'gitGraph': {'showBranches': true, 'showCommitLabel':true,'mainBranchName': 'release'}} }%% 
     gitGraph
-       commit
-       commit tag: "v1.4.0"
-       branch main
-       checkout main
-       commit
-       checkout release
-       checkout main
-       branch feature
-       checkout feature
-       commit id: "fix: increment counter"
-       checkout release
-       checkout main
-       commit
-       checkout release
-       merge main id: "release" tag: "v1.4.1" type: REVERSE
-       checkout feature
-       checkout release
-       checkout feature
-       merge main
+        commit tag: "v1.4.0" id:" "
+        branch main
+        checkout main
+        branch feature
+        checkout feature
+        commit id: "feat: add new feature"
+        commit id: "test: test new feature"
+        commit id: "docs: update README"
+        checkout main
+        merge feature
+        checkout release
+        merge main tag: "v1.4.1"
+        branch fix
+        checkout fix
+        commit id: "fix: fix bug"
+        checkout main
+        merge fix
+        checkout release
+        merge main tag: "v1.4.2"
 ```
 
-The chosen branching strategy loosely follows the [Gitflow](https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow) workflow. We chose to omit hotfix branches and merge the concept of a main/develop branch for simplicity. CI pipeline is triggered on open pull-requests from feature to main. CD pipeline is triggered on new commits on release. Release tag is bumped according to the contents of the release, using the [semantic versioning](https://semver.org/) protocol.
+The chosen branching strategy loosely follows the [Gitflow](https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow) workflow. We chose to omit hotfix branches and merge the concept of a main/develop branch for simplicity. Committing to main or release is not allowed only pull requests.
+
+Opening a pull request from a feature branch to main triggers the CI pipline.
+
+Succesfully merging a pull request to the release branch triggers the CD pipeline. Release tag is bumped according to the contents of the release, using the [semantic versioning](https://semver.org/) protocol.
 
 ### Commit hooks
 
