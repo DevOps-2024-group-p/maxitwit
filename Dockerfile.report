@@ -1,20 +1,23 @@
-# Start from a base image with Pandoc installed
-FROM pandoc/core:latest-ubuntu
+FROM node:latest
 
-# Install Node.js and npm
-RUN apt update && apt install -y nodejs npm
+RUN apt-get update && apt-get install -y \
+    pandoc \
+    texlive-latex-base \
+    texlive-fonts-recommended \
+    texlive-fonts-extra \
+    texlive-latex-extra
 
-# Install mermaid-filter globally
-RUN npm install --global mermaid-filter
+RUN npm install -g mermaid-filter
 
-# Install LaTeX and recommended fonts
-RUN apt install -y texlive-latex-base texlive-fonts-recommended texlive-fonts-extra texlive-latex-extra
-
-# Set the working directory in the container
 WORKDIR /data
 
-# Copy the report directory into the container
 COPY ./report /data
 
-# Run the pandoc command to generate the PDF
-CMD pandoc -s -o report.pdf --pdf-engine=pdflatex --filter mermaid-filter ./report.md
+
+CMD pandoc -s -N -o report.pdf \
+    -V colorlinks=true \
+    -V linkcolor=blue \
+    --pdf-engine=pdflatex \
+    -V urlcolor=blue \
+    --filter mermaid-filter \
+    ./report.md
