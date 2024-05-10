@@ -23,6 +23,8 @@ include-before: |
 
 ## Dependencies
 
+We generated a [dependency graph](./images/dependency_graph.svg) for our node dependencies.
+
 ![Snyk screenshot](./images/Snyk_report.png)
 
 For identifying and fixing vulnerabilities, we used Snyk, which provided us with detailed reports on a weekly basis. These potential vulnerabilities were categorized based on their severity and then addressed. However, not all of them have been resolved, such as [inflight](https://security.snyk.io/vuln/SNYK-JS-INFLIGHT-6095116), which appears to no longer be maintained, and therefore, no current fix is available.
@@ -212,22 +214,24 @@ flowchart LR
         id2-->id3("Set up VM")
         id3-->id4("Deploy")
 
-        style id0 fill:#FFDB5C
-        style id1 fill:#5AB2FF
-        style id2 fill:#7ABA78
-        style id3 fill:#FFBB70
+        style id0 stroke:#FFDB5C, stroke-width:3px, fill:#FFFFFF
+        style id1 stroke:#5AB2FF, stroke-width:3px, fill:#FFFFFF
+        style id2 stroke:#7ABA78, stroke-width:3px, fill:#FFFFFF
+        style id3 stroke:#FFBB70, stroke-width:3px, fill:#FFFFFF
+        style id4 stroke-width:3px, fill:#FFFFFF
 ```
 
-We prepare the workflow by checking out to our release branch, logging in to Docker Hub and setting up Docker Buildx so it can build the images.
+We prepare the workflow by checking out to our release branch, logging in to Docker Hub and setting up Docker Buildx so the workflow can build the images.
 
 ```mermaid
+
 flowchart TB
     subgraph P["Prepare the workflow"]
         id0("Checkout")-->id1("Login to Docker Hub")
         id1-->id2("Set up Docker Buildx") 
     end
     
-    style P fill:#FFDB5C
+    style P stroke:#FFDB5C, stroke-width:3px, fill:#FFFFFF
 ```
 
 Th workflow builds our images and pushes them to Docker Hub.
@@ -240,10 +244,10 @@ flowchart TB
         id2-->id3("Fluentd image") 
     end
 
-    style B fill:#5AB2FF
+    style B stroke:#5AB2FF, stroke-width:3px, fill:#FFFFFF
 ```
 
-The workflow runs snyk to check for vulerabilities, then builds our images and runs our tests suite against them.
+Snyk is run to check for vulerabilities. After the workflow builds our images and runs our tests suite against them.
 
 ```mermaid
 flowchart TB
@@ -251,10 +255,13 @@ flowchart TB
         id0("Run Snyk")-->id1("Test maxitwit")
     end
 
-    style T fill:#7ABA78
+    style T stroke:#7ABA78, stroke-width:3px, fill:#FFFFFF
+    classDef goodFont font-size:10px;
+    class id1 goodFont;
+    class id0 goodFont;
 ```
 
-The environment variables stored in GitHub Actions Secrets are given to the workers and the most recent [/remote_files](https://github.com/DevOps-2024-group-p/maxitwit/tree/main/remote_files) are SCPd to the Swarm Manager.
+The environment variables stored in GitHub Actions Secrets are given to the workers and the most recent [/remote_files](https://github.com/DevOps-2024-group-p/maxitwit/tree/main/remote_files) are copied with SCP to the Swarm Manager.
 
 ```mermaid
 flowchart TB
@@ -263,7 +270,7 @@ flowchart TB
         id1-->id2("Provision /remote_files to Swarm Manager")
     end
 
-    style S fill:#FFBB70
+    style S stroke:#FFBB70, stroke-width:3px, fill:#FFFFFF
 ```
 
 Finally we SSH onto the Swarm Manager and run the [deploy.sh](https://github.com/DevOps-2024-group-p/maxitwit/blob/main/remote_files/deploy.sh) script to pull and build the new images.
@@ -277,6 +284,8 @@ Prometheus scrapes these endpoints and Grafana visualizes the data.
 We set up a separate Droplet on DigitalOcean for monitoring, because we had issues with its resource consumption. The monitoring droplet runs Prometheus and Grafana, and scrapes the metrics from the Worker nodes of the Docker swarm.
 
 ## Security Assesment
+
+* TODO sentence about our pipelines using root users which violates [PloP](https://www.paloaltonetworks.com/cyberpedia/what-is-the-principle-of-least-privilege)
 
 According to the documentation that can be found [Restricitons to ssh](https://superuser.com/questions/1751932/what-are-the-restrictions-to-ssh-stricthostkeychecking-no), we are aware that setting the flag for StrictHostKeyChecking to "no", might result in malicious parties being able to access the super user console of our system. Setting it to yes would prevent third parties from enterying our system and only known hosts would be able to.
 
@@ -292,9 +301,9 @@ We update our system with rolling upgrades. The replicas are updated 2 at a time
 ## Evolution and refactoring
 
 ### Implementation of Logging
-The implementation of the logging system proved difficult, especially as the system was prepared for scaling using docker swarm. Originally, a simple syslogs setup inside a droplet was created which was managed by the npm packaged winston and morgan. This solution proved inscalable in a docker swarm framework, as there would be no centralized logging. Thus, we attempted to expand on the system by adding a fluentd container to each droplet, which would recieve the logs from the winston npm package and send them all to a centralized storage droplet running elasticsearch and kibana. This however failed as the Elasticsearch integration kept crashing due to memory issues. To still provide centralized logs, we defaulted to have fluentd send logfiles to the droplets running the load balancers, which would store them in a /logs folder.
-Reflecting on this experience, had we from the beginning worked on implementing a scalable logging system, the amount of refactoring and experiential learning required for the implementation of the EFK-stack would have been diminished. In other words, it shows how technical debt can hinder the scaling of software solutions in practice. 
 
+The implementation of the logging system proved difficult, especially as the system was prepared for scaling using docker swarm. Originally, a simple syslogs setup inside a droplet was created which was managed by the npm packaged winston and morgan. This solution proved inscalable in a docker swarm framework, as there would be no centralized logging. Thus, we attempted to expand on the system by adding a fluentd container to each droplet, which would recieve the logs from the winston npm package and send them all to a centralized storage droplet running elasticsearch and kibana. This however failed as the Elasticsearch integration kept crashing due to memory issues. To still provide centralized logs, we defaulted to have fluentd send logfiles to the droplets running the load balancers, which would store them in a /logs folder.
+Reflecting on this experience, had we from the beginning worked on implementing a scalable logging system, the amount of refactoring and experiential learning required for the implementation of the EFK-stack would have been diminished. In other words, it shows how technical debt can hinder the scaling of software solutions in practice.
 
 ## Operation
 
