@@ -305,9 +305,14 @@ We update our system with rolling upgrades. The replicas are updated 2 at a time
 The implementation of the logging system proved difficult, especially as the system was prepared for scaling using docker swarm. Originally, a simple syslogs setup inside a droplet was created which was managed by the npm packaged winston and morgan. This solution proved inscalable in a docker swarm framework, as there would be no centralized logging. Thus, we attempted to expand on the system by adding a fluentd container to each droplet, which would recieve the logs from the winston npm package and send them all to a centralized storage droplet running elasticsearch and kibana. This however failed as the Elasticsearch integration kept crashing due to memory issues. To still provide centralized logs, we defaulted to have fluentd send logfiles to the droplets running the load balancers, which would store them in a /logs folder.
 Reflecting on this experience, had we from the beginning worked on implementing a scalable logging system, the amount of refactoring and experiential learning required for the implementation of the EFK-stack would have been diminished. In other words, it shows how technical debt can hinder the scaling of software solutions in practice.
 
+The Database Migration task presented in session 6 of the course proved a challenge for our team. 
+Even with the abstraction layer provided by Prisma, we ran into issues with certain namespaces not being allowed in postgresql.
+Furthermore, simply dumping the sqlite database and running the dump against a postgres droplet on Digital Ocean would not work, as certain types were not compatible between the database. Specifically, the TIMESTAMP type in sqlite proved difficult, as postgres stores timestamps as integers. 
+Over multiple attempts, we tried to modify the sql dump using different regex commands, and then using an ssh connection to run the script against the postgresql droplet. This proved fatal however, as the script had not finished running after five hours due to each insert statement requiring a new connection. Furthermore we lost some data as we transitioned the application to make use of the postgresql droplet during the running of this script, 
+which resulted in conflicting id's, as our insert statements still had the original id's present, which conflicted with the ones postgresql was generating as new requests were sent from the API. In th end, the solution was found in the shape of a pythonscript, which represented insert statements as classes, where each attribute in the insert statement was modified in the constructor of the class to match the postgresql schema, before being aggregated into insert statements and run. This also allowed us to run 1000 insert statements per connection, making the migration script only run 5 minutes before completion. 
+This experience showed us that even with abstraction layers, such as prisma, unique issues related to our migration occured which necessitated the development of a specific solution. 
+
 ## Operation
-- database migration
-- system crashed due to failing fluentd container
 During the last week of the simulator being active, our application crashed which we ended up not noticing.
 The reason for the crash, which became clear when inspecting the docker logs, was that a misconfiguration in Fluentd 
 stopped the API- and GUI- containers from running, thereby bringing the entire application to a standstill.
@@ -318,7 +323,7 @@ events occuring in tandem. Furthermore, it was trivial to solve when we became a
  Thus, even though unlikely, the independant failure of multiple systems should be expected and guarded against.
  In our case, further manual testing of the website on a regular basis was deemed sufficient, however, it was discussed whether
  a shell script could be created to run get requests against the Api could be created, to have a continuous, reliant, status of the webapp.
- 
+
 
 ## Maintenance
 
