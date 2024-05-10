@@ -1,23 +1,28 @@
-FROM node:latest
+FROM pandoc/latex:latest
 
-RUN apt-get update && apt-get install -y \
-    pandoc \
-    texlive-latex-base \
-    texlive-fonts-recommended \
-    texlive-fonts-extra \
-    texlive-latex-extra
+# Install additional TeX packages such as those used by eisvogel template
 
-RUN npm install -g mermaid-filter
+RUN tlmgr option repository http://mirror.ctan.org/systems/texlive/tlnet \
+    tlmgr update \
+    && tlmgr install csquotes mdframed needspace sourcesanspro ly1 mweights \
+    sourcecodepro titling pagecolor epstopdf zref footnotebackref \
+    koma-script hardwrap catchfile \
+    && apk add --update ghostscript
 
-WORKDIR /data
+# Install Node and mermaid-filter
 
-COPY ./report /data
+ENV CHROME_BIN="/usr/bin/chromium-browser" \
+    PUPPETEER_SKIP_CHROMIUM_DOWNLOAD="true"
 
+RUN apk add --update udev ttf-freefont chromium npm \
+    && npm install -g mermaid-filter@1.4.5 --unsafe-perm=true
+
+WORKDIR /report
 
 CMD pandoc -s -N -o report.pdf \
     -V colorlinks=true \
     -V linkcolor=blue \
-    --pdf-engine=pdflatex \
     -V urlcolor=blue \
+    --pdf-engine=pdflatex \
     --filter mermaid-filter \
     ./report.md

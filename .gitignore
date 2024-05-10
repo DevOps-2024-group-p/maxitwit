@@ -16,3 +16,4 @@ latest.txt
 .htpasswd
 .env
 coverage/
+mermaid-filter.err

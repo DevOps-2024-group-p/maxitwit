@@ -24,8 +24,8 @@ cd report
 pandoc -s -N -o report.pdf \
 -V colorlinks=true \
 -V linkcolor=blue \
---pdf-engine=pdflatex \
 -V urlcolor=blue \
+--pdf-engine=pdflatex \
 --filter mermaid-filter \
 ./report.md
 ```
