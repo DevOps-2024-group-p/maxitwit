@@ -297,6 +297,19 @@ Reflecting on this experience, had we from the beginning worked on implementing 
 
 
 ## Operation
+- database migration
+- system crashed due to failing fluentd container
+During the last week of the simulator being active, our application crashed which we ended up not noticing.
+The reason for the crash, which became clear when inspecting the docker logs, was that a misconfiguration in Fluentd 
+stopped the API- and GUI- containers from running, thereby bringing the entire application to a standstill.
+The issue seemed to be that Fluentd was not configured to deal with certain logs, which led to the system rebooting. 
+The logs of this crash are lined [here]. Such an issue would have been difficult to foresee, as it was isolated to a specific subset of
+events occuring in tandem. Furthermore, it was trivial to solve when we became aware of it, as it only required a slight modification in how logs were matched and transported out of fluentd. 
+ The larger issue at hand was that our monitoring system failed to inform us of this crash, which was caused by Prometheus having crashed around the same time. Thus, a set of systems set up to monitor and log the system had failed with no relation to eachother, allowing for the issue to go unnoticed.
+ Thus, even though unlikely, the independant failure of multiple systems should be expected and guarded against.
+ In our case, further manual testing of the website on a regular basis was deemed sufficient, however, it was discussed whether
+ a shell script could be created to run get requests against the Api could be created, to have a continuous, reliant, status of the webapp.
+ 
 
 ## Maintenance
 
