@@ -208,22 +208,24 @@ flowchart LR
         id2-->id3("Set up VM")
         id3-->id4("Deploy")
 
-        style id0 fill:#FFDB5C
-        style id1 fill:#5AB2FF
-        style id2 fill:#7ABA78
-        style id3 fill:#FFBB70
+        style id0 stroke:#FFDB5C, stroke-width:3px, fill:#FFFFFF
+        style id1 stroke:#5AB2FF, stroke-width:3px, fill:#FFFFFF
+        style id2 stroke:#7ABA78, stroke-width:3px, fill:#FFFFFF
+        style id3 stroke:#FFBB70, stroke-width:3px, fill:#FFFFFF
+        style id4 stroke-width:3px, fill:#FFFFFF
 ```
 
-We prepare the workflow by checking out to our release branch, logging in to Docker Hub and setting up Docker Buildx so it can build the images.
+We prepare the workflow by checking out to our release branch, logging in to Docker Hub and setting up Docker Buildx so the workflow can build the images.
 
 ```mermaid
+
 flowchart TB
     subgraph P["Prepare the workflow"]
         id0("Checkout")-->id1("Login to Docker Hub")
         id1-->id2("Set up Docker Buildx") 
     end
     
-    style P fill:#FFDB5C
+    style P stroke:#FFDB5C, stroke-width:3px, fill:#FFFFFF
 ```
 
 Th workflow builds our images and pushes them to Docker Hub.
@@ -236,10 +238,10 @@ flowchart TB
         id2-->id3("Fluentd image") 
     end
 
-    style B fill:#5AB2FF
+    style B stroke:#5AB2FF, stroke-width:3px, fill:#FFFFFF
 ```
 
-The workflow runs snyk to check for vulerabilities, then builds our images and runs our tests suite against them.
+Snyk is run to check for vulerabilities. After the workflow builds our images and runs our tests suite against them.
 
 ```mermaid
 flowchart TB
@@ -247,10 +249,13 @@ flowchart TB
         id0("Run Snyk")-->id1("Test maxitwit")
     end
 
-    style T fill:#7ABA78
+    style T stroke:#7ABA78, stroke-width:3px, fill:#FFFFFF
+    classDef goodFont font-size:10px;
+    class id1 goodFont;
+    class id0 goodFont;
 ```
 
-The environment variables stored in GitHub Actions Secrets are given to the workers and the most recent [/remote_files](https://github.com/DevOps-2024-group-p/maxitwit/tree/main/remote_files) are SCPd to the Swarm Manager.
+The environment variables stored in GitHub Actions Secrets are given to the workers and the most recent [/remote_files](https://github.com/DevOps-2024-group-p/maxitwit/tree/main/remote_files) are copied with SCP to the Swarm Manager.
 
 ```mermaid
 flowchart TB
@@ -259,7 +264,7 @@ flowchart TB
         id1-->id2("Provision /remote_files to Swarm Manager")
     end
 
-    style S fill:#FFBB70
+    style S stroke:#FFBB70, stroke-width:3px, fill:#FFFFFF
 ```
 
 Finally we SSH onto the Swarm Manager and run the [deploy.sh](https://github.com/DevOps-2024-group-p/maxitwit/blob/main/remote_files/deploy.sh) script to pull and build the new images.
