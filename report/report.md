@@ -21,6 +21,42 @@ include-before: |
 
 ## Architecture
 
+When we took over the minitwit application at the beginning of the course we started by evolving it away from Python using Flask and replacing it with Javascript using Node.js, Express and Pug. The group decided to do the rewrite using Javascript as all members were already familiar with it to varying degrees and because of the good ecosystem which offers tools for everything we need in this web application.
+
+### Description of Components
+
+#### Frontend
+
+The frontend of our maxitwit application consists of HTML and CSS which is being rendered using the Pug templating engine. The frontend handles user input and sends requests to the express server while also displaying all data it receives as response.
+
+#### Backend API
+
+The backend is developed using Node.js and utilizing the express framework for the server. 
+
+**Node.js**
+
+We decided to use Node.js as it is the most popular and mature runtime environment for building fast and scalable server side applications in Javascript. We could have written the entire server logic in Javascript using just Node.js but decided this would be too big of an undertaking for the scope of this project.
+
+**Express**
+
+Instead of writing the server side logic completely from scratch we decided to use the Express framework as it comes with a number of useful features for developing robust server-side applications. Using the Express framework we have a minimal yet flexible framework that provides middleware support, so middleware functions can be used to handle HTTP requests and responses, as well as Route Handling allowing us to define routes for a number of HTTP methods such as GET, POST, PUT, DELETE and the corresponding url patterns.
+Furthermore it offers a number of HTTP Utilities to simplify sending responses and accessing request data.
+Another useful feature for us is the static file serving provided by the framework which we use to serve our CSS styles. To render our HTML content dynamically Express also offer template engine support, in our case for Pug. Finally the good support for Error Handling in the framework is essential when developing and maintaining complex application logic.
+
+**Pug**
+
+
+
+#### Database
+
+#### CI/CD Pipeline
+
+#### Monitoring Logging
+
+#### Containerization
+
+Using the express framework we have a minimal yet flexible framework to work with. Express handles all of the server side logic of the application and 
+
 ## Dependencies
 
 We generated a [dependency graph](./images/dependency_graph.svg) for our node dependencies.
