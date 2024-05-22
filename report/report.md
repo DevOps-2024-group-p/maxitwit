@@ -173,13 +173,11 @@ The application is practically fully functional, apart from a single outstanding
 # Process Perspective
 
 Why: ExpressJS, Prisma, Postgres
-TODO: section on decision-making (milestone decisions) (a why under each choice !)
-TODO add description on Grafana and Prometheus component (from express to db)
-TODO: add description of how postgres connection works (from express to db)
-TODO: how AI was used in this project
 
-We use Prmetheus to generate metrics for our monitoring and Grafana to visualize them. We made this decision because with this setup we can easily make relevant and informative [dashboards](http://144.126.246.214:3002/public-dashboards/2c37eba9cf8c494c83490b90f89e116f?orgId=1) representing the state of our system.
+## Monitoring
+Inside the application droplets, prometheus has a volume storing it's state, such that the cd pipeline would not reset monitoring. We use Prometheus to generate metrics for our monitoring and Grafana to visualize them. We made this decision because with this setup we can easily make relevant and informative [dashboards](http://144.126.246.214:3002/public-dashboards/2c37eba9cf8c494c83490b90f89e116f?orgId=1) representing the state of our system.
 
+## Database Migration
 During the semester we had the task to migrate from SQLite to a database of our choice. We chose Postgres to supplement our studies in Introdutcion to Database Systems course that we are having paralelly.
 
 ## Branching strategy
