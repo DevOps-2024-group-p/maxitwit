@@ -132,8 +132,6 @@ We chose Digital Ocean because Github Education provides 200$ in credits for stu
 
 ## Important interactions
 
-TODO: Describe how the simulators requests are send to an api, that are sent to prisma, that transforms prisma to sql and sends queries to a db and so on.
-
 The system can be interaceted with in two ways:
 
 * [User Interface](https://maxitwit.tech)
