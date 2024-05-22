@@ -7,9 +7,6 @@ on:
       - main
       # Run workflow every time a pull request is opened or reopened
     types: [opened, reopened, ready_for_review, edited]
-  # allow manual triggers for now too
-  workflow_dispatch:
-    manual: true
 
 jobs:
   build:
@@ -49,8 +46,8 @@ jobs:
         run: |
           docker build -t $DOCKER_USERNAME/maxitwittest -f Dockerfile.test .
           yes 2>/dev/null | docker compose -f tests_compose.yaml up --build -d
-          chmod +x ./wait_for_compose.sh
-          ./wait_for_compose.sh
+          chmod +x ./scripts/wait_for_compose.sh
+          ./scripts/wait_for_compose.sh
           docker run --rm --network=maxitwit-test $DOCKER_USERNAME/maxitwittest
         env:
           TARGET: production

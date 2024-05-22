@@ -6,9 +6,6 @@ on:
     # Run workflow every time something is pushed to release
     branches:
       - release
-  # allow manual triggers for now too
-  workflow_dispatch:
-    manual: true
 
 # Remember to set the following secrets in your repository's settings:
 # https://github.com/your_username/itu-minitwit-ci/settings/secrets/actions
@@ -86,8 +83,8 @@ jobs:
         run: |
           docker build -t $DOCKER_USERNAME/maxitwittest -f Dockerfile.test .
           yes 2>/dev/null | docker compose -f tests_compose.yaml up --build -d
-          chmod +x ./wait_for_compose.sh
-          ./wait_for_compose.sh
+          chmod +x ./scripts/wait_for_compose.sh
+          ./scripts/wait_for_compose.sh
           docker run --rm --network=maxitwit-test $DOCKER_USERNAME/maxitwittest
         env:
           TARGET: production

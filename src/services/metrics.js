@@ -1,4 +1,6 @@
 const client = require('prom-client')
+
+// Create a new Prometheus registry for tracking all metrics
 const register = new client.Registry()
 
 const httpErrorsCounter = new client.Counter({

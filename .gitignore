@@ -15,5 +15,5 @@ latest.txt
 .notes
 .htpasswd
 .env
-*.md
 coverage/
+mermaid-filter.err
