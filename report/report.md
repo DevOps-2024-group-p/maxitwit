@@ -16,6 +16,7 @@ include-before: |
 ---
 
 \newpage
+TODO: add abstract 
 
 # System Perspective
 
@@ -30,7 +31,7 @@ The application was refactored from Python using Flask and replacing it with Jav
 The frontend of our maxitwit application consists of HTML and CSS which is being rendered using the Pug templating engine. The frontend handles user input and sends requests to the express server while also displaying all data it receives as response.
 
 #### Backend API
-
+TODO: make headings more natural
 The backend is developed using Node.js and utilizing the express framework for the server. 
 
 **Node.js**
@@ -47,6 +48,8 @@ Another useful feature for us is the static file serving provided by the framewo
 
 For identifying and fixing vulnerabilities, we used Snyk, which provided us with detailed reports on a weekly basis. These potential vulnerabilities were categorized based on their severity and then addressed. However, not all of them have been resolved, such as [inflight](https://security.snyk.io/vuln/SNYK-JS-INFLIGHT-6095116), which appears to no longer be maintained, and therefore, no current fix is available.
 
+ TODO: Prisma/Database description
+TODO: how express to database connected (is it extendable/ modifiable      etc.. )
 ## Viewpoints
 
 ### Module Viewpoint
@@ -99,7 +102,10 @@ dependencies required for the running of the application, such as the postgres d
 tasks such as monitoring and logging. What is not covered in this illustration is the framework in which the application is run and managed,
 which is covered in the following viewpoints.
 
+
+
 ### Deployment Viewpoint
+TODO: add text on how deployment works (why digital ocean)
 
 ```mermaid
 flowchart LR
@@ -120,6 +126,7 @@ flowchart LR
 ```
 
 ## Important interactions
+TODO: Describe how the simulators requests are send to an api, that are sent to prisma, that transforms prisma to sql and sends queries to a db and so on.
 
 The system can be interaceted with in two ways:
 
@@ -153,13 +160,18 @@ sequenceDiagram
 ```
 
 ## Current State
-
+TODO: add static and quality assessment  (is the code extendable) Which requirements did we meet and which didn't we meet.
+TODO: github issues
 ![Sonarcloud screenshot](./images/sonarcloud.png)
 The application is practically fully functional, apart from a single outstanding [bug](https://github.com/DevOps-2024-group-p/maxitwit/issues/42). While the application has [minimal technical debt](https://sonarcloud.io/summary/overall?id=fridge7809_maxitwit), it relies on legacy code and dependencies to test the application (test suite and simulator).
 
 # Process Perspective
 
 Why: ExpressJS, Prisma, Postgres
+TODO: section on decision-making (milestone decisions) (a why under each choice !)
+TODO: how AI was used in this project
+TODO add description on Grafana and Prometheus component (from express to db)
+TODO: add description of how postgres connection works (from express to db)
 
 ## Branching strategy
 
@@ -283,6 +295,8 @@ Prometheus scrapes these endpoints and Grafana visualizes the data.
 
 We set up a separate Droplet on DigitalOcean for monitoring, because we had issues with its resource consumption. The monitoring droplet runs Prometheus and Grafana, and scrapes the metrics from the Worker nodes of the Docker swarm.
 
+## Logging
+TODO: add section on Logging
 ## Security Assesment
 
 A severe vulnerability we found is that many of our containerized services executed process as root. This included images that ran in our CI/CD pipeline. This is a security risk because it violates [PloP](https://www.paloaltonetworks.com/cyberpedia/what-is-the-principle-of-least-privilege).
@@ -292,14 +306,14 @@ According to the documentation that can be found [Restricitons to ssh](https://s
 [NPM](https://www.npmjs.com/) was used to manage and audit dependencies with security vulnerabilities with `npm audit`. It was a challenge to upgrade certain dependencies, either because they were bundled or because they create cyclic dependencies. We generated a [dependency graph](./images/dependency_graph.svg) for our dependencies. 
 
 ## Scaling strategy
-
+TODO: add sentence on why distributed systems are great !
 We used Docker Swarm for horizontal scaling. The strategy is defined in [compose.yml](https://github.com/DevOps-2024-group-p/maxitwit/blob/main/remote_files/compose.yaml).
 One manager node is responsible for the load balancing and the health checks of two worker nodes.
 Worker nodes we have 6 replicas of the service running.
 We update our system with rolling upgrades. The replicas are updated 2 at a time, with 10s interval between the updates. The health of the service is monitored every 10s. If the service fails, it will be restarted with a maximum of 2 attempts.
 
 # Lessons Learned
-
+TODO: add paragraphing
 ## Evolution and refactoring
 
 ### State in a Load Balanced System
