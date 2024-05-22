@@ -18,6 +18,8 @@ include-before: |
 \newpage
 TODO: add abstract
 
+This report details the transformation of Maxitwit, initially a Python-Flask application, into a JavaScript-based platform utilizing Node.js, Express, and Pug. The transition was guided by DevOps principles, incorporating Docker Swarm and DigitalOcean for deployment and hosting. Key components include a PostgreSQL database and monitoring with Prometheus and Grafana. The refactoring emphasizes modern software practices and the project's adaptive strategies in architecture, deployment, and maintenance for enhanced performance and scalability.
+
 # System Perspective
 
 ## Architecture
