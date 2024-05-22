@@ -173,7 +173,6 @@ The application is practically fully functional, apart from a single outstanding
 
 Why: ExpressJS, Prisma, Postgres
 TODO: section on decision-making (milestone decisions) (a why under each choice !)
-TODO: how AI was used in this project
 TODO add description on Grafana and Prometheus component (from express to db)
 TODO: add description of how postgres connection works (from express to db)
 
@@ -320,6 +319,10 @@ We used Docker Swarm for horizontal scaling. The strategy is defined in [compose
 One manager node is responsible for the load balancing and the health checks of two worker nodes.
 Worker nodes we have 6 replicas of the service running.
 We update our system with rolling upgrades. The replicas are updated 2 at a time, with 10s interval between the updates. The health of the service is monitored every 10s. If the service fails, it will be restarted with a maximum of 2 attempts.
+
+## AI and LLM's
+
+LLM's were very useful tools in the refactoring process. We found that AI tools work best when you can provide extensive context as a prompt, however, sometimes gathering all the context needed for a prompt was wasted cognitive load if they didn't provide a useful response. Especially when debugging niche interactions between system components, LLM's was not very helpful.
 
 # Lessons Learned
 
