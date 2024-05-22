@@ -16,13 +16,12 @@ include-before: |
 ---
 
 \newpage
-TODO: add abstract 
 
 # System Perspective
 
 ## Architecture
 
-The application was refactored from Python using Flask and replacing it with Javascript using Node.js runtime, Express and framework and Pug. The group decided to do the rewrite using Javascript as all members were already familiar with it to varying degrees and because of the good ecosystem which offers tools for everything we need in this web application. Javascript remains a popular and [relevant](https://pypl.github.io/PYPL.html) language to learn.
+When we took over the minitwit application at the beginning of the course we started by evolving it away from Python using Flask and replacing it with Javascript using Node.js, Express and Pug. The group decided to do the rewrite in Javascript as all members were already familiar with it to varying degrees and because of the good ecosystem which offers tools for everything we need in this web application.
 
 ### Description of Components
 
@@ -31,25 +30,29 @@ The application was refactored from Python using Flask and replacing it with Jav
 The frontend of our maxitwit application consists of HTML and CSS which is being rendered using the Pug templating engine. The frontend handles user input and sends requests to the express server while also displaying all data it receives as response.
 
 #### Backend API
-TODO: make headings more natural
+
 The backend is developed using Node.js and utilizing the express framework for the server. 
-
-**Node.js**
-
 We decided to use Node.js as it is the most popular and mature runtime environment for building fast and scalable server side applications in Javascript. We could have written the entire server logic in Javascript using just Node.js but decided this would be too big of an undertaking for the scope of this project.
-
-**Express**
 
 Instead of writing the server side logic completely from scratch we decided to use the Express framework as it comes with a number of useful features for developing robust server-side applications. Using the Express framework we have a minimal yet flexible framework that provides middleware support, so middleware functions can be used to handle HTTP requests and responses, as well as Route Handling allowing us to define routes for a number of HTTP methods such as GET, POST, PUT, DELETE and the corresponding url patterns.
 Furthermore it offers a number of HTTP Utilities to simplify sending responses and accessing request data.
 Another useful feature for us is the static file serving provided by the framework which we use to serve our CSS styles. To render our HTML content dynamically Express also offer template engine support, in our case for Pug. Finally the good support for Error Handling in the framework is essential when developing and maintaining complex application logic.
 
+We use Pug as our templating engine which enables us to dynamically generate the HTML markup for the frontend. We chose Pug because it seamlessly integrates with our Express.js application, its concise syntax and because it is very performant.
+
+#### Database
+
+When we first started working with the application it had an SQlite database for data storage which we used for the first weeks of the course. We then added the ORM Prisma which provided an abstraction layer over the database, allowed us to define our data models with a schema and facilitated interactions with the database via a type-safe API. We decided to use Prisma as our ORM because of the efficient and clean communication it enabled us to have between the database and the backend API and because the schema driven approach would ensure data integrity.
+After adding the ORM we were tasked with migrating away from SQlite to another database for which we decided on PostgreSQL as all team members are familiar with it from the Introduction to Database Systems course, which we were all taking this semester. We also chose Postgres as it allows us to improve the perfromance of our application, especially as the database grew to a large data set and because we could easily scale PostgreSQL horizontally if we needed to.
+
+## Dependencies
+
+We generated a [dependency graph](./images/dependency_graph.svg) for our node dependencies.
+
 ![Snyk screenshot](./images/Snyk_report.png)
 
 For identifying and fixing vulnerabilities, we used Snyk, which provided us with detailed reports on a weekly basis. These potential vulnerabilities were categorized based on their severity and then addressed. However, not all of them have been resolved, such as [inflight](https://security.snyk.io/vuln/SNYK-JS-INFLIGHT-6095116), which appears to no longer be maintained, and therefore, no current fix is available.
 
- TODO: Prisma/Database description
-TODO: how express to database connected (is it extendable/ modifiable      etc.. )
 ## Viewpoints
 
 ### Module Viewpoint
@@ -102,10 +105,25 @@ dependencies required for the running of the application, such as the postgres d
 tasks such as monitoring and logging. What is not covered in this illustration is the framework in which the application is run and managed,
 which is covered in the following viewpoints.
 
+### Components Viewpoint
 
+```mermaid
+graph LR;
+    id1[Browser]
+    id2[Simulator]
+    id3[Expressjs]
+    id4[Services]
+    id5[Prisma]
+    id6[Postgres]
+
+    id1-->id3
+    id2-->id3
+    id3-->id4
+    id4-->id5
+    id5-->id6
+```
 
 ### Deployment Viewpoint
-TODO: add text on how deployment works (why digital ocean)
 
 ```mermaid
 flowchart LR
@@ -126,7 +144,6 @@ flowchart LR
 ```
 
 ## Important interactions
-TODO: Describe how the simulators requests are send to an api, that are sent to prisma, that transforms prisma to sql and sends queries to a db and so on.
 
 The system can be interaceted with in two ways:
 
@@ -160,18 +177,13 @@ sequenceDiagram
 ```
 
 ## Current State
-TODO: add static and quality assessment  (is the code extendable) Which requirements did we meet and which didn't we meet.
-TODO: github issues
+
 ![Sonarcloud screenshot](./images/sonarcloud.png)
 The application is practically fully functional, apart from a single outstanding [bug](https://github.com/DevOps-2024-group-p/maxitwit/issues/42). While the application has [minimal technical debt](https://sonarcloud.io/summary/overall?id=fridge7809_maxitwit), it relies on legacy code and dependencies to test the application (test suite and simulator).
 
 # Process Perspective
 
 Why: ExpressJS, Prisma, Postgres
-TODO: section on decision-making (milestone decisions) (a why under each choice !)
-TODO: how AI was used in this project
-TODO add description on Grafana and Prometheus component (from express to db)
-TODO: add description of how postgres connection works (from express to db)
 
 ## Branching strategy
 
@@ -295,29 +307,22 @@ Prometheus scrapes these endpoints and Grafana visualizes the data.
 
 We set up a separate Droplet on DigitalOcean for monitoring, because we had issues with its resource consumption. The monitoring droplet runs Prometheus and Grafana, and scrapes the metrics from the Worker nodes of the Docker swarm.
 
-## Logging
-TODO: add section on Logging
 ## Security Assesment
 
-A severe vulnerability we found is that many of our containerized services executed process as root. This included images that ran in our CI/CD pipeline. This is a security risk because it violates [PloP](https://www.paloaltonetworks.com/cyberpedia/what-is-the-principle-of-least-privilege).
+* TODO sentence about our pipelines using root users which violates [PloP](https://www.paloaltonetworks.com/cyberpedia/what-is-the-principle-of-least-privilege)
 
-According to the documentation that can be found [Restricitons to ssh](https://superuser.com/questions/1751932/what-are-the-restrictions-to-ssh-stricthostkeychecking-no), we are aware that setting the flag for StrictHostKeyChecking to "no", might result in malicious parties being able to access the super user console of our system. Setting it to yes would prevent third parties from entering our system and only known hosts would be able to.
-
-[NPM](https://www.npmjs.com/) was used to manage and audit dependencies with security vulnerabilities with `npm audit`. It was a challenge to upgrade certain dependencies, either because they were bundled or because they create cyclic dependencies. We generated a [dependency graph](./images/dependency_graph.svg) for our dependencies. 
+According to the documentation that can be found [Restricitons to ssh](https://superuser.com/questions/1751932/what-are-the-restrictions-to-ssh-stricthostkeychecking-no), we are aware that setting the flag for StrictHostKeyChecking to "no", might result in malicious parties being able to access the super user console of our system. Setting it to yes would prevent third parties from enterying our system and only known hosts would be able to.
 
 ## Scaling strategy
-TODO: add sentence on why distributed systems are great !
+
 We used Docker Swarm for horizontal scaling. The strategy is defined in [compose.yml](https://github.com/DevOps-2024-group-p/maxitwit/blob/main/remote_files/compose.yaml).
 One manager node is responsible for the load balancing and the health checks of two worker nodes.
 Worker nodes we have 6 replicas of the service running.
 We update our system with rolling upgrades. The replicas are updated 2 at a time, with 10s interval between the updates. The health of the service is monitored every 10s. If the service fails, it will be restarted with a maximum of 2 attempts.
 
 # Lessons Learned
-TODO: add paragraphing
-## Evolution and refactoring
 
-### State in a Load Balanced System
-The implementation of the swarm and application droplets raised an issue related to the state in case a user would be forced to switch from one droplet to the other. The express-session npm package used to handle sessions in the GUI made use of a sqlite database running locally in the application. Thus, users of the GUI could face random logouts or database errors as the session-secret used to identify the user would be lost when switching droplet. To fix this issue, we discussed ways to manage session-handling using our postgres database or make a common droplet for session handling using sqlite. This would however require a complete refactoring of the session-handling. This proved an important lesson for the other issues raied by the migration to docker swarm, as many of our early implementations on the website where not scalable in a distributed framework.
+## Evolution and refactoring
 
 ### Implementation of Logging
 
