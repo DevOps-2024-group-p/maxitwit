@@ -16,7 +16,7 @@ include-before: |
 ---
 
 \newpage
-TODO: add abstract 
+TODO: add abstract
 
 # System Perspective
 
@@ -31,8 +31,9 @@ The application was refactored from Python using Flask and replacing it with Jav
 The frontend of our maxitwit application consists of HTML and CSS which is being rendered using the Pug templating engine. The frontend handles user input and sends requests to the express server while also displaying all data it receives as response.
 
 #### Backend API
+
 TODO: make headings more natural
-The backend is developed using Node.js and utilizing the express framework for the server. 
+The backend is developed using Node.js and utilizing the express framework for the server.
 
 **Node.js**
 
@@ -50,6 +51,7 @@ For identifying and fixing vulnerabilities, we used Snyk, which provided us with
 
  TODO: Prisma/Database description
 TODO: how express to database connected (is it extendable/ modifiable      etc.. )
+
 ## Viewpoints
 
 ### Module Viewpoint
@@ -102,10 +104,11 @@ dependencies required for the running of the application, such as the postgres d
 tasks such as monitoring and logging. What is not covered in this illustration is the framework in which the application is run and managed,
 which is covered in the following viewpoints.
 
-
-
 ### Deployment Viewpoint
-TODO: add text on how deployment works (why digital ocean)
+
+Our application is deployed on a Digital Ocean droplet. The droplet is running a Docker Swarm with one manager and two worker nodes. We use an Nginx reverse proxy to route the incoming requests and monitoring is also running in a separate droplet.
+
+In total we have 5 droplets and a database running on Digital Ocean.
 
 ```mermaid
 flowchart LR
@@ -125,7 +128,10 @@ flowchart LR
 
 ```
 
+We chose Digital Ocean because Github Education provides 200$ in credits for students, which was enough to cover the costs of the droplets and the database for the duration of the project.
+
 ## Important interactions
+
 TODO: Describe how the simulators requests are send to an api, that are sent to prisma, that transforms prisma to sql and sends queries to a db and so on.
 
 The system can be interaceted with in two ways:
@@ -133,7 +139,9 @@ The system can be interaceted with in two ways:
 * [User Interface](https://maxitwit.tech)
 * [API for the simulator](https://api.maxitwit.tech)
 
-A user (or the simulator) can register, follow/unfollow other users and send tweets.
+The main interaction with the system is via an API, that is built for a simulator. The simulator sends HTTP requests to our endpoints to simulate a user registering, following, unfollowing and tweeting. The API uses Prisma to interact with the Postgres database. Prisma is an ORM that generates SQL queries based on the schema defined in the [Prisma schema file](https://github.com/DevOps-2024-group-p/maxitwit/blob/feature/report/prisma/schema.prisma).
+
+We chose prisma because it is a modern ORM that is easy to use and has a lot of features that make it easy to interact with the database.
 
 ```mermaid
 ---
@@ -160,6 +168,7 @@ sequenceDiagram
 ```
 
 ## Current State
+
 TODO: add static and quality assessment  (is the code extendable) Which requirements did we meet and which didn't we meet.
 TODO: github issues
 ![Sonarcloud screenshot](./images/sonarcloud.png)
@@ -296,16 +305,19 @@ Prometheus scrapes these endpoints and Grafana visualizes the data.
 We set up a separate Droplet on DigitalOcean for monitoring, because we had issues with its resource consumption. The monitoring droplet runs Prometheus and Grafana, and scrapes the metrics from the Worker nodes of the Docker swarm.
 
 ## Logging
+
 TODO: add section on Logging
+
 ## Security Assesment
 
 A severe vulnerability we found is that many of our containerized services executed process as root. This included images that ran in our CI/CD pipeline. This is a security risk because it violates [PloP](https://www.paloaltonetworks.com/cyberpedia/what-is-the-principle-of-least-privilege).
 
 According to the documentation that can be found [Restricitons to ssh](https://superuser.com/questions/1751932/what-are-the-restrictions-to-ssh-stricthostkeychecking-no), we are aware that setting the flag for StrictHostKeyChecking to "no", might result in malicious parties being able to access the super user console of our system. Setting it to yes would prevent third parties from entering our system and only known hosts would be able to.
 
-[NPM](https://www.npmjs.com/) was used to manage and audit dependencies with security vulnerabilities with `npm audit`. It was a challenge to upgrade certain dependencies, either because they were bundled or because they create cyclic dependencies. We generated a [dependency graph](./images/dependency_graph.svg) for our dependencies. 
+[NPM](https://www.npmjs.com/) was used to manage and audit dependencies with security vulnerabilities with `npm audit`. It was a challenge to upgrade certain dependencies, either because they were bundled or because they create cyclic dependencies. We generated a [dependency graph](./images/dependency_graph.svg) for our dependencies.
 
 ## Scaling strategy
+
 TODO: add sentence on why distributed systems are great !
 We used Docker Swarm for horizontal scaling. The strategy is defined in [compose.yml](https://github.com/DevOps-2024-group-p/maxitwit/blob/main/remote_files/compose.yaml).
 One manager node is responsible for the load balancing and the health checks of two worker nodes.
@@ -313,10 +325,13 @@ Worker nodes we have 6 replicas of the service running.
 We update our system with rolling upgrades. The replicas are updated 2 at a time, with 10s interval between the updates. The health of the service is monitored every 10s. If the service fails, it will be restarted with a maximum of 2 attempts.
 
 # Lessons Learned
+
 TODO: add paragraphing
+
 ## Evolution and refactoring
 
 ### State in a Load Balanced System
+
 The implementation of the swarm and application droplets raised an issue related to the state in case a user would be forced to switch from one droplet to the other. The express-session npm package used to handle sessions in the GUI made use of a sqlite database running locally in the application. Thus, users of the GUI could face random logouts or database errors as the session-secret used to identify the user would be lost when switching droplet. To fix this issue, we discussed ways to manage session-handling using our postgres database or make a common droplet for session handling using sqlite. This would however require a complete refactoring of the session-handling. This proved an important lesson for the other issues raied by the migration to docker swarm, as many of our early implementations on the website where not scalable in a distributed framework.
 
 ### Implementation of Logging
@@ -326,25 +341,25 @@ Reflecting on this experience, had we from the beginning worked on implementing 
 
 ### Database Migration
 
-The Database Migration task presented in session 6 of the course proved a challenge for our team. 
+The Database Migration task presented in session 6 of the course proved a challenge for our team.
 Even with the abstraction layer provided by Prisma, we ran into issues with certain namespaces not being allowed in postgresql.
-Furthermore, simply dumping the sqlite database and running the dump against a postgres droplet on Digital Ocean would not work, as certain types were not compatible between the database. Specifically, the TIMESTAMP type in sqlite proved difficult, as postgres stores timestamps as integers. 
-Over multiple attempts, we tried to modify the sql dump using different regex commands, and then using an ssh connection to run the script against the postgresql droplet. This proved fatal however, as the script had not finished running after five hours due to each insert statement requiring a new connection. Furthermore we lost some data as we transitioned the application to make use of the postgresql droplet during the running of this script, 
-which resulted in conflicting id's, as our insert statements still had the original id's present, which conflicted with the ones postgresql was generating as new requests were sent from the API. In th end, the solution was found in the shape of a pythonscript, which represented insert statements as classes, where each attribute in the insert statement was modified in the constructor of the class to match the postgresql schema, before being aggregated into insert statements and run. This also allowed us to run 1000 insert statements per connection, making the migration script only run 5 minutes before completion. 
-This experience showed us that even with abstraction layers, such as prisma, unique issues related to our migration occured which necessitated the development of a specific solution. 
+Furthermore, simply dumping the sqlite database and running the dump against a postgres droplet on Digital Ocean would not work, as certain types were not compatible between the database. Specifically, the TIMESTAMP type in sqlite proved difficult, as postgres stores timestamps as integers.
+Over multiple attempts, we tried to modify the sql dump using different regex commands, and then using an ssh connection to run the script against the postgresql droplet. This proved fatal however, as the script had not finished running after five hours due to each insert statement requiring a new connection. Furthermore we lost some data as we transitioned the application to make use of the postgresql droplet during the running of this script,
+which resulted in conflicting id's, as our insert statements still had the original id's present, which conflicted with the ones postgresql was generating as new requests were sent from the API. In th end, the solution was found in the shape of a pythonscript, which represented insert statements as classes, where each attribute in the insert statement was modified in the constructor of the class to match the postgresql schema, before being aggregated into insert statements and run. This also allowed us to run 1000 insert statements per connection, making the migration script only run 5 minutes before completion.
+This experience showed us that even with abstraction layers, such as prisma, unique issues related to our migration occured which necessitated the development of a specific solution.
 
 ## Operation
+
 During the last week of the simulator being active, our application crashed which we ended up not noticing.
-The reason for the crash, which became clear when inspecting the docker logs, was that a misconfiguration in Fluentd 
+The reason for the crash, which became clear when inspecting the docker logs, was that a misconfiguration in Fluentd
 stopped the API- and GUI- containers from running, thereby bringing the entire application to a standstill.
-The issue seemed to be that Fluentd was not configured to deal with certain logs, which led to the system rebooting. 
+The issue seemed to be that Fluentd was not configured to deal with certain logs, which led to the system rebooting.
 The logs of this crash are lined [here]. Such an issue would have been difficult to foresee, as it was isolated to a specific subset of
-events occuring in tandem. Furthermore, it was trivial to solve when we became aware of it, as it only required a slight modification in how logs were matched and transported out of fluentd. 
+events occuring in tandem. Furthermore, it was trivial to solve when we became aware of it, as it only required a slight modification in how logs were matched and transported out of fluentd.
  The larger issue at hand was that our monitoring system failed to inform us of this crash, which was caused by Prometheus having crashed around the same time. Thus, a set of systems set up to monitor and log the system had failed with no relation to eachother, allowing for the issue to go unnoticed.
  Thus, even though unlikely, the independant failure of multiple systems should be expected and guarded against.
  In our case, further manual testing of the website on a regular basis was deemed sufficient, however, it was discussed whether
  a shell script could be created to run get requests against the Api could be created, to have a continuous, reliant, status of the webapp.
-
 
 ## Maintenance
 
