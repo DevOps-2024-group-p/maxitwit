@@ -18,6 +18,7 @@
     "format": "prettier --write .",
     "test": "./scripts/test.sh -d",
     "simulator": "python3 src/api/minitwit_simulator.py http://localhost:3001",
+    "genpdf": "cd report && pandoc -s -N -o report.pdf -V colorlinks=true -V linkcolor=blue -V urlcolor=blue --pdf-engine=pdflatex --filter mermaid-filter ./report.md"
     "release": "semantic-release"
   },
   "dependencies": {
@@ -51,6 +52,7 @@
     "eslint-plugin-n": "^16.6.2",
     "eslint-plugin-promise": "^6.1.1",
     "eslint-plugin-sonarjs": "^0.25.1",
+    "mermaid-filter": "^1.4.7",
     "nodemon": "^3.0.3",
     "npx": "^3.0.0",
     "prettier": "^3.2.5",
