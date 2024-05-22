@@ -304,6 +304,9 @@ We update our system with rolling upgrades. The replicas are updated 2 at a time
 
 ## Evolution and refactoring
 
+### State in a Load Balanced System
+The implementation of the swarm and application droplets raised an issue related to the state in case a user would be forced to switch from one droplet to the other. The express-session npm package used to handle sessions in the GUI made use of a sqlite database running locally in the application. Thus, users of the GUI could face random logouts or database errors as the session-secret used to identify the user would be lost when switching droplet. To fix this issue, we discussed ways to manage session-handling using our postgres database or make a common droplet for session handling using sqlite. This would however require a complete refactoring of the session-handling. This proved an important lesson for the other issues raied by the migration to docker swarm, as many of our early implementations on the website where not scalable in a distributed framework.
+
 ### Implementation of Logging
 
 The implementation of the logging system proved difficult, especially as the system was prepared for scaling using docker swarm. Originally, a simple syslogs setup inside a droplet was created which was managed by the npm packaged winston and morgan. This solution proved inscalable in a docker swarm framework, as there would be no centralized logging. Thus, we attempted to expand on the system by adding a fluentd container to each droplet, which would recieve the logs from the winston npm package and send them all to a centralized storage droplet running elasticsearch and kibana. This however failed as the Elasticsearch integration kept crashing due to memory issues. To still provide centralized logs, we defaulted to have fluentd send logfiles to the droplets running the load balancers, which would store them in a /logs folder.
