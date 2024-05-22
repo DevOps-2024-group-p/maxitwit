@@ -21,7 +21,7 @@ include-before: |
 
 ## Architecture
 
-When we took over the minitwit application at the beginning of the course we started by evolving it away from Python using Flask and replacing it with Javascript using Node.js, Express and Pug. The group decided to do the rewrite using Javascript as all members were already familiar with it to varying degrees and because of the good ecosystem which offers tools for everything we need in this web application.
+The application was refactored from Python using Flask and replacing it with Javascript using Node.js runtime, Express and framework and Pug. The group decided to do the rewrite using Javascript as all members were already familiar with it to varying degrees and because of the good ecosystem which offers tools for everything we need in this web application. Javascript remains a popular and [relevant](https://pypl.github.io/PYPL.html) language to learn.
 
 ### Description of Components
 
