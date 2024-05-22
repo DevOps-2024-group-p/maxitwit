@@ -297,6 +297,9 @@ We set up a separate Droplet on DigitalOcean for monitoring, because we had issu
 
 ## Logging
 TODO: add section on Logging
+The Logging system started out a simple [logger](../src/services/logger.js) using the winston npm package to watch the application and its responses. To make logging system scale in a distributed context, the logger was reconfigured to send the gathered logs to a [fluentd instance](../remote_files/fluentd.conf) listening on port 24224, which then send the logs to be stored in the same droplet containing the load balancer. 
+Fluentd specifically was chosen over other similar alternatives such as Logstash for it's provided flexibility and integration with other services, as the decision whether to integrate logging into elasticsearch had not been made at the time. Thus, Fluentd provided a scalable solution that could fit with multiple evolution paths. 
+
 ## Security Assesment
 
 A severe vulnerability we found is that many of our containerized services executed process as root. This included images that ran in our CI/CD pipeline. This is a security risk because it violates [PloP](https://www.paloaltonetworks.com/cyberpedia/what-is-the-principle-of-least-privilege).
