@@ -302,8 +302,8 @@ We set up a separate Droplet on DigitalOcean for monitoring, because we had issu
 ## Logging
 
 TODO: add section on Logging
-The Logging system started out a simple [logger](../src/services/logger.js) using the winston npm package to watch the application and its responses. To make logging system scale in a distributed context, the logger was reconfigured to send the gathered logs to a [fluentd instance](../remote_files/fluentd.conf) listening on port 24224, which then send the logs to be stored in the same droplet containing the load balancer.
-Fluentd specifically was chosen over other similar alternatives such as Logstash for it's provided flexibility and integration with other services, as the decision whether to integrate logging into elasticsearch had not been made at the time. Thus, Fluentd provided a scalable solution that could fit with multiple evolution paths.
+The Logging system started out a simple [logger](../src/services/logger.js) using the `winston`  npm package for the logging-client and the `morgan` npm package as middleware to interface with [express.js](../src/app.js). To make logging system scale in a distributed context, the logger was reconfigured to send the gathered logs to a [fluentd instance](../remote_files/fluentd.conf) listening on port 24224, which then send the logs to be stored in the same droplet containing the load balancer.
+Fluentd specifically was chosen over other similar alternatives such as Logstash for it's provided flexibility and integration with [other services](https://www.fluentd.org/plugins?ref=porthit.com), as the decision whether to integrate logging into elasticsearch had not been made at the time. Thus, Fluentd provided a scalable solution that could fit with multiple evolution paths.
 
 ## Security Assesment
 
@@ -327,20 +327,22 @@ We update our system with rolling upgrades. The replicas are updated 2 at a time
 
 ### State in a Load Balanced System
 
-We initially had difficulty scaling because our containers contained state in the form of a sql database file that had contained user sessions KV pairs that our server needs to check the session of the user. This means that users would get their sessions dropped/logged out if their requests got directed to a node in the swarm that did not contain the database. To fix this issue, we discussed ways to manage session-handling using our managed postgres database to handle user sessions instead. This would however require refactoring of the session-handling.
+A hindrance to the application running in a distributed environment, such as Docker Swarm, is the configuration of the session handling. Currently, it is done using the express-session npm package, which was set up to use a locally stored sqlite database. This means that users would get their sessions dropped/logged out if their requests got directed to a node in the swarm that did not contain the database. To fix this issue, we discussed ways to manage session-handling using our managed postgres database to handle user sessions instead. This would however require refactoring of the session-handling to use a foreign database.
 
-### Implementation of Logging
+### Implementation of Loggiexpress-session
 
-The implementation of the logging system proved difficult, especially as the system was prepared for horizontal scaling using docker swarm. Originally, a simple syslogs setup inside a droplet was created which was managed by the npm package `winston` and `morgan`. This solution proved difficult to scale in a docker swarm network, as there would be no centralized logging. We attempted to expand on the system by adding a fluentd container as a global service in the swarm so it would run on each node in the swarm. The service would recieve the logs from the containers send them all to a centralized storage droplet running elasticsearch and kibana. This proved not feasable given the [hardware specification](https://www.elastic.co/guide/en/cloud-enterprise/current/ece-hardware-prereq.html) of Elasticsearch, as it kept crashing due to memory issues. To provide centralized logs, we defaulted to have fluentd send logfiles to the droplets running the load balancers, which would store them in a /logs folder. To summarize, finding a stack of technologies and designing a global service to send logs to a node in our production enviroment was difficult.
+The implementation of the logging system proved difficult, especially as the system was prepared for horizontal scaling using docker swarm. The original solution storing logs locally in the application proved difficult to scale in a docker swarm network, as there would be no centralized logging. We attempted to expand on the system by adding a fluentd container as a global service in the swarm so it would run on each node in the swarm. The service would recieve the logs from the containers send them all to a centralized storage droplet running elasticsearch and kibana. This proved not feasable given the [hardware specification](https://www.elastic.co/guide/en/cloud-enterprise/current/ece-hardware-prereq.html) of Elasticsearch, as it kept crashing due to memory issues. To provide centralized logs, we defaulted to have fluentd send logfiles to the droplets running the load balancers, which would store them in a /logs folder. Overall, our original choices of implementation hindered the scaling of the project as the refactoring required for a centralized logging system proved too expansive.
 
 ### Database Migration
 
 The Database Migration task presented in session 6 of the course proved a challenge for our team.
 Even with the abstraction layer provided by Prisma, we ran into issues with certain namespaces not being allowed in postgresql.
-Furthermore, simply dumping the sqlite database and running the dump against a postgres droplet on Digital Ocean would not work, as certain types were not compatible between the database. Specifically, the TIMESTAMP type in sqlite proved difficult, as postgres stores timestamps as integers. 
+Furthermore, simply dumping the sqlite database and running the dump against a postgres droplet on Digital Ocean would not work, as certain types were not compatible between the database. Specifically, the TIMESTAMP type in sqlite proved difficult, as postgres stores timestamps as integers.
 
-Over multiple attempts, we tried to modify the sql dump using different regex, `sed` commands and [bash scripts](https://github.com/DevOps-2024-group-p/maxitwit/issues/49), and then using an ssh connection to run the script against the postgresql droplet. This proved fatal however, as the script had not finished running after five hours due to each insert statement requiring a new connection. Furthermore we lost some data as we transitioned the application to make use of the postgresql droplet during the running of this script, 
-which resulted in conflicting id's, as our insert statements still had the original id's present, which conflicted with the ones postgresql was generating as new requests were sent from the API. In th end, the solution was found in the shape of a pythonscript, which represented insert statements as classes, where each attribute in the insert statement was modified in the constructor of the class to match the postgresql schema, before being aggregated into insert statements and run. This also allowed us to run 1000 insert statements per connection, making the migration script only run 5 minutes before completion. 
+Over multiple attempts, we tried to modify the sql dump using different regex, `sed` commands and [bash scripts](https://github.com/DevOps-2024-group-p/maxitwit/issues/49), and then using an ssh connection to run the script against the postgresql droplet. This proved fatal however, as the script had not finished running after five hours due to each insert statement requiring a new connection.Furthermore we lost some data as we transitioned the application to make use of the postgresql droplet during the running of this script, 
+which resulted in conflicting id's, as our insert statements still had the original id's present. 
+
+Finally, a solution was found in the shape of a pythonscript, which represented insert statements as classes, where each attribute in the insert statement was modified in the constructor of the class to match the postgresql schema. The script then aggregated insert statements, allowing us to run 1000 insert statements per connection. Thus, the migration was completed in five minutes.
 
 This experience showed us that even with abstraction layers, such as prisma, unique issues related to our migration occured which necessitated the development of a specific solution. 
 
@@ -349,14 +351,14 @@ This experience showed us that even with abstraction layers, such as prisma, uni
 During the last week of the simulator being active, our application crashed which we ended up not noticing.
 The reason for the crash, which became clear when inspecting the docker logs, was that a misconfiguration in Fluentd
 stopped the API- and GUI- containers from running, thereby bringing the entire application to a standstill.
-The issue seemed to be that Fluentd was not configured to deal with certain logs, which led to the system rebooting. 
+The issue seemed to be that Fluentd was not configured to deal with some of the formats generated by the [logging-client](../src/services/logger.js) certain logs.
 Furthermore, it was trivial to solve when we became aware of it, as it only required a slight modification in how logs were [matched and transported](https://github.com/DevOps-2024-group-p/maxitwit/pull/108) out of fluentd. Our monitoring system failed to inform us of this crash, which was caused by Prometheus having crashed around the same time. Thus, a set of systems set up to monitor and log the system had failed with no relation to eachother, allowing for the issue to go unnoticed.
 
 ## Maintenance
 
 ### Issues with monitoring
 
-Our inbuilt metrics for prometheus turned out to be [very resource demanding](https://github.com/DevOps-2024-group-p/maxitwit/issues/83). So much that building the Prometheus container instantly started using 100% CPU and RAM of our droplet. This was solved by reducing the unnecesarry metrics and moving the Monitoring to its own droplet.
+Our inbuilt metrics for prometheus turned out to be [very resource demanding](https://github.com/DevOps-2024-group-p/maxitwit/issues/83). Starting the Prometheus container would instantly max out system resource usage in the droplet. This was solved by reducing the unnecesarry metrics and moving the Monitoring to its own droplet.
 
 ### Maintaining a performant DB
 
