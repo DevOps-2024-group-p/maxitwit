@@ -24,7 +24,7 @@ This report details the transformation of Maxitwit, initially a Python-Flask app
 
 ## Architecture
 
-The application was refactored from Python using Flask and replacing it with Javascript using Node.js runtime, Express and framework and Pug. The group decided to do the rewrite using Javascript as all members were already familiar with it to varying degrees and because of the good ecosystem which offers tools for everything we need in this web application. Javascript remains a popular and [relevant](https://pypl.github.io/PYPL.html) language to learn.
+When we took over the minitwit application at the beginning of the course we started by evolving it away from Python using Flask and replacing it with Javascript using Node.js, Express and Pug. The group decided to do the rewrite in Javascript as all members were already familiar with it to varying degrees and because of the good ecosystem which offers tools for everything we need in this web application.
 
 ### Description of Components
 
@@ -34,18 +34,23 @@ The frontend of our maxitwit application consists of HTML and CSS which is being
 
 #### Backend API
 
-TODO: make headings more natural
-The backend is developed using Node.js and utilizing the express framework for the server.
-
-#### Node.js
-
+The backend is developed using Node.js and utilizing the express framework for the server. 
 We decided to use Node.js as it is the most popular and mature runtime environment for building fast and scalable server side applications in Javascript. We could have written the entire server logic in Javascript using just Node.js but decided this would be too big of an undertaking for the scope of this project.
-
-#### Express
 
 Instead of writing the server side logic completely from scratch we decided to use the Express framework as it comes with a number of useful features for developing robust server-side applications. Using the Express framework we have a minimal yet flexible framework that provides middleware support, so middleware functions can be used to handle HTTP requests and responses, as well as Route Handling allowing us to define routes for a number of HTTP methods such as GET, POST, PUT, DELETE and the corresponding url patterns.
 Furthermore it offers a number of HTTP Utilities to simplify sending responses and accessing request data.
 Another useful feature for us is the static file serving provided by the framework which we use to serve our CSS styles. To render our HTML content dynamically Express also offer template engine support, in our case for Pug. Finally the good support for Error Handling in the framework is essential when developing and maintaining complex application logic.
+
+We use Pug as our templating engine which enables us to dynamically generate the HTML markup for the frontend. We chose Pug because it seamlessly integrates with our Express.js application, its concise syntax and because it is very performant.
+
+#### Database
+
+When we first started working with the application it had an SQlite database for data storage which we used for the first weeks of the course. We then added the ORM Prisma which provided an abstraction layer over the database, allowed us to define our data models with a schema and facilitated interactions with the database via a type-safe API. We decided to use Prisma as our ORM because of the efficient and clean communication it enabled us to have between the database and the backend API and because the schema driven approach would ensure data integrity.
+After adding the ORM we were tasked with migrating away from SQlite to another database for which we decided on PostgreSQL as all team members are familiar with it from the Introduction to Database Systems course, which we were all taking this semester. We also chose Postgres as it allows us to improve the perfromance of our application, especially as the database grew to a large data set and because we could easily scale PostgreSQL horizontally if we needed to.
+
+## Dependencies
+
+We generated a [dependency graph](./images/dependency_graph.svg) for our node dependencies.
 
 ![Snyk screenshot](./images/Snyk_report.png)
 
@@ -312,7 +317,7 @@ Fluentd specifically was chosen over other similar alternatives such as Logstash
 
 ## Security Assesment
 
-A severe vulnerability we found is that many of our containerized services executed process as root. This included images that ran in our CI/CD pipeline. This is a security risk because it violates [PloP](https://www.paloaltonetworks.com/cyberpedia/what-is-the-principle-of-least-privilege).
+* TODO sentence about our pipelines using root users which violates [PloP](https://www.paloaltonetworks.com/cyberpedia/what-is-the-principle-of-least-privilege)
 
 According to the documentation that can be found [Restricitons to ssh](https://superuser.com/questions/1751932/what-are-the-restrictions-to-ssh-stricthostkeychecking-no), we are aware that setting the flag for StrictHostKeyChecking to "no", might result in malicious parties being able to access the super user console of our system. Setting it to yes would prevent third parties from entering our system and only known hosts would be able to.
 
