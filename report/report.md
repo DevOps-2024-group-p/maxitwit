@@ -58,7 +58,7 @@ TODO: how express to database connected (is it extendable/ modifiable      etc..
 
 To effectively capture this, the following class diagram presents the components of the web-app mapped to their respective dependencies.
 
-```mermaid
+```{.mermaid #fig:moduleviewpoint caption="Module Viewpoint"}
 classDiagram
     direction RL
 
@@ -110,7 +110,7 @@ Our application is deployed on a Digital Ocean droplet. The droplet is running a
 
 In total we have 5 droplets and a database running on Digital Ocean.
 
-```mermaid
+```{.mermaid #fig:deployment caption="Depoyment Viewpoint"}
 flowchart LR
 
     subgraph "Digital Ocean"
@@ -130,7 +130,7 @@ flowchart LR
 
 We chose Digital Ocean because Github Education provides 200$ in credits for students, which was enough to cover the costs of the droplets and the database for the duration of the project.
 
-## Important interactions
+## Important Interactions
 
 The system can be interaceted with in two ways:
 
@@ -141,10 +141,7 @@ The main interaction with the system is via an API, that is built for a simulato
 
 We chose prisma because it is a modern ORM that is easy to use and has a lot of features that make it easy to interact with the database.
 
-```mermaid
----
-title: Sequence Diagram - Simulator Interaction
----
+```{.mermaid #fig:interactions caption="Simulator Interaction"}
 sequenceDiagram
     autonumber
     actor Simulator
@@ -169,7 +166,9 @@ sequenceDiagram
 
 TODO: add static and quality assessment  (is the code extendable) Which requirements did we meet and which didn't we meet.
 TODO: github issues
+
 ![Sonarcloud screenshot](./images/sonarcloud.png)
+
 The application is practically fully functional, apart from a single outstanding [bug](https://github.com/DevOps-2024-group-p/maxitwit/issues/42). While the application has [minimal technical debt](https://sonarcloud.io/summary/overall?id=fridge7809_maxitwit), it relies on legacy code and dependencies to test the application (test suite and simulator).
 
 # Process Perspective
@@ -182,10 +181,7 @@ TODO: add description of how postgres connection works (from express to db)
 
 ## Branching strategy
 
-```mermaid
----
-title: Git branching strategy
----
+```{.mermaid #fig:gitbranch caption="Git branching strategy"}
 %%{init: { 'logLevel': 'debug', 'theme': 'base', 'gitGraph': {'showBranches': true, 'showCommitLabel':true,'mainBranchName': 'release'}} }%% 
     gitGraph
         commit tag: "v1.4.0" id:" "
@@ -223,10 +219,7 @@ A pre-commit hook was added in [d40fcba](https://github.com/DevOps-2024-group-p/
 
 Our CI/CD pipleine is based on **Github Actions**. We have a [deploy.yml](https://github.com/DevOps-2024-group-p/maxitwit/blob/main/.github/workflows/deploy.yml) file that is automatically triggered when new data is pushed to the **release branch**.
 
-```mermaid
----
-title: CI/CD Pipeline
----
+```{.mermaid #fig:cicd caption="CI/CD Pipeline"}
 flowchart LR
         id0("Prepare")-->id1("Build and Push")
         id1-->id2("Test")
