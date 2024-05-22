@@ -28,18 +28,17 @@ The application was refactored from Python using Flask and replacing it with Jav
 
 #### Frontend
 
-The frontend of our maxitwit application consists of HTML and CSS which is being rendered using the Pug templating engine. The frontend handles user input and sends requests to the express server while also displaying all data it receives as response.
+The frontend of our maxitwit application consists of HTML and CSS which is being rendered using the Pug templating engine. The frontend handles user input and sends requests to the express server while also displaying all data it receives as response. The frontend is rendered on the server and there is no javascript running on the client to render the GUI.
 
 #### Backend API
 
-TODO: make headings more natural
-The backend is developed using Node.js and utilizing the express framework for the server.
+The backend is developed using Node.js and utilizing the express framework for the server. 
 
-**Node.js**
+#### Node.js
 
 We decided to use Node.js as it is the most popular and mature runtime environment for building fast and scalable server side applications in Javascript. We could have written the entire server logic in Javascript using just Node.js but decided this would be too big of an undertaking for the scope of this project.
 
-**Express**
+#### Express
 
 Instead of writing the server side logic completely from scratch we decided to use the Express framework as it comes with a number of useful features for developing robust server-side applications. Using the Express framework we have a minimal yet flexible framework that provides middleware support, so middleware functions can be used to handle HTTP requests and responses, as well as Route Handling allowing us to define routes for a number of HTTP methods such as GET, POST, PUT, DELETE and the corresponding url patterns.
 Furthermore it offers a number of HTTP Utilities to simplify sending responses and accessing request data.
@@ -167,10 +166,8 @@ sequenceDiagram
 
 ## Current State
 
-TODO: add static and quality assessment  (is the code extendable) Which requirements did we meet and which didn't we meet.
-TODO: github issues
 ![Sonarcloud screenshot](./images/sonarcloud.png)
-The application is practically fully functional, apart from a single outstanding [bug](https://github.com/DevOps-2024-group-p/maxitwit/issues/42). While the application has [minimal technical debt](https://sonarcloud.io/summary/overall?id=fridge7809_maxitwit), it relies on legacy code and dependencies to test the application (test suite and simulator). The project has a couple of [outstanding](https://github.com/DevOps-2024-group-p/maxitwit/pull/150) [PR's](https://github.com/DevOps-2024-group-p/maxitwit/pull/155) that fixes the most relevant cwe's.
+The application is practically fully functional, apart from a single outstanding [bug](https://github.com/DevOps-2024-group-p/maxitwit/issues/42). While the application has [minimal technical debt](https://sonarcloud.io/summary/overall?id=fridge7809_maxitwit), it relies on legacy code and dependencies to test the application (test suite and simulator). The project has a couple of [outstanding](https://github.com/DevOps-2024-group-p/maxitwit/pull/150) [PR's](https://github.com/DevOps-2024-group-p/maxitwit/pull/155) that fixes the most relevant cwe's. Overall, the quality of the code base is high, with minimal technical debt.
 
 # Process Perspective
 
