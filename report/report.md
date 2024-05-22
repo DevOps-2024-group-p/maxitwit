@@ -43,20 +43,6 @@ Instead of writing the server side logic completely from scratch we decided to u
 Furthermore it offers a number of HTTP Utilities to simplify sending responses and accessing request data.
 Another useful feature for us is the static file serving provided by the framework which we use to serve our CSS styles. To render our HTML content dynamically Express also offer template engine support, in our case for Pug. Finally the good support for Error Handling in the framework is essential when developing and maintaining complex application logic.
 
-**Pug**
-
-
-
-#### Database
-
-#### CI/CD Pipeline
-
-#### Monitoring Logging
-
-#### Containerization
-
-Using the express framework we have a minimal yet flexible framework to work with. Express handles all of the server side logic of the application and 
-
 ## Dependencies
 
 We generated a [dependency graph](./images/dependency_graph.svg) for our node dependencies.
@@ -116,24 +102,6 @@ The above module viewpoint highlights how the expressjs application interacts wi
 dependencies required for the running of the application, such as the postgres database, while others are tools meant for
 tasks such as monitoring and logging. What is not covered in this illustration is the framework in which the application is run and managed,
 which is covered in the following viewpoints.
-
-### Components Viewpoint
-
-```mermaid
-graph LR;
-    id1[Browser]
-    id2[Simulator]
-    id3[Expressjs]
-    id4[Services]
-    id5[Prisma]
-    id6[Postgres]
-
-    id1-->id3
-    id2-->id3
-    id3-->id4
-    id4-->id5
-    id5-->id6
-```
 
 ### Deployment Viewpoint
 
