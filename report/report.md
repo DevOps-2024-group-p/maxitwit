@@ -16,6 +16,7 @@ include-before: |
 ---
 
 \newpage
+TODO: add abstract
 
 # System Perspective
 
@@ -27,7 +28,7 @@ When we took over the minitwit application at the beginning of the course we sta
 
 #### Frontend
 
-The frontend of our maxitwit application consists of HTML and CSS which is being rendered using the Pug templating engine. The frontend handles user input and sends requests to the express server while also displaying all data it receives as response.
+The frontend of our maxitwit application consists of HTML and CSS which is being rendered using the Pug templating engine. The frontend handles user input and sends requests to the express server while also displaying all data it receives as response. The frontend is rendered on the server and there is no javascript running on the client to render the GUI.
 
 #### Backend API
 
@@ -52,6 +53,9 @@ We generated a [dependency graph](./images/dependency_graph.svg) for our node de
 ![Snyk screenshot](./images/Snyk_report.png)
 
 For identifying and fixing vulnerabilities, we used Snyk, which provided us with detailed reports on a weekly basis. These potential vulnerabilities were categorized based on their severity and then addressed. However, not all of them have been resolved, such as [inflight](https://security.snyk.io/vuln/SNYK-JS-INFLIGHT-6095116), which appears to no longer be maintained, and therefore, no current fix is available.
+
+ TODO: Prisma/Database description
+TODO: how express to database connected (is it extendable/ modifiable      etc.. )
 
 ## Viewpoints
 
@@ -105,25 +109,11 @@ dependencies required for the running of the application, such as the postgres d
 tasks such as monitoring and logging. What is not covered in this illustration is the framework in which the application is run and managed,
 which is covered in the following viewpoints.
 
-### Components Viewpoint
-
-```mermaid
-graph LR;
-    id1[Browser]
-    id2[Simulator]
-    id3[Expressjs]
-    id4[Services]
-    id5[Prisma]
-    id6[Postgres]
-
-    id1-->id3
-    id2-->id3
-    id3-->id4
-    id4-->id5
-    id5-->id6
-```
-
 ### Deployment Viewpoint
+
+Our application is deployed on a Digital Ocean droplet. The droplet is running a Docker Swarm with one manager and two worker nodes. We use an Nginx reverse proxy to route the incoming requests and monitoring is also running in a separate droplet.
+
+In total we have 5 droplets and a database running on Digital Ocean.
 
 ```mermaid
 flowchart LR
@@ -143,6 +133,8 @@ flowchart LR
 
 ```
 
+We chose Digital Ocean because Github Education provides 200$ in credits for students, which was enough to cover the costs of the droplets and the database for the duration of the project.
+
 ## Important interactions
 
 The system can be interaceted with in two ways:
@@ -150,7 +142,9 @@ The system can be interaceted with in two ways:
 * [User Interface](https://maxitwit.tech)
 * [API for the simulator](https://api.maxitwit.tech)
 
-A user (or the simulator) can register, follow/unfollow other users and send tweets.
+The main interaction with the system is via an API, that is built for a simulator. The simulator sends HTTP requests to our endpoints to simulate a user registering, following, unfollowing and tweeting. The API uses Prisma to interact with the Postgres database. Prisma is an ORM that generates SQL queries based on the schema defined in the [Prisma schema file](https://github.com/DevOps-2024-group-p/maxitwit/blob/feature/report/prisma/schema.prisma).
+
+We chose prisma because it is a modern ORM that is easy to use and has a lot of features that make it easy to interact with the database.
 
 ```mermaid
 ---
@@ -179,11 +173,17 @@ sequenceDiagram
 ## Current State
 
 ![Sonarcloud screenshot](./images/sonarcloud.png)
-The application is practically fully functional, apart from a single outstanding [bug](https://github.com/DevOps-2024-group-p/maxitwit/issues/42). While the application has [minimal technical debt](https://sonarcloud.io/summary/overall?id=fridge7809_maxitwit), it relies on legacy code and dependencies to test the application (test suite and simulator).
+The application is practically fully functional, apart from a single outstanding [bug](https://github.com/DevOps-2024-group-p/maxitwit/issues/42). While the application has [minimal technical debt](https://sonarcloud.io/summary/overall?id=fridge7809_maxitwit), it relies on legacy code and dependencies to test the application (test suite and simulator). The project has a couple of [outstanding](https://github.com/DevOps-2024-group-p/maxitwit/pull/150) [PR's](https://github.com/DevOps-2024-group-p/maxitwit/pull/155) that fixes the most relevant cwe's. Overall, the quality of the code base is high, with minimal technical debt.
 
 # Process Perspective
 
 Why: ExpressJS, Prisma, Postgres
+
+## Monitoring
+Inside the application droplets, prometheus has a volume storing it's state, such that the cd pipeline would not reset monitoring. We use Prometheus to generate metrics for our monitoring and Grafana to visualize them. We made this decision because with this setup we can easily make relevant and informative [dashboards](http://144.126.246.214:3002/public-dashboards/2c37eba9cf8c494c83490b90f89e116f?orgId=1) representing the state of our system.
+
+## Database Migration
+During the semester we had the task to migrate from SQLite to a database of our choice. We chose Postgres to supplement our studies in Introdutcion to Database Systems course that we are having paralelly.
 
 ## Branching strategy
 
@@ -222,7 +222,7 @@ Succesfully merging a pull request to the release branch triggers the CD pipelin
 
 ## Commit hooks
 
-A pre-commit hook was added in [d40fcba](https://github.com/DevOps-2024-group-p/maxitwit/commit/d40fcba312eb082bda44bd220887f3d7574a7a40) to lint and enforce commit messages and to follow the [semantic versioning](https://semver.org/) protocol. A [CLI-tool](https://github.com/commitizen/cz-cli) was also [added](https://github.com/DevOps-2024-group-p/maxitwit/commit/44eec0ba28e7cad2000d6f1bcbf9db3c667b3862) to aid developers write commit messages that follows the chosen protocol. Effectively standardizing a common development process, improving our process quality and readability of the git log.
+A pre-commit hook was added in [d40fcba](https://github.com/DevOps-2024-group-p/maxitwit/commit/d40fcba312eb082bda44bd220887f3d7574a7a40) to lint and enforce commit messages and to follow the [semantic versioning](https://semver.org/) protocol. A [CLI-tool](https://github.com/commitizen/cz-cli) was also [added](https://github.com/DevOps-2024-group-p/maxitwit/commit/44eec0ba28e7cad2000d6f1bcbf9db3c667b3862) to aid developers write commit messages that follows the chosen protocol. Effectively standardizing a common development process, improving our process quality and readability of the git log, which is a part of good DevOps practices.
 
 ## CI/CD pipline
 
@@ -307,55 +307,70 @@ Prometheus scrapes these endpoints and Grafana visualizes the data.
 
 We set up a separate Droplet on DigitalOcean for monitoring, because we had issues with its resource consumption. The monitoring droplet runs Prometheus and Grafana, and scrapes the metrics from the Worker nodes of the Docker swarm.
 
+## Logging
+
+TODO: add section on Logging
+The Logging system started out a simple [logger](../src/services/logger.js) using the `winston`  npm package for the logging-client and the `morgan` npm package as middleware to interface with [express.js](../src/app.js). To make logging system scale in a distributed context, the logger was reconfigured to send the gathered logs to a [fluentd instance](../remote_files/fluentd.conf) listening on port 24224, which then send the logs to be stored in the same droplet containing the load balancer.
+Fluentd specifically was chosen over other similar alternatives such as Logstash for it's provided flexibility and integration with [other services](https://www.fluentd.org/plugins?ref=porthit.com), as the decision whether to integrate logging into elasticsearch had not been made at the time. Thus, Fluentd provided a scalable solution that could fit with multiple evolution paths.
+
 ## Security Assesment
 
 * TODO sentence about our pipelines using root users which violates [PloP](https://www.paloaltonetworks.com/cyberpedia/what-is-the-principle-of-least-privilege)
 
-According to the documentation that can be found [Restricitons to ssh](https://superuser.com/questions/1751932/what-are-the-restrictions-to-ssh-stricthostkeychecking-no), we are aware that setting the flag for StrictHostKeyChecking to "no", might result in malicious parties being able to access the super user console of our system. Setting it to yes would prevent third parties from enterying our system and only known hosts would be able to.
+According to the documentation that can be found [Restricitons to ssh](https://superuser.com/questions/1751932/what-are-the-restrictions-to-ssh-stricthostkeychecking-no), we are aware that setting the flag for StrictHostKeyChecking to "no", might result in malicious parties being able to access the super user console of our system. Setting it to yes would prevent third parties from entering our system and only known hosts would be able to.
+
+[NPM](https://www.npmjs.com/) was used to manage and audit dependencies with security vulnerabilities with `npm audit`. It was a challenge to upgrade certain dependencies, either because they were bundled or because they create cyclic dependencies. An overview of the dependencies are found in the [dependency graph](./images/dependency_graph.svg).
 
 ## Scaling strategy
 
+TODO: add sentence on why distributed systems are great !
 We used Docker Swarm for horizontal scaling. The strategy is defined in [compose.yml](https://github.com/DevOps-2024-group-p/maxitwit/blob/main/remote_files/compose.yaml).
 One manager node is responsible for the load balancing and the health checks of two worker nodes.
 Worker nodes we have 6 replicas of the service running.
 We update our system with rolling upgrades. The replicas are updated 2 at a time, with 10s interval between the updates. The health of the service is monitored every 10s. If the service fails, it will be restarted with a maximum of 2 attempts.
 
+## AI and LLM's
+
+LLM's were very useful tools in the refactoring process. We found that AI tools work best when you can provide extensive context as a prompt, however, sometimes gathering all the context needed for a prompt was wasted cognitive load if they didn't provide a useful response. Especially when debugging niche interactions between system components, LLM's was not very helpful.
+
 # Lessons Learned
 
 ## Evolution and refactoring
 
-### Implementation of Logging
+### State in a Load Balanced System
 
-The implementation of the logging system proved difficult, especially as the system was prepared for scaling using docker swarm. Originally, a simple syslogs setup inside a droplet was created which was managed by the npm packaged winston and morgan. This solution proved inscalable in a docker swarm framework, as there would be no centralized logging. Thus, we attempted to expand on the system by adding a fluentd container to each droplet, which would recieve the logs from the winston npm package and send them all to a centralized storage droplet running elasticsearch and kibana. This however failed as the Elasticsearch integration kept crashing due to memory issues. To still provide centralized logs, we defaulted to have fluentd send logfiles to the droplets running the load balancers, which would store them in a /logs folder.
-Reflecting on this experience, had we from the beginning worked on implementing a scalable logging system, the amount of refactoring and experiential learning required for the implementation of the EFK-stack would have been diminished. In other words, it shows how technical debt can hinder the scaling of software solutions in practice.
+A hindrance to the application running in a distributed environment, such as Docker Swarm, is the configuration of the session handling. Currently, it is done using the express-session npm package, which was set up to use a locally stored sqlite database. This means that users would get their sessions dropped/logged out if their requests got directed to a node in the swarm that did not contain the database. To fix this issue, we discussed ways to manage session-handling using our managed postgres database to handle user sessions instead. This would however require refactoring of the session-handling to use a foreign database.
+
+### Implementation of Loggiexpress-session
+
+The implementation of the logging system proved difficult, especially as the system was prepared for horizontal scaling using docker swarm. The original solution storing logs locally in the application proved difficult to scale in a docker swarm network, as there would be no centralized logging. We attempted to expand on the system by adding a fluentd container as a global service in the swarm so it would run on each node in the swarm. The service would recieve the logs from the containers send them all to a centralized storage droplet running elasticsearch and kibana. This proved not feasable given the [hardware specification](https://www.elastic.co/guide/en/cloud-enterprise/current/ece-hardware-prereq.html) of Elasticsearch, as it kept crashing due to memory issues. To provide centralized logs, we defaulted to have fluentd send logfiles to the droplets running the load balancers, which would store them in a /logs folder. Overall, our original choices of implementation hindered the scaling of the project as the refactoring required for a centralized logging system proved too expansive.
 
 ### Database Migration
 
-The Database Migration task presented in session 6 of the course proved a challenge for our team. 
+The Database Migration task presented in session 6 of the course proved a challenge for our team.
 Even with the abstraction layer provided by Prisma, we ran into issues with certain namespaces not being allowed in postgresql.
-Furthermore, simply dumping the sqlite database and running the dump against a postgres droplet on Digital Ocean would not work, as certain types were not compatible between the database. Specifically, the TIMESTAMP type in sqlite proved difficult, as postgres stores timestamps as integers. 
-Over multiple attempts, we tried to modify the sql dump using different regex commands, and then using an ssh connection to run the script against the postgresql droplet. This proved fatal however, as the script had not finished running after five hours due to each insert statement requiring a new connection. Furthermore we lost some data as we transitioned the application to make use of the postgresql droplet during the running of this script, 
-which resulted in conflicting id's, as our insert statements still had the original id's present, which conflicted with the ones postgresql was generating as new requests were sent from the API. In th end, the solution was found in the shape of a pythonscript, which represented insert statements as classes, where each attribute in the insert statement was modified in the constructor of the class to match the postgresql schema, before being aggregated into insert statements and run. This also allowed us to run 1000 insert statements per connection, making the migration script only run 5 minutes before completion. 
-This experience showed us that even with abstraction layers, such as prisma, unique issues related to our migration occured which necessitated the development of a specific solution. 
+Furthermore, simply dumping the sqlite database and running the dump against a postgres droplet on Digital Ocean would not work, as certain types were not compatible between the database. Specifically, the TIMESTAMP type in sqlite proved difficult, as postgres stores timestamps as integers.
+
+Over multiple attempts, we tried to modify the sql dump using different regex, `sed` commands and [bash scripts](https://github.com/DevOps-2024-group-p/maxitwit/issues/49), and then using an ssh connection to run the script against the postgresql droplet. This proved fatal however, as the script had not finished running after five hours due to each insert statement requiring a new connection.Furthermore we lost some data as we transitioned the application to make use of the postgresql droplet during the running of this script,
+which resulted in conflicting id's, as our insert statements still had the original id's present.
+
+Finally, a solution was found in the shape of a pythonscript, which represented insert statements as classes, where each attribute in the insert statement was modified in the constructor of the class to match the postgresql schema. The script then aggregated insert statements, allowing us to run 1000 insert statements per connection. Thus, the migration was completed in five minutes.
+
+This experience showed us that even with abstraction layers, such as prisma, unique issues related to our migration occured which necessitated the development of a specific solution.
 
 ## Operation
-During the last week of the simulator being active, our application crashed which we ended up not noticing.
-The reason for the crash, which became clear when inspecting the docker logs, was that a misconfiguration in Fluentd 
-stopped the API- and GUI- containers from running, thereby bringing the entire application to a standstill.
-The issue seemed to be that Fluentd was not configured to deal with certain logs, which led to the system rebooting. 
-The logs of this crash are lined [here]. Such an issue would have been difficult to foresee, as it was isolated to a specific subset of
-events occuring in tandem. Furthermore, it was trivial to solve when we became aware of it, as it only required a slight modification in how logs were matched and transported out of fluentd. 
- The larger issue at hand was that our monitoring system failed to inform us of this crash, which was caused by Prometheus having crashed around the same time. Thus, a set of systems set up to monitor and log the system had failed with no relation to eachother, allowing for the issue to go unnoticed.
- Thus, even though unlikely, the independant failure of multiple systems should be expected and guarded against.
- In our case, further manual testing of the website on a regular basis was deemed sufficient, however, it was discussed whether
- a shell script could be created to run get requests against the Api could be created, to have a continuous, reliant, status of the webapp.
 
+During the last week of the simulator being active, our application crashed which we ended up not noticing.
+The reason for the crash, which became clear when inspecting the docker logs, was that a misconfiguration in Fluentd
+stopped the API- and GUI- containers from running, thereby bringing the entire application to a standstill.
+The issue seemed to be that Fluentd was not configured to deal with some of the formats generated by the [logging-client](../src/services/logger.js) certain logs.
+Furthermore, it was trivial to solve when we became aware of it, as it only required a slight modification in how logs were [matched and transported](https://github.com/DevOps-2024-group-p/maxitwit/pull/108) out of fluentd. Our monitoring system failed to inform us of this crash, which was caused by Prometheus having crashed around the same time. Thus, a set of systems set up to monitor and log the system had failed with no relation to eachother, allowing for the issue to go unnoticed.
 
 ## Maintenance
 
 ### Issues with monitoring
 
-Our inbuilt metrics for prometheus turned out to be [very resource demanding](https://github.com/DevOps-2024-group-p/maxitwit/issues/83). So much that building the Prometheus container instantly started using 100% CPU and RAM of our droplet. This was solved by reducing the unnecesarry metrics and moving the Monitoring to its own droplet.
+Our inbuilt metrics for prometheus turned out to be [very resource demanding](https://github.com/DevOps-2024-group-p/maxitwit/issues/83). Starting the Prometheus container would instantly max out system resource usage in the droplet. This was solved by reducing the unnecesarry metrics and moving the Monitoring to its own droplet.
 
 ### Maintaining a performant DB
 
