@@ -18,7 +18,7 @@
     "format": "prettier --write .",
     "test": "./scripts/test.sh -d",
     "simulator": "python3 src/api/minitwit_simulator.py http://localhost:3001",
-    "genpdf": "cd report && pandoc -s -N -o report.pdf -V colorlinks=true -V linkcolor=blue -V urlcolor=blue --pdf-engine=pdflatex --filter mermaid-filter ./report.md"
+    "genpdf": "cd report && pandoc -s -N -o report.pdf -V colorlinks=true -V linkcolor=blue -V urlcolor=blue --pdf-engine=pdflatex --filter mermaid-filter ./report.md",
     "release": "semantic-release"
   },
   "dependencies": {
@@ -38,7 +38,11 @@
     "winston-syslog": "^2.7.0"
   },
   "release": {
-    "branches": ["main", "next", "beta"]
+    "branches": [
+      "main",
+      "next",
+      "beta"
+    ]
   },
   "devDependencies": {
     "@commitlint/cli": "^19.2.1",
