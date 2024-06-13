@@ -5,7 +5,7 @@ services:
     image: postgres:latest
     environment:
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
+      POSTGRES_PASSWORD: ${CICD_DB_PASSWORD}
       POSTGRES_DB: testdb
       PGPORT: 9999
     ports:
@@ -27,7 +27,7 @@ services:
       - test_db
     environment:
       - HUSKY=0
-      - DATABASE_URL=postgresql://postgres:postgres@test_db:9999/testdb
+      - DATABASE_URL=postgresql://postgres:${CICD_DB_PASSWORD}@test_db:9999/testdb
       - SESSION_SECRET=secret
     restart: always
 
@@ -45,7 +45,7 @@ services:
       - test_db
     environment:
       - HUSKY=0
-      - DATABASE_URL=postgresql://postgres:postgres@test_db:9999/testdb
+      - DATABASE_URL=postgresql://postgres:${CICD_DB_PASSWORD}@test_db:9999/testdb
       - SESSION_SECRET=secret
     restart: always
 
